@@ -1,7 +1,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'PersonaClick'
-  s.version          = '1.0.6'
+  s.version          = '1.0.8'
   s.summary          = 'PersonaClick iOS SDK'
 
 # This description is used to generate tags and improve search results.
@@ -17,8 +17,8 @@ This is iOS SDK for PersonaClick platform. Read documentation here: https://gith
   s.homepage         = 'https://github.com/PersonaClick/ios-sdk'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
   s.author           = { 'PersonaClick' => '«support@personaclick.com»' }
- 
-  s.source       = { :git => "https://github.com/PersonaClick/ios-sdk.git", :branch => "1.0.6",
+
+  s.source       = { :git => "https://github.com/PersonaClick/ios-sdk.git", :branch => "master",
   :tag => s.version.to_s }
 
   s.ios.deployment_target = '9.3'
