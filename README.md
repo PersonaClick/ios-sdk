@@ -53,7 +53,23 @@ Track user's behavior to collect data. There are several types of events:
 ### User viewed a product
 
 ```swift
+// Common view
 sdk.track(event: .productView(id: "PRODUCT_ID")) { _ in
+  print("Product view callback")
+}
+
+// From instant search
+sdk.track(event: .productView(id: "PRODUCT_ID"), recommendedBy: 'instant_search') { _ in
+  print("Product view callback")
+}
+
+// From full search
+sdk.track(event: .productView(id: "PRODUCT_ID"), recommendedBy: 'full_search') { _ in
+  print("Product view callback")
+}
+
+// From recommender block - use block ID for recommendedBy parameter
+sdk.track(event: .productView(id: "PRODUCT_ID"), recommendedBy: 'WTJc23B2pTBsgc0e') { _ in
   print("Product view callback")
 }
 ```
@@ -89,6 +105,8 @@ sdk.track(event: .productAddedToCart(id: "PRODUCT_ID")) { _ in
   print("Product is added to cart callback")
 }
 ```
+
+> Also supports `recommendedBy` parameter
 
 ### User removed a product from shopping cart
 
