@@ -15,7 +15,7 @@ class SimplePersonalizationSDK: PersonalizationSDK {
     var userPhone: String?
     var userLoyaltyId: String?
     
-    var baseUrl: String
+    var baseURL: String
 
     var urlSession: URLSession
 
