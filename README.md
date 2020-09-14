@@ -46,6 +46,17 @@ import PersonaClick
 var sdk = createPersonalizationSDK(shopId: "API_KEY")
 ```
 
+Or with completion to handle problems:
+
+```swift
+import PersonaClick
+.....
+sdk = createPersonalizationSDK(shopId: "API_KEY", { (error) in
+    print(error)
+})
+```
+
+
 ## Events tracking
 
 Track user's behavior to collect data. There are several types of events:
