@@ -5,17 +5,14 @@ struct InitResponse: Codable {
     var seance: String = ""
     var currency: String = ""
     var search: Search = Search()
-    var webPushSettings: WebPushSet = WebPushSet()
 
     init(json: [String: Any]) {
         deviceID = json["did"] as! String
         seance = json["seance"] as! String
         currency = json["currency"] as! String
         let search = json["search"] as! [String: Any]
-        let webPushSet = json["web_push_settings"] as! [String: Any]
 
         self.search = Search(json: search)
-        webPushSettings = WebPushSet(json: webPushSet)
     }
 
     init() {
@@ -61,15 +58,3 @@ struct Settings: Codable {
     }
 }
 
-struct WebPushSet: Codable {
-    var safariEnable: Int = 0
-    var safariId: String = ""
-
-    init(json: [String: Any]) {
-        safariEnable = json["safari_enabled"] as! Int
-        safariId = json["safari_id"] as! String
-    }
-
-    init() {
-    }
-}
