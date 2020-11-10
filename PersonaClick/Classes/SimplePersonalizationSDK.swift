@@ -87,6 +87,10 @@ class SimplePersonalizationSDK: PersonalizationSDK {
                 "token": token,
                 "platform": "ios",
             ]
+            
+            let sessionConfig = URLSessionConfiguration.default
+            sessionConfig.timeoutIntervalForRequest = 1
+            self.urlSession = URLSession(configuration: sessionConfig)
             self.postRequest(path: path, params: params, completion: { result in
                 switch result {
                 case .success:
@@ -114,6 +118,9 @@ class SimplePersonalizationSDK: PersonalizationSDK {
                     completion(.failure(.custom(error: "Error: rating can be between 1 and 10 only")))
                     return //выходим из review
                 }
+                let sessionConfig = URLSessionConfiguration.default
+                sessionConfig.timeoutIntervalForRequest = 1
+                self.urlSession = URLSession(configuration: sessionConfig)
                 self.postRequest(path: path, params: params) { (result) in
                     switch result {
                     case .success:
@@ -150,6 +157,10 @@ class SimplePersonalizationSDK: PersonalizationSDK {
                 "attributes[location]": location ?? "",
             ]
 
+            let sessionConfig = URLSessionConfiguration.default
+            sessionConfig.timeoutIntervalForRequest = 1
+            self.urlSession = URLSession(configuration: sessionConfig)
+            
             self.postRequest(path: path, params: params, completion: { result in
                 switch result {
                 case let .success(successResult):
@@ -259,7 +270,7 @@ class SimplePersonalizationSDK: PersonalizationSDK {
     }
 
 
-    func recommend(blockId: String, currentProductId: String?, imageSize: String?, completion: @escaping (Result<RecommenderResponse, SDKError>) -> Void) {
+    func recommend(blockId: String, currentProductId: String?, imageSize: String?, timeOut: Double?, completion: @escaping (Result<RecommenderResponse, SDKError>) -> Void) {
         mySerialQueue.async {
             let path = "recommend"
             var params = [
@@ -281,6 +292,10 @@ class SimplePersonalizationSDK: PersonalizationSDK {
                 params["resize_image"] = imageSize
             }
             
+            let sessionConfig = URLSessionConfiguration.default
+            sessionConfig.timeoutIntervalForRequest = timeOut ?? 1
+            self.urlSession = URLSession(configuration: sessionConfig)
+            
             self.getRequest(path: path, params: params) { result in
                 switch result {
                 case let .success(successResult):
@@ -294,7 +309,7 @@ class SimplePersonalizationSDK: PersonalizationSDK {
         }
     }
 
-    func search(query: String, limit: Int?, offset: Int?, categoryLimit: Int?, categories: String?, extended: String?, sortBy: String?, sortDir: String?, locations: String?, brands: String?, filters: [String: Any]?, priceMin: Double?, priceMax: Double?, colors: String?, exclude: String?, email: String?, completion: @escaping (Result<SearchResponse, SDKError>) -> Void) {
+    func search(query: String, limit: Int?, offset: Int?, categoryLimit: Int?, categories: String?, extended: String?, sortBy: String?, sortDir: String?, locations: String?, brands: String?, filters: [String: Any]?, priceMin: Double?, priceMax: Double?, colors: String?, exclude: String?, email: String?, timeOut: Double?, completion: @escaping (Result<SearchResponse, SDKError>) -> Void) {
         mySerialQueue.async {
             let path = "search"
             var params: [String: String] = [
@@ -357,7 +372,10 @@ class SimplePersonalizationSDK: PersonalizationSDK {
                 params["email"] = email
             }
 
-
+            let sessionConfig = URLSessionConfiguration.default
+            sessionConfig.timeoutIntervalForRequest = timeOut ?? 1
+            self.urlSession = URLSession(configuration: sessionConfig)
+            
             self.getRequest(path: path, params: params) { result in
                 switch result {
                 case let .success(successResult):
@@ -372,7 +390,7 @@ class SimplePersonalizationSDK: PersonalizationSDK {
     }
 
 
-    func suggest(query: String, locations: String?, completion: @escaping (Result<SearchResponse, SDKError>) -> Void) {
+    func suggest(query: String, locations: String?, timeOut: Double?, completion: @escaping (Result<SearchResponse, SDKError>) -> Void) {
 
         mySerialQueue.async {
             let path = "search"
@@ -388,6 +406,10 @@ class SimplePersonalizationSDK: PersonalizationSDK {
             if let locations = locations{
                 params["locations"] = locations
             }
+            
+            let sessionConfig = URLSessionConfiguration.default
+            sessionConfig.timeoutIntervalForRequest = timeOut ?? 1
+            self.urlSession = URLSession(configuration: sessionConfig)
             
             self.getRequest(path: path, params: params) { result in
                 switch result {
@@ -408,6 +430,10 @@ class SimplePersonalizationSDK: PersonalizationSDK {
             "shop_id": shopId,
         ]
 
+        let sessionConfig = URLSessionConfiguration.default
+        sessionConfig.timeoutIntervalForRequest = 1
+        self.urlSession = URLSession(configuration: sessionConfig)
+        
         getRequest(path: path, params: params, true) { result in
 
             switch result {
