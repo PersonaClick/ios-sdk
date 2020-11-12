@@ -270,7 +270,7 @@ class SimplePersonalizationSDK: PersonalizationSDK {
     }
 
 
-    func recommend(blockId: String, currentProductId: String?, imageSize: String?, timeOut: Double?, completion: @escaping (Result<RecommenderResponse, SDKError>) -> Void) {
+    func recommend(blockId: String, currentProductId: String?, locations: String?, imageSize: String?, timeOut: Double?, completion: @escaping (Result<RecommenderResponse, SDKError>) -> Void) {
         mySerialQueue.async {
             let path = "recommend"
             var params = [
@@ -290,6 +290,10 @@ class SimplePersonalizationSDK: PersonalizationSDK {
             
             if let imageSize = imageSize {
                 params["resize_image"] = imageSize
+            }
+            
+            if let locations = locations{
+                params["locations"] = locations
             }
             
             let sessionConfig = URLSessionConfiguration.default
