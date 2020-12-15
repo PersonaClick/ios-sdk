@@ -1,7 +1,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'PersonaClick'
-  s.version          = '1.2.8'
+  s.version          = '1.3.0'
   s.summary          = 'PersonaClick iOS SDK'
 
 # This description is used to generate tags and improve search results.
