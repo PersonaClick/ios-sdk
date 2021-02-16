@@ -38,6 +38,7 @@ public protocol PersonalizationSDK {
     func setPushTokenNotification(token: String, completion: @escaping(Result<Void, SDKError>) -> Void)
     func review(rate: Int, channel: String, category: String, orderId: String?, comment: String?, completion: @escaping(Result<Void, SDKError>) -> Void)
     func searchBlank(completion: @escaping(Result<SearchBlankResponse, SDKError>) -> Void)
+    func notificationClicked(type: String, code: String, completion: @escaping (Result<Void, SDKError>) -> Void)
 }
 
 public extension PersonalizationSDK {
@@ -65,6 +66,10 @@ public extension PersonalizationSDK {
     
     func track(event: Event, recommendedBy: RecomendedBy? = nil, completion: @escaping (Result<Void, SDKError>) -> Void) {
         track(event: event, recommendedBy: recommendedBy, completion: completion)
+    }
+    
+    func notificationClicked(type: String, code: String, completion: @escaping (Result<Void, SDKError>) -> Void) {
+        notificationClicked(type: type, code: code, completion: completion)
     }
 
 }
