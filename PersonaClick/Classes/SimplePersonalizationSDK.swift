@@ -180,7 +180,7 @@ class SimplePersonalizationSDK: PersonalizationSDK {
                 
                 if let birthday = birthday {
                     let dateFormatter = DateFormatter()
-                    dateFormatter.dateFormat = "YYYY-MM-DD"
+                    dateFormatter.dateFormat = "yyyy-MM-dd"
                     let birthdayString = dateFormatter.string(from: birthday)
                     paramsTemp["birthday"] = birthdayString
                 }
@@ -323,13 +323,11 @@ class SimplePersonalizationSDK: PersonalizationSDK {
 
     func recommend(blockId: String, currentProductId: String?, locations: String?, imageSize: String?, timeOut: Double?, completion: @escaping (Result<RecommenderResponse, SDKError>) -> Void) {
         mySerialQueue.async {
-            let path = "recommend"
+            let path = "recommend/\(blockId)"
             var params = [
                 "shop_id": self.shopId,
                 "did": self.deviceID,
                 "seance": self.userSeance,
-                "recommender_type": "dynamic",
-                "recommender_code": blockId,
                 "extended": "true",
                 "resize_image": "180",
                 "segment": self.segment
@@ -545,7 +543,7 @@ class SimplePersonalizationSDK: PersonalizationSDK {
         let jsonDecoder = JSONDecoder()
         jsonDecoder.keyDecodingStrategy = .convertFromSnakeCase
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-mm-dd"
+        dateFormatter.dateFormat = "yyyy-MM-dd"
         jsonDecoder.dateDecodingStrategy = .formatted(dateFormatter)
         return jsonDecoder
     }()
