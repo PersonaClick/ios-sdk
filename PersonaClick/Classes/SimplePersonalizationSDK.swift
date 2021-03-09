@@ -10,14 +10,14 @@ class SimplePersonalizationSDK: PersonalizationSDK {
     var shopId: String
     var deviceID: String
     var userSeance: String
+    
+    var baseURL: String
 
     var userEmail: String?
     var userPhone: String?
     var userLoyaltyId: String?
     
     var segment: String
-    
-    var baseURL: String
 
     var urlSession: URLSession
 
@@ -31,7 +31,7 @@ class SimplePersonalizationSDK: PersonalizationSDK {
         self.shopId = shopId
         
         self.baseURL = "https://" + apiDomain + "/"
-
+        
         self.userEmail = userEmail
         self.userPhone = userPhone
         self.userLoyaltyId = userLoyaltyId
@@ -40,24 +40,30 @@ class SimplePersonalizationSDK: PersonalizationSDK {
         userSeance = UUID().uuidString
         
         // Generate segment
-        segment = ["A", "B"].randomElement()!
+        segment = ["A", "B"].randomElement() ?? "A"
         
         // Trying to fetch user session (permanent user ID)
         deviceID = UserDefaults.standard.string(forKey: "device_id") ?? ""
-
+        
         urlSession = URLSession.shared
         mySerialQueue.async {
             self.sendInitRequest { initResult in
                 switch initResult {
                 case .success:
-                    let res = try! initResult.get()
-                    self.userInfo = res
-                    self.userSeance = res.seance
-                    self.deviceID = res.deviceID
-                    self.semaphore.signal()
-                    if let completion = completion {
-                        completion(nil)
+                    if let res = try? initResult.get() {
+                        self.userInfo = res
+                        self.userSeance = res.seance
+                        self.deviceID = res.deviceID
+                        if let completion = completion {
+                            completion(nil)
+                        }
+                    }else{
+                        print("PersonalizationSDK error: SDK DECODE FAIL")
+                        if let completion = completion {
+                            completion(.decodeError)
+                        }
                     }
+                    self.semaphore.signal()
                 case .failure(let error):
                     print("PersonalizationSDK error: SDK INIT FAIL")
                     if let completion = completion {
@@ -88,7 +94,6 @@ class SimplePersonalizationSDK: PersonalizationSDK {
                 "token": token,
                 "platform": "ios",
             ]
-            
             let sessionConfig = URLSessionConfiguration.default
             sessionConfig.timeoutIntervalForRequest = 1
             self.urlSession = URLSession(configuration: sessionConfig)
@@ -104,130 +109,130 @@ class SimplePersonalizationSDK: PersonalizationSDK {
     }
     
     func searchBlank(completion: @escaping (Result<SearchBlankResponse, SDKError>) -> Void) {
-           mySerialQueue.async {
-               let path = "search/blank"
-               let params: [String : String] = [
-                   "did": self.deviceID,
-                   "shop_id": self.shopId
-               ]
-               let sessionConfig = URLSessionConfiguration.default
-               sessionConfig.timeoutIntervalForRequest = 1
-               self.urlSession = URLSession(configuration: sessionConfig)
-               self.getRequest(path: path, params: params) { (result) in
-                   switch result {
-                   case let .success(successResult):
-                       let resJSON = successResult
-                       let resultResponse = SearchBlankResponse(json: resJSON)
-                       completion(.success(resultResponse))
-                   case let .failure(error):
-                       completion(.failure(error))
-                   }
-               }
-           }
-       }
-
-    func review(rate: Int, channel: String, category: String, orderId: String?, comment: String?, completion: @escaping (Result<Void, SDKError>) -> Void) {
-            mySerialQueue.async {
-                let path = "nps/create"
-                let params: [String : String] = [
-                    "did": self.deviceID,
-                    "shop_id": self.shopId,
-                    "rate": String(rate),
-                    "channel": channel,
-                    "category": category,
-                    "order_id": orderId ?? "",
-                    "comment": comment ?? ""
-                ]
-                if rate < 1 || rate > 10 {
-                    completion(.failure(.custom(error: "Error: rating can be between 1 and 10 only")))
-                    return //выходим из review
-                }
-                let sessionConfig = URLSessionConfiguration.default
-                sessionConfig.timeoutIntervalForRequest = 1
-                self.urlSession = URLSession(configuration: sessionConfig)
-                self.postRequest(path: path, params: params) { (result) in
-                    switch result {
-                    case .success:
-                        completion(.success(Void()))
-                    case let .failure(error):
-                        completion(.failure(error))
-                    }
+        mySerialQueue.async {
+            let path = "search/blank"
+            let params: [String : String] = [
+                "did": self.deviceID,
+                "shop_id": self.shopId
+            ]
+            let sessionConfig = URLSessionConfiguration.default
+            sessionConfig.timeoutIntervalForRequest = 1
+            self.urlSession = URLSession(configuration: sessionConfig)
+            self.getRequest(path: path, params: params) { (result) in
+                switch result {
+                case let .success(successResult):
+                    let resJSON = successResult
+                    let resultResponse = SearchBlankResponse(json: resJSON)
+                    completion(.success(resultResponse))
+                case let .failure(error):
+                    completion(.failure(error))
                 }
             }
         }
+    }
     
-    func setProfileData(userEmail: String, userPhone: String?, userLoyaltyId: String?, birthday: Date?, age: Int?, firstName: String?, lastName: String?, location: String?, gender: Gender?, fbID: String?, vkID: String?, telegramID: String?, loyaltyCardLocation: String?, loyaltyStatus: String?, loyaltyBonuses: Int?, loyaltyBonusesToNextLevel: Int?, boughtSomething: Bool?, completion: @escaping (Result<Void, SDKError>) -> Void) {
-            mySerialQueue.async {
-                let path = "profile/set"
-                var paramsTemp: [String: String?] = [
-                    "shop_id": self.shopId,
-                    "did": self.deviceID,
-                    "seance": self.userSeance,
-                    "loyalty_id": userLoyaltyId,
-                    "fb_id": fbID,
-                    "vk_id": vkID,
-                    "telegram_id": telegramID,
-                    "loyalty_card_location": loyaltyCardLocation,
-                    "loyalty_status": loyaltyStatus,
-                    "gender": gender == .male ? "m" : "f",
-                    "email": userEmail,
-                    "first_name": firstName,
-                    "last_name": lastName,
-                    "phone": userPhone,
-                    "loyality_id": userLoyaltyId,
-                    "location": location
-                ]
-                
-                if let birthday = birthday {
-                    let dateFormatter = DateFormatter()
-                    dateFormatter.dateFormat = "yyyy-MM-dd"
-                    let birthdayString = dateFormatter.string(from: birthday)
-                    paramsTemp["birthday"] = birthdayString
+    func review(rate: Int, channel: String, category: String, orderId: String?, comment: String?, completion: @escaping (Result<Void, SDKError>) -> Void) {
+        mySerialQueue.async {
+            let path = "nps/create"
+            let params: [String : String] = [
+                "did": self.deviceID,
+                "shop_id": self.shopId,
+                "rate": String(rate),
+                "channel": channel,
+                "category": category,
+                "order_id": orderId ?? "",
+                "comment": comment ?? ""
+            ]
+            if rate < 1 || rate > 10 {
+                completion(.failure(.custom(error: "Error: rating can be between 1 and 10 only")))
+                return //выходим из review
+            }
+            let sessionConfig = URLSessionConfiguration.default
+            sessionConfig.timeoutIntervalForRequest = 1
+            self.urlSession = URLSession(configuration: sessionConfig)
+            self.postRequest(path: path, params: params) { (result) in
+                switch result {
+                case .success:
+                    completion(.success(Void()))
+                case let .failure(error):
+                    completion(.failure(error))
                 }
-                
-                if let loyaltyBonuses = loyaltyBonuses {
-                    paramsTemp["loyalty_bonuses"] = String(loyaltyBonuses)
-                }
-                
-                if let loyaltyBonusesToNextLevel = loyaltyBonusesToNextLevel {
-                    paramsTemp["loyalty_bonuses_to_next_level"] = String(loyaltyBonusesToNextLevel)
-                }
-                
-                if let boughtSomething = boughtSomething {
-                    paramsTemp["bought_something"] = boughtSomething == true ? "1" : "0"
-                }
-                
-                if let age = age {
-                    paramsTemp["age"] = String(age)
-                }
-                
-                let sessionConfig = URLSessionConfiguration.default
-                sessionConfig.timeoutIntervalForRequest = 1
-                self.urlSession = URLSession(configuration: sessionConfig)
-                
-                var params: [String: String] =  [String: String]()
-                for item in paramsTemp {
-                    if let value = item.value {
-                        params[item.key] = value
-                    }
-                }
-                
-                self.postRequest(path: path, params: params, completion: { result in
-                    switch result {
-                    case let .success(successResult):
-                        let resJSON = successResult
-                        let status = resJSON["status"] as! String
-                        if status == "success" {
-                            completion(.success(Void()))
-                        } else {
-                            completion(.failure(.responseError))
-                        }
-                    case let .failure(error):
-                        completion(.failure(error))
-                    }
-                })
             }
         }
+    }
+
+    func setProfileData(userEmail: String, userPhone: String?, userLoyaltyId: String?, birthday: Date?, age: Int?, firstName: String?, lastName: String?, location: String?, gender: Gender?, fbID: String?, vkID: String?, telegramID: String?, loyaltyCardLocation: String?, loyaltyStatus: String?, loyaltyBonuses: Int?, loyaltyBonusesToNextLevel: Int?, boughtSomething: Bool?, completion: @escaping (Result<Void, SDKError>) -> Void) {
+        mySerialQueue.async {
+            let path = "profile/set"
+            var paramsTemp: [String: String?] = [
+                "shop_id": self.shopId,
+                "did": self.deviceID,
+                "seance": self.userSeance,
+                "loyalty_id": userLoyaltyId,
+                "fb_id": fbID,
+                "vk_id": vkID,
+                "telegram_id": telegramID,
+                "loyalty_card_location": loyaltyCardLocation,
+                "loyalty_status": loyaltyStatus,
+                "gender": gender == .male ? "m" : "f",
+                "email": userEmail,
+                "first_name": firstName,
+                "last_name": lastName,
+                "phone": userPhone,
+                "loyality_id": userLoyaltyId,
+                "location": location
+            ]
+            
+            if let birthday = birthday {
+                let dateFormatter = DateFormatter()
+                dateFormatter.dateFormat = "yyyy-MM-dd"
+                let birthdayString = dateFormatter.string(from: birthday)
+                paramsTemp["birthday"] = birthdayString
+            }
+            
+            if let loyaltyBonuses = loyaltyBonuses {
+                paramsTemp["loyalty_bonuses"] = String(loyaltyBonuses)
+            }
+            
+            if let loyaltyBonusesToNextLevel = loyaltyBonusesToNextLevel {
+                paramsTemp["loyalty_bonuses_to_next_level"] = String(loyaltyBonusesToNextLevel)
+            }
+            
+            if let boughtSomething = boughtSomething {
+                paramsTemp["bought_something"] = boughtSomething == true ? "1" : "0"
+            }
+            
+            if let age = age {
+                paramsTemp["age"] = String(age)
+            }
+            
+            let sessionConfig = URLSessionConfiguration.default
+            sessionConfig.timeoutIntervalForRequest = 1
+            self.urlSession = URLSession(configuration: sessionConfig)
+            
+            var params: [String: String] =  [String: String]()
+            for item in paramsTemp {
+                if let value = item.value {
+                    params[item.key] = value
+                }
+            }
+            
+            self.postRequest(path: path, params: params, completion: { result in
+                switch result {
+                case let .success(successResult):
+                    let resJSON = successResult
+                    let status = resJSON["status"] as? String ?? ""
+                    if status == "success" {
+                        completion(.success(Void()))
+                    } else {
+                        completion(.failure(.responseError))
+                    }
+                case let .failure(error):
+                    completion(.failure(error))
+                }
+            })
+        }
+    }
 
     func track(event: Event, recommendedBy: RecomendedBy?, completion: @escaping (Result<Void, SDKError>) -> Void) {
         mySerialQueue.async {
@@ -295,13 +300,13 @@ class SimplePersonalizationSDK: PersonalizationSDK {
                 let savedType = UserDefaults.standard.string(forKey: "recomendedType") ?? ""
                 params["source"] = "{\"from\": \"\(savedType)\" , \"code\": \"\(savedCode)\" }"
             }
-
+            
             
             self.postRequest(path: path, params: params, completion: { result in
                 switch result {
                 case let .success(successResult):
                     let resJSON = successResult
-                    let status = resJSON["status"] as! String
+                    let status = resJSON["status"] as? String ?? ""
                     if status == "success" {
                         completion(.success(Void()))
                     } else {
@@ -319,7 +324,6 @@ class SimplePersonalizationSDK: PersonalizationSDK {
         UserDefaults.standard.setValue(code, forKey: "recomendedCode")
         UserDefaults.standard.setValue(source.rawValue, forKey: "recomendedType")
     }
-
 
     func recommend(blockId: String, currentProductId: String?, locations: String?, imageSize: String?, timeOut: Double?, completion: @escaping (Result<RecommenderResponse, SDKError>) -> Void) {
         mySerialQueue.async {
@@ -340,7 +344,7 @@ class SimplePersonalizationSDK: PersonalizationSDK {
             if let imageSize = imageSize {
                 params["resize_image"] = imageSize
             }
-            
+
             if let locations = locations{
                 params["locations"] = locations
             }
@@ -348,7 +352,7 @@ class SimplePersonalizationSDK: PersonalizationSDK {
             let sessionConfig = URLSessionConfiguration.default
             sessionConfig.timeoutIntervalForRequest = timeOut ?? 1
             self.urlSession = URLSession(configuration: sessionConfig)
-            
+
             self.getRequest(path: path, params: params) { result in
                 switch result {
                 case let .success(successResult):
@@ -425,10 +429,10 @@ class SimplePersonalizationSDK: PersonalizationSDK {
                 params["email"] = email
             }
 
+            
             let sessionConfig = URLSessionConfiguration.default
             sessionConfig.timeoutIntervalForRequest = timeOut ?? 1
             self.urlSession = URLSession(configuration: sessionConfig)
-            
             self.getRequest(path: path, params: params) { result in
                 switch result {
                 case let .success(successResult):
@@ -455,13 +459,14 @@ class SimplePersonalizationSDK: PersonalizationSDK {
                 "search_query": query,
                 "segment": self.segment
             ]
-
+            
             if let locations = locations{
                 params["locations"] = locations
             }
             if let extended = extended{
                 params["extended"] = extended
             }
+            
             
             let sessionConfig = URLSessionConfiguration.default
             sessionConfig.timeoutIntervalForRequest = timeOut ?? 1
@@ -499,7 +504,7 @@ class SimplePersonalizationSDK: PersonalizationSDK {
                 switch result {
                 case let .success(successResult):
                     let resJSON = successResult
-                    let status = resJSON["status"] as! String
+                    let status = resJSON["status"] as? String ?? ""
                     if status == "success" {
                         completion(.success(Void()))
                     } else {
@@ -515,16 +520,15 @@ class SimplePersonalizationSDK: PersonalizationSDK {
     private func sendInitRequest(completion: @escaping (Result<InitResponse, SDKError>) -> Void) {
         let path = "init"
         var secondsFromGMT: Int { return TimeZone.current.secondsFromGMT() }
-        let hours = secondsFromGMT / 3600
+        let hours = secondsFromGMT/3600
         let params: [String: String] = [
             "shop_id": shopId,
             "tz": String(hours)
         ]
-
+        
         let sessionConfig = URLSessionConfiguration.default
         sessionConfig.timeoutIntervalForRequest = 1
         self.urlSession = URLSession(configuration: sessionConfig)
-        
         getRequest(path: path, params: params, true) { result in
 
             switch result {
@@ -538,6 +542,7 @@ class SimplePersonalizationSDK: PersonalizationSDK {
             }
         }
     }
+    
 
     private let jsonDecoder: JSONDecoder = {
         let jsonDecoder = JSONDecoder()
@@ -603,16 +608,15 @@ class SimplePersonalizationSDK: PersonalizationSDK {
                 switch result {
                 case .success(let (response, data)):
                     guard let statusCode = (response as? HTTPURLResponse)?.statusCode, 200 ..< 299 ~= statusCode else {
-                        
                         if let json = try? JSONSerialization.jsonObject(with: data) {
-                                                    if let jsonObject = json as? [String:Any] {
-                                                        if let status = jsonObject["status"] as? String, status == "error" {
-                                                            if let errorMessage = jsonObject["message"] as? String {
-                                                                completion(.failure(.custom(error: errorMessage)))
-                                                            }
-                                                        }
-                                                    }
-                                                }
+                            if let jsonObject = json as? [String:Any] {
+                                if let status = jsonObject["status"] as? String, status == "error" {
+                                    if let errorMessage = jsonObject["message"] as? String {
+                                        completion(.failure(.custom(error: errorMessage)))
+                                    }
+                                }
+                            }
+                        }
                         completion(.failure(.invalidResponse))
                         return
                     }
