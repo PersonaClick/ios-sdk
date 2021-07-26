@@ -1,7 +1,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'PersonaClick'
-  s.version          = '1.5.7'
+  s.version          = '1.5.8'
   s.summary          = 'PersonaClick iOS SDK'
 
 # This description is used to generate tags and improve search results.
@@ -11,10 +11,10 @@ Pod::Spec.new do |s|
 #   * Finally, don't worry about the indent, CocoaPods strips it!
 
   s.description      = <<-DESC
-This is iOS SDK for PersonaClick platform. Read documentation here: https://github.com/PersonaClick/ios-sdk
+This is iOS SDK for PersonaClick platform. Read documentation here: https://reference.api.personaclick.com/
                        DESC
 
-  s.homepage         = 'https://github.com/PersonaClick/ios-sdk'
+  s.homepage         = 'https://reference.api.personaclick.com/'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
   s.author           = { 'PersonaClick' => '«support@personaclick.com»' }
 
