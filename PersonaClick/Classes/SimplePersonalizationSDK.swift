@@ -86,6 +86,10 @@ class SimplePersonalizationSDK: PersonalizationSDK {
     func getSession() -> String {
         return userSeance
     }
+    
+    func getCurrentSegment() -> String {
+        return segment
+    }
 
     func setPushTokenNotification(token: String, completion: @escaping (Result<Void, SDKError>) -> Void) {
         mySerialQueue.async {
