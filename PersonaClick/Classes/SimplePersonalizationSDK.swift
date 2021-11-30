@@ -739,8 +739,10 @@ class SimplePersonalizationSDK: PersonalizationSDK {
 
 extension URLSession {
     func dataTask(with url: URL, result: @escaping (Result<(URLResponse, Data), Error>) -> Void) -> URLSessionDataTask {
+        HTTPLogger().logRequest(URLRequest(url: url))
         return dataTask(with: url) { data, response, error in
             if let error = error {
+                HTTPLogger().logError(error)
                 result(.failure(error))
                 return
             }
@@ -749,13 +751,16 @@ extension URLSession {
                 result(.failure(error))
                 return
             }
+            HTTPLogger().logResponse(response, data: data)
             result(.success((response, data)))
         }
     }
 
     func postTask(with request: URLRequest, result: @escaping (Result<(URLResponse, Data), Error>) -> Void) -> URLSessionDataTask {
+        HTTPLogger().logRequest(request)
         return uploadTask(with: request, from: nil) { data, response, error in
             if let error = error {
+                HTTPLogger().logError(error)
                 result(.failure(error))
                 return
             }
@@ -764,7 +769,9 @@ extension URLSession {
                 result(.failure(error))
                 return
             }
+            HTTPLogger().logResponse(response, data: data)
             result(.success((response, data)))
         }
     }
 }
+
