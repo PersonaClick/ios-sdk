@@ -201,7 +201,8 @@ class SimplePersonalizationSDK: PersonalizationSDK {
             var paramsTemp: [String: String?] = [
                 "shop_id": self.shopId,
                 "did": self.deviceID,
-                "seance": self.userSeance
+                "seance": self.userSeance,
+                "sid": self.userSeance,
             ]
             
             if let userEmail = userEmail {
@@ -323,6 +324,7 @@ class SimplePersonalizationSDK: PersonalizationSDK {
                 "shop_id": self.shopId,
                 "did": self.deviceID,
                 "seance": self.userSeance,
+                "sid": self.userSeance,
                 "segment": self.segment,
             ]
             switch event {
@@ -430,6 +432,7 @@ class SimplePersonalizationSDK: PersonalizationSDK {
                 "shop_id": self.shopId,
                 "did": self.deviceID,
                 "seance": self.userSeance,
+                "sid": self.userSeance,
                 "segment": self.segment,
                 "event": event
             ]
@@ -494,6 +497,7 @@ class SimplePersonalizationSDK: PersonalizationSDK {
                 "shop_id": self.shopId,
                 "did": self.deviceID,
                 "seance": self.userSeance,
+                "sid": self.userSeance,
                 "extended": "true",
                 "resize_image": "180",
                 "segment": self.segment
@@ -539,6 +543,7 @@ class SimplePersonalizationSDK: PersonalizationSDK {
                 "shop_id": self.shopId,
                 "did": self.deviceID,
                 "seance": self.userSeance,
+                "sid": self.userSeance,
                 "type": "full_search",
                 "search_query": query,
                 "segment": self.segment
@@ -626,6 +631,7 @@ class SimplePersonalizationSDK: PersonalizationSDK {
                 "shop_id": self.shopId,
                 "did": self.deviceID,
                 "seance": self.userSeance,
+                "sid": self.userSeance,
                 "type": "instant_search",
                 "search_query": query,
                 "segment": self.segment
@@ -689,6 +695,7 @@ class SimplePersonalizationSDK: PersonalizationSDK {
                 "shop_id": self.shopId,
                 "did": self.deviceID,
                 "seance": self.userSeance,
+                "sid": self.userSeance,
                 "segment": self.segment,
                 "item_id": id,
                 "price": currentPrice
@@ -722,8 +729,73 @@ class SimplePersonalizationSDK: PersonalizationSDK {
                 "shop_id": self.shopId,
                 "did": self.deviceID,
                 "seance": self.userSeance,
+                "sid": self.userSeance,
                 "segment": self.segment,
                 "item_id": id
+            ]
+            
+            // If has email
+            if let email = email {
+                params["email"] = email
+            }
+            
+            // If has phone
+            if let phone = phone {
+                params["phone"] = phone
+            }
+
+            self.postRequest(path: path, params: params, completion: { result in
+                switch result {
+                case .success(_):
+                    completion(.success(Void()))
+                case let .failure(error):
+                    completion(.failure(error))
+                }
+            })
+        }
+    }
+    
+    func addToSegment(segmentId: String, email: String? = nil, phone: String? = nil, completion: @escaping (Result<Void, SDKError>) -> Void) {
+        mySerialQueue.async {
+            let path = "segments/add"
+            var params: [String: Any] = [
+                "shop_id": self.shopId,
+                "did": self.deviceID,
+                "seance": self.userSeance,
+                "sid": self.userSeance,
+                "segment_id": segmentId
+            ]
+            
+            // If has email
+            if let email = email {
+                params["email"] = email
+            }
+            
+            // If has phone
+            if let phone = phone {
+                params["phone"] = phone
+            }
+
+            self.postRequest(path: path, params: params, completion: { result in
+                switch result {
+                case .success(_):
+                    completion(.success(Void()))
+                case let .failure(error):
+                    completion(.failure(error))
+                }
+            })
+        }
+    }
+    
+    func removeFromSegment(segmentId: String, email: String? = nil, phone: String? = nil, completion: @escaping (Result<Void, SDKError>) -> Void) {
+        mySerialQueue.async {
+            let path = "segments/remove"
+            var params: [String: Any] = [
+                "shop_id": self.shopId,
+                "did": self.deviceID,
+                "seance": self.userSeance,
+                "sid": self.userSeance,
+                "segment_id": segmentId
             ]
             
             // If has email
