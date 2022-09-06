@@ -324,7 +324,6 @@ class SimplePersonalizationSDK: PersonalizationSDK {
                 "did": self.deviceID,
                 "seance": self.userSeance,
                 "segment": self.segment,
-                "stream": self.stream
             ]
             switch event {
             case let .search(query):
@@ -432,7 +431,6 @@ class SimplePersonalizationSDK: PersonalizationSDK {
                 "did": self.deviceID,
                 "seance": self.userSeance,
                 "segment": self.segment,
-                "stream": self.stream,
                 "event": event
             ]
             
@@ -543,8 +541,7 @@ class SimplePersonalizationSDK: PersonalizationSDK {
                 "seance": self.userSeance,
                 "type": "full_search",
                 "search_query": query,
-                "segment": self.segment,
-                "stream": self.stream
+                "segment": self.segment
             ]
             if let limit = limit{
                 params["limit"] = String(limit)
@@ -631,8 +628,7 @@ class SimplePersonalizationSDK: PersonalizationSDK {
                 "seance": self.userSeance,
                 "type": "instant_search",
                 "search_query": query,
-                "segment": self.segment,
-                "stream": self.stream
+                "segment": self.segment
             ]
             
             if let locations = locations{
@@ -694,7 +690,6 @@ class SimplePersonalizationSDK: PersonalizationSDK {
                 "did": self.deviceID,
                 "seance": self.userSeance,
                 "segment": self.segment,
-                "stream": self.stream,
                 "item_id": id,
                 "price": currentPrice
             ]
@@ -728,7 +723,6 @@ class SimplePersonalizationSDK: PersonalizationSDK {
                 "did": self.deviceID,
                 "seance": self.userSeance,
                 "segment": self.segment,
-                "stream": self.stream,
                 "item_id": id
             ]
             
@@ -759,8 +753,7 @@ class SimplePersonalizationSDK: PersonalizationSDK {
         let hours = secondsFromGMT/3600
         let params: [String: String] = [
             "shop_id": shopId,
-            "tz": String(hours),
-            "stream": self.stream
+            "tz": String(hours)
         ]
         
         let sessionConfig = URLSessionConfiguration.default
@@ -800,6 +793,7 @@ class SimplePersonalizationSDK: PersonalizationSDK {
         for item in params{
             queryItems.append(URLQueryItem(name: item.key, value: item.value))
         }
+        queryItems.append(URLQueryItem(name: "stream", value: stream))
         url?.queryItems = queryItems
 
         if let endUrl = url?.url {
@@ -835,11 +829,19 @@ class SimplePersonalizationSDK: PersonalizationSDK {
     }
 
     private func postRequest(path: String, params: [String: Any], completion: @escaping (Result<[String: Any], SDKError>) -> Void) {
+        
+        var requestParams : [String: Any] = [
+            "stream": stream
+        ]
+        for (key, value) in params {
+                  requestParams[key] = value
+             }
+        
         if let url = URL(string: baseURL + path) {
             var request = URLRequest(url: url)
             request.httpMethod = "POST"
             do {
-                request.httpBody = try JSONSerialization.data(withJSONObject: params, options: .prettyPrinted)
+                request.httpBody = try JSONSerialization.data(withJSONObject: requestParams, options: .prettyPrinted)
             } catch let error {
                 completion(.failure(.custom(error: "00001: \(error.localizedDescription)")))
                 return
@@ -887,13 +889,14 @@ class SimplePersonalizationSDK: PersonalizationSDK {
         }
     }
 
-    private func getPostString(params: [String: Any]) -> String {
-        var data = [String]()
-        for (key, value) in params {
-            data.append(key + "=\(value)")
-        }
-        return data.map { String($0) }.joined(separator: "&")
-    }
+    // @DELETE after 2022-09-15
+//    private func getPostString(params: [String: Any]) -> String {
+//        var data = [String]()
+//        for (key, value) in params {
+//            data.append(key + "=\(value)")
+//        }
+//        return data.map { String($0) }.joined(separator: "&")
+//    }
 }
 
 extension URLSession {
