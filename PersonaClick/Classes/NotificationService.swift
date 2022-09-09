@@ -5,6 +5,7 @@
 
 import Foundation
 import UserNotifications
+import UIKit
 
 public protocol NotificationServicePushDelegate: AnyObject {
     func openCategory(categoryId: String)
