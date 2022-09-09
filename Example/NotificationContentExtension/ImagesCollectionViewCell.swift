@@ -4,20 +4,23 @@ class ImagesCollectionViewCell: UICollectionViewCell {
     @IBOutlet var imageView: UIImageView!
     @IBOutlet var nameLabel: UILabel!
     @IBOutlet var oldPriceLabel: UILabel!
+    @IBOutlet var oldPriceView: UIView!
     @IBOutlet var priceLabel: UILabel!
 
     override func awakeFromNib() {
         super.awakeFromNib()
-        oldPriceLabel.isHidden = true
+        oldPriceView.isHidden = true
+        nameLabel.textColor = .black
+        priceLabel.textColor = .black
         layer.cornerRadius = 8.0
     }
 
     func configure(product: Product) {
         if let oldPrice = product.oldPrice, !oldPrice.isEmpty {
-            oldPriceLabel.isHidden = false
+            oldPriceView.isHidden = false
             oldPriceLabel.attributedText = strikeThrough(str: oldPrice)
         } else {
-            oldPriceLabel.isHidden = true
+            oldPriceView.isHidden = true
         }
         priceLabel.text = product.price
         nameLabel.text = product.name
@@ -32,7 +35,6 @@ class ImagesCollectionViewCell: UICollectionViewCell {
 
     private func setImage(imagePath: String) {
         guard let url = URL(string: imagePath) else {
-            print("Failed to present attachment due to an invalid url: ", imagePath)
             return
         }
 

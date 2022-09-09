@@ -63,14 +63,12 @@ class SimplePersonalizationSDK: PersonalizationSDK {
                             completion(nil)
                         }
                     }else{
-                        print("PersonalizationSDK error: SDK DECODE FAIL")
                         if let completion = completion {
                             completion(.decodeError)
                         }
                     }
                     self.semaphore.signal()
                 case .failure(let error):
-                    print("PersonalizationSDK error: SDK INIT FAIL")
                     if let completion = completion {
                         completion(error)
                     }
@@ -119,23 +117,23 @@ class SimplePersonalizationSDK: PersonalizationSDK {
     
     func setFirebasePushToken(token: String, completion: @escaping (Result<Void, SDKError>) -> Void) {
         mySerialQueue.async {
-           let path = "mobile_push_tokens"
-           let params = [
-               "shop_id": self.shopId,
-               "did": self.deviceID,
-               "token": token,
-               "platform": "android",
-           ]
-           let sessionConfig = URLSessionConfiguration.default
-           sessionConfig.timeoutIntervalForRequest = 1
-           self.urlSession = URLSession(configuration: sessionConfig)
-           self.postRequest(path: path, params: params, completion: { result in
-               switch result {
-               case .success:
-                   completion(.success(Void()))
-               case let .failure(error):
-                   completion(.failure(error))
-               }
+            let path = "mobile_push_tokens"
+            let params = [
+                "shop_id": self.shopId,
+                "did": self.deviceID,
+                "token": token,
+                "platform": "android",
+            ]
+            let sessionConfig = URLSessionConfiguration.default
+            sessionConfig.timeoutIntervalForRequest = 1
+            self.urlSession = URLSession(configuration: sessionConfig)
+            self.postRequest(path: path, params: params, completion: { result in
+                switch result {
+                case .success:
+                    completion(.success(Void()))
+                case let .failure(error):
+                    completion(.failure(error))
+                }
             })
         }
     }
@@ -325,9 +323,17 @@ class SimplePersonalizationSDK: PersonalizationSDK {
                 "did": self.deviceID,
                 "seance": self.userSeance,
                 "sid": self.userSeance,
-                "segment": self.segment,
+                "segment": self.segment
             ]
             switch event {
+            case let .slideView(storyId, slideId):
+                params["story_id"] = storyId
+                params["slide_id"] = slideId
+                paramEvent = "view"
+            case let .slideClick(storyId, slideId):
+                params["story_id"] = storyId
+                params["slide_id"] = slideId
+                paramEvent = "click"
             case let .search(query):
                 params["search_query"] = query
                 paramEvent = "search"
@@ -433,8 +439,7 @@ class SimplePersonalizationSDK: PersonalizationSDK {
                 "did": self.deviceID,
                 "seance": self.userSeance,
                 "sid": self.userSeance,
-                "segment": self.segment,
-                "event": event
+                "segment": self.segment
             ]
             
             if let category = category {
@@ -688,6 +693,7 @@ class SimplePersonalizationSDK: PersonalizationSDK {
         }
     }
     
+    
     func subscribeForPriceDrop(id: String, currentPrice: Double, email: String? = nil, phone: String? = nil, completion: @escaping (Result<Void, SDKError>) -> Void) {
         mySerialQueue.async {
             let path = "subscriptions/subscribe_for_product_price"
@@ -890,6 +896,29 @@ class SimplePersonalizationSDK: PersonalizationSDK {
         }
     }
     
+    
+    func getStories(completion: @escaping (Result<StoriesResponse, SDKError>) -> Void) {
+        let path = "stories"
+        let params: [String: String] = [
+            "shop_id": shopId,
+            "did": deviceID
+        ]
+        let sessionConfig = URLSessionConfiguration.default
+        sessionConfig.timeoutIntervalForRequest = 1
+        self.urlSession = URLSession(configuration: sessionConfig)
+        getRequest(path: path, params: params, true) { result in
+
+            switch result {
+            case let .success(successResult):
+                let resJSON = successResult
+                let resultResponse = StoriesResponse(json: resJSON)
+                completion(.success(resultResponse))
+            case let .failure(error):
+                completion(.failure(error))
+            }
+        }
+    }
+    
 
     private let jsonDecoder: JSONDecoder = {
         let jsonDecoder = JSONDecoder()
@@ -953,7 +982,7 @@ class SimplePersonalizationSDK: PersonalizationSDK {
         for (key, value) in params {
                   requestParams[key] = value
              }
-        
+
         if let url = URL(string: baseURL + path) {
             var request = URLRequest(url: url)
             request.httpMethod = "POST"
@@ -1053,4 +1082,3 @@ extension URLSession {
         }
     }
 }
-
