@@ -33,7 +33,7 @@ public struct Recommended {
     public var resizedImageUrl: String = ""
     public var url: String = ""
     public var categories = [Category]()
-    
+
     public var price: Double = 0
     public var priceFormatted: String?
     public var priceFull: Double = 0
@@ -42,7 +42,7 @@ public struct Recommended {
     public var oldPriceFormatted: String?
     public var oldPriceFull: Double = 0
     public var oldPriceFullFormatted: String?
-    
+
     public var currency: String = ""
     public var salesRate: Int = 0
     public var discount: Bool = false
@@ -51,6 +51,7 @@ public struct Recommended {
     public var fashionOriginalSizes: [String] = []
     public var fashionSizes: [String] = []
     public var fashionColors: [String] = []
+    public var resizedImages: [String: String] = [:]
 
     init(json: [String: Any]) {
         id = json["id"] as? String ?? ""
@@ -74,6 +75,7 @@ public struct Recommended {
         salesRate = json["sales_rate"] as? Int ?? 0
         relativeSalesRate = json["relative_sales_rate"] as? Float ?? 0.0
         discount = json["discount"] as? Bool ?? false
+        resizedImages = json["image_url_resized"] as? [String: String] ?? [:]
         
         let cats = json["categories"] as? [[String: Any]] ?? []
         var catsTemp = [Category]()
@@ -91,6 +93,8 @@ public struct Recommended {
         
     }
 }
+
+
 
 
 public enum RecommendedByCase: String {
