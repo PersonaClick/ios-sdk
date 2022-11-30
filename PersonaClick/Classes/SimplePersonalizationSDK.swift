@@ -191,12 +191,12 @@ class SimplePersonalizationSDK: PersonalizationSDK {
         }
     }
 
-    func setProfileData(userEmail: String?, userPhone: String?, userLoyaltyId: String?, birthday: Date?, age: Int?, firstName: String?, lastName: String?, location: String?, gender: Gender?, fbID: String?, vkID: String?, telegramID: String?, loyaltyCardLocation: String?, loyaltyStatus: String?, loyaltyBonuses: Int?, loyaltyBonusesToNextLevel: Int?, boughtSomething: Bool?, userId: String?, customProperties: [String: String?]?, completion: @escaping (Result<Void, SDKError>) -> Void) {
+    func setProfileData(userEmail: String?, userPhone: String?, userLoyaltyId: String?, birthday: Date?, age: Int?, firstName: String?, lastName: String?, location: String?, gender: Gender?, fbID: String?, vkID: String?, telegramID: String?, loyaltyCardLocation: String?, loyaltyStatus: String?, loyaltyBonuses: Int?, loyaltyBonusesToNextLevel: Int?, boughtSomething: Bool?, userId: String?, customProperties: [String: Any?]?, completion: @escaping (Result<Void, SDKError>) -> Void) {
         mySerialQueue.async {
             
             let path = "profile/set"
             
-            var paramsTemp: [String: String?] = [
+            var paramsTemp: [String: Any?] = [
                 "shop_id": self.shopId,
                 "did": self.deviceID,
                 "seance": self.userSeance,
@@ -290,10 +290,15 @@ class SimplePersonalizationSDK: PersonalizationSDK {
             sessionConfig.timeoutIntervalForRequest = 1
             self.urlSession = URLSession(configuration: sessionConfig)
             
-            var params: [String: String] = [String: String]()
+            var params: [String: Any] = [String: Any]()
             for item in paramsTemp {
-                if let value = item.value {
-                    params[item.key] = value
+                if item.value is Date {
+                    let formatter = DateFormatter()
+                    formatter.dateFormat = "YYYY-MM-dd"
+                    guard let date = item.value as? Date else {continue}
+                    params[item.key] = formatter.string(from: date)
+                } else {
+                    params[item.key] = item.value
                 }
             }
             
