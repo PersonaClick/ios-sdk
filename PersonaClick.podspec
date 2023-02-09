@@ -24,6 +24,8 @@ This is iOS SDK for PersonaClick platform. Read documentation here: https://refe
   s.ios.deployment_target = '9.3'
 
   s.source_files = 'PersonaClick/Classes/**/*'
+  s.pod_target_xcconfig = { 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64' }
+  s.user_target_xcconfig = { 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64' }
   s.swift_version = '5'
 
 end
