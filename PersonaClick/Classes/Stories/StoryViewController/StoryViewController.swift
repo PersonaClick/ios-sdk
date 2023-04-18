@@ -58,7 +58,17 @@ class StoryViewController: UIViewController, UIGestureRecognizerDelegate {
         setupLongGestureRecognizerOnCollection()
         NotificationCenter.default.addObserver(self, selector: #selector(willEnterForeground), name: UIApplication.willEnterForegroundNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(didEnterBackground), name: UIApplication.didEnterBackgroundNotification, object: nil)
+        
+        //NotificationCenter.default.addObserver(self, selector: #selector(DOWNVIDEO(_:)), name: .init(rawValue: "DOWNVIDEO"), object: nil)
+        
     }
+    
+    @objc
+    private func DOWNVIDEO(_ notification: NSNotification) {
+    //func DOWNVIDEO() {
+        collectionView.reloadData()
+    }
+      
     
     @objc
     func willEnterForeground() {
@@ -90,10 +100,15 @@ class StoryViewController: UIViewController, UIGestureRecognizerDelegate {
         NSLayoutConstraint(item: pageIndicator, attribute: NSLayoutConstraint.Attribute.right, relatedBy: NSLayoutConstraint.Relation.equal, toItem: view, attribute: NSLayoutConstraint.Attribute.right, multiplier: 1, constant: -16).isActive = true
 
         NSLayoutConstraint(item: pageIndicator, attribute: NSLayoutConstraint.Attribute.left, relatedBy: NSLayoutConstraint.Relation.equal, toItem: view, attribute: NSLayoutConstraint.Attribute.left, multiplier: 1, constant: 16).isActive = true
+        
+        let valueDynamicIsland = UIDevice().checkIfHasDynamicIsland()
+        if valueDynamicIsland {
+            NSLayoutConstraint(item: pageIndicator, attribute: NSLayoutConstraint.Attribute.top, relatedBy: NSLayoutConstraint.Relation.equal, toItem: view, attribute: NSLayoutConstraint.Attribute.top, multiplier: 1, constant: 57).isActive = true }
+        else {
+            NSLayoutConstraint(item: pageIndicator, attribute: NSLayoutConstraint.Attribute.top, relatedBy: NSLayoutConstraint.Relation.equal, toItem: view, attribute: NSLayoutConstraint.Attribute.top, multiplier: 1, constant: 40).isActive = true
+        }
 
-        NSLayoutConstraint(item: pageIndicator, attribute: NSLayoutConstraint.Attribute.top, relatedBy: NSLayoutConstraint.Relation.equal, toItem: view, attribute: NSLayoutConstraint.Attribute.top, multiplier: 1, constant: 40).isActive = true
-
-        NSLayoutConstraint(item: pageIndicator, attribute: NSLayoutConstraint.Attribute.height, relatedBy: NSLayoutConstraint.Relation.equal, toItem: nil, attribute: NSLayoutConstraint.Attribute.notAnAttribute, multiplier: 1, constant: 8).isActive = true
+        NSLayoutConstraint(item: pageIndicator, attribute: NSLayoutConstraint.Attribute.height, relatedBy: NSLayoutConstraint.Relation.equal, toItem: nil, attribute: NSLayoutConstraint.Attribute.notAnAttribute, multiplier: 1, constant: 4).isActive = true
         
         closeButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint(item: closeButton, attribute: NSLayoutConstraint.Attribute.right, relatedBy: NSLayoutConstraint.Relation.equal, toItem: view, attribute: NSLayoutConstraint.Attribute.right, multiplier: 1, constant: -10).isActive = true
@@ -101,23 +116,40 @@ class StoryViewController: UIViewController, UIGestureRecognizerDelegate {
         NSLayoutConstraint(item: closeButton, attribute: NSLayoutConstraint.Attribute.width, relatedBy: NSLayoutConstraint.Relation.equal, toItem: nil, attribute: NSLayoutConstraint.Attribute.notAnAttribute, multiplier: 1, constant: 30).isActive = true
         NSLayoutConstraint(item: closeButton, attribute: NSLayoutConstraint.Attribute.height, relatedBy: NSLayoutConstraint.Relation.equal, toItem: nil, attribute: NSLayoutConstraint.Attribute.notAnAttribute, multiplier: 1, constant: 30).isActive = true
 
-
         configureView()
         closeButton.addTarget(self, action: #selector(didTapCloseButton), for: .touchUpInside)
-        
         
         let leftSwipe = UISwipeGestureRecognizer(target: self, action: #selector(didSwipeLeft))
         leftSwipe.direction = .left
         let rightSwipe = UISwipeGestureRecognizer(target: self, action: #selector(didSwipeRight))
         rightSwipe.direction = .right
+        let tap = UITapGestureRecognizer(target: self, action: #selector(didTapOnScreen(_:)))
         
         collectionView.addGestureRecognizer(leftSwipe)
         collectionView.addGestureRecognizer(rightSwipe)
+        collectionView.addGestureRecognizer(tap)
+        
     }
     
-    @objc
-    func didSwipeLeft() {
-        if currentPosition.section >= stories.count - 1 {
+    @objc private func didTapOnScreen(_ gestureRecognizer: UITapGestureRecognizer) {
+        let tapLocation = gestureRecognizer.location(in: self.view)
+        let halfWidth = self.view.bounds.width / 2.0
+        if tapLocation.x < halfWidth {
+            handleLeftTap()
+        } else {
+            handleRightTap()
+        }
+    }
+    
+    private func handleRightTap() {
+        if currentPosition.row < stories[currentPosition.section].slides.count - 1 {
+            currentPosition.row += 1
+            collectionView.scrollToItem(at: currentPosition, at: .left, animated: true)
+            DispatchQueue.main.async {
+                self.updateSlides()
+            }
+        } else if currentPosition.section >= stories.count - 1 {
+            // break
             self.dismiss(animated: true)
         } else if currentPosition.section < stories.count - 1 {
             currentPosition.section += 1
@@ -128,29 +160,19 @@ class StoryViewController: UIViewController, UIGestureRecognizerDelegate {
                 self.updateSlides()
             }
         }
-//        if currentPosition.row < stories[currentPosition.section].slides.count - 1 {
-//            currentPosition.row += 1
-//            collectionView.scrollToItem(at: currentPosition, at: .left, animated: true)
-//            DispatchQueue.main.async {
-//                self.updateSlides()
-//            }
-//        } else if currentPosition.section > stories.count - 1 {
-//            self.dismiss(animated: true)
-//            // break
-//        } else if currentPosition.section < stories.count - 1 {
-//            currentPosition.section += 1
-//            currentPosition.row = 0
-//            collectionView.scrollToItem(at: currentPosition, at: .left, animated: true)
-//
-//            DispatchQueue.main.async {
-//                self.updateSlides()
-//            }
-//        }
     }
     
-    @objc
-    func didSwipeRight() {
-        if currentPosition.section > 0 {
+    private func handleLeftTap() {
+        if currentPosition.row > 0 { 
+            currentPosition.row -= 1
+            collectionView.scrollToItem(at: currentPosition, at: .left, animated: true)
+            DispatchQueue.main.async {
+                self.updateSlides()
+            }
+        } else if currentPosition.section == 0 {
+            // break
+            self.dismiss(animated: true)
+        } else if currentPosition.section >= 1 {
             currentPosition.section -= 1
             currentPosition.row = 0
             collectionView.scrollToItem(at: currentPosition, at: .left, animated: true)
@@ -159,31 +181,53 @@ class StoryViewController: UIViewController, UIGestureRecognizerDelegate {
                 self.updateSlides()
             }
         }
-//        if currentPosition.row > 0 {
-//            currentPosition.row -= 1
-//            collectionView.scrollToItem(at: currentPosition, at: .left, animated: true)
-//            DispatchQueue.main.async {
-//                self.updateSlides()
-//            }
-//        } else if currentPosition.section > 0 {
-//            currentPosition.section -= 1
-//            currentPosition.row = stories[currentPosition.section].slides.count - 1
-//            collectionView.scrollToItem(at: currentPosition, at: .left, animated: true)
-//
-//            DispatchQueue.main.async {
-//                self.updateSlides()
-//            }
-//        }
+    }
+    
+    @objc
+    func didSwipeLeft() {
+        if currentPosition.section >= stories.count - 1{
+            dismiss(animated: true)
+        } else {
+            currentPosition.section += 1
+            currentPosition.row = 0
+            scrollToFirstRow()
+            collectionView.scrollToItem(at: currentPosition, at: .left, animated: true)
+
+            DispatchQueue.main.async {
+                self.updateSlides()
+            }
+        }
+    }
+    
+    private func scrollToFirstRow() {
+        let sectionFrame = collectionView.layoutAttributesForItem(at: IndexPath(item: 0, section: currentPosition.section))?.frame ?? .zero
+        print(sectionFrame)
+        collectionView.setContentOffset(CGPoint(x: sectionFrame.origin.x - collectionView.contentInset.left, y: 0), animated: false)
+        
+    }
+    
+    @objc
+    func didSwipeRight() {
+        if currentPosition.section > 0 {
+            currentPosition.section -= 1
+            currentPosition.row = 0
+            scrollToFirstRow()
+            collectionView.scrollToItem(at: currentPosition, at: .left, animated: true)
+            DispatchQueue.main.async {
+                self.updateSlides()
+            }
+        } else {
+            dismiss(animated: true)
+        }
     }
 
     private func configureView() {
         collectionView.delegate = self
         collectionView.dataSource = self
         let bundle = Bundle(for: classForCoder)
-        closeButton.setImage(UIImage(named: "iconClose", in: bundle, compatibleWith: nil), for: .normal)
+        closeButton.setImage(UIImage(named: "iconStoryClose", in: bundle, compatibleWith: nil), for: .normal)
 
-        let nib = UINib(nibName: "StoryCollectionViewCell", bundle: bundle)
-        collectionView.register(nib, forCellWithReuseIdentifier: "StoryCollectionViewCell")
+        collectionView.register(StoryCollectionViewCell.self, forCellWithReuseIdentifier: StoryCollectionViewCell.cellId)
         updateSlides()
     }
 
@@ -253,9 +297,8 @@ class StoryViewController: UIViewController, UIGestureRecognizerDelegate {
         if let url = URL(string: link) {
             if #available(iOS 10.0, *) {
                 pauseTimer()
-                UIApplication.shared.open(url)
-            } else {
-                // Fallback on earlier versions
+                present(url: url, completion: nil)
+                //UIApplication.shared.open(url) //Safari default
             }
         }
     }
@@ -326,7 +369,7 @@ extension StoryViewController: UICollectionViewDelegate, UICollectionViewDataSou
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "StoryCollectionViewCell", for: indexPath) as! StoryCollectionViewCell
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: StoryCollectionViewCell.cellId, for: indexPath) as? StoryCollectionViewCell else {return UICollectionViewCell()}
         let slide = stories[indexPath.section].slides[indexPath.row]
         cell.configure(slide: slide)
         cell.delegate = self
@@ -346,6 +389,12 @@ extension StoryViewController: UICollectionViewDelegate, UICollectionViewDataSou
             }
         }
     }
+    
+    func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        if let _cell = cell as? StoryCollectionViewCell {
+            _cell.stopPlayer()
+        }
+    }
 
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
 //        timer.invalidate()
@@ -356,24 +405,9 @@ extension StoryViewController: UICollectionViewDelegate, UICollectionViewDataSou
     }
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if currentPosition.row < stories[currentPosition.section].slides.count - 1 {
-            currentPosition.row += 1
-            collectionView.scrollToItem(at: currentPosition, at: .left, animated: true)
-            DispatchQueue.main.async {
-                self.updateSlides()
-            }
-        } else if currentPosition.section >= stories.count - 1 {
-            // break
-            self.dismiss(animated: true)
-        } else if currentPosition.section < stories.count - 1 {
-            currentPosition.section += 1
-            currentPosition.row = 0
-            collectionView.scrollToItem(at: currentPosition, at: .left, animated: true)
-
-            DispatchQueue.main.async {
-                self.updateSlides()
-            }
-        }
+        
+        guard let cell = collectionView.cellForItem(at: indexPath) as? StoryCollectionViewCell else {return}
+        cell.stopPlayer()
     }
 
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
@@ -387,7 +421,7 @@ extension StoryViewController: UICollectionViewDelegate, UICollectionViewDataSou
     }
 }
 extension StoryViewController: StoryCollectionViewCellDelegate {
-    func didTapUrlButton(url: String, slide: StorySlide) {
+    func didTapUrlButton(url: String, slide: Slide) {
         self.openUrl(link: url)
         for (section, story) in stories.enumerated() {
             for (row, storySlide) in story.slides.enumerated() {
@@ -405,5 +439,19 @@ extension UICollectionView {
               indexPath.row < numberOfItems(inSection: indexPath.section)
         else { return false }
         return true
+    }
+}
+
+extension UIDevice {
+    func checkIfHasDynamicIsland() -> Bool {
+        if let simulatorModelIdentifier = ProcessInfo().environment["SIMULATOR_MODEL_IDENTIFIER"] {
+            let nameSimulator = simulatorModelIdentifier
+            return nameSimulator == "iPhone15,2" || nameSimulator == "iPhone15,3" ? true : false
+        }
+        
+        var sysinfo = utsname()
+        uname(&sysinfo) //ignore return value
+        let name =  String(bytes: Data(bytes: &sysinfo.machine, count: Int(_SYS_NAMELEN)), encoding: .ascii)!.trimmingCharacters(in: .controlCharacters)
+        return name == "iPhone15,2" || name == "iPhone15,3" ? true : false
     }
 }

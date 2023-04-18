@@ -204,51 +204,51 @@ class SimplePersonalizationSDK: PersonalizationSDK {
             ]
             
             if let userEmail = userEmail {
-                paramsTemp["email"] = userEmail
+                paramsTemp["email"] = String(userEmail)
             }
             
             if let firstName = firstName {
-                paramsTemp["first_name"] = firstName
+                paramsTemp["first_name"] = String(firstName)
             }
             
             if let lastName = lastName {
-                paramsTemp["last_name"] = lastName
+                paramsTemp["last_name"] = String(lastName)
             }
             
             if let userPhone = userPhone {
-                paramsTemp["phone"] = userPhone
+                paramsTemp["phone"] = String(userPhone)
             }
             
             if let location = location {
-                paramsTemp["location"] = location
+                paramsTemp["location"] = String(location)
             }
 
             if let loyaltyCardLocation = loyaltyCardLocation {
-                paramsTemp["loyalty_card_location"] = loyaltyCardLocation
+                paramsTemp["loyalty_card_location"] = String(loyaltyCardLocation)
             }
 
             if let userLoyaltyId = userLoyaltyId {
-                paramsTemp["loyalty_id"] = userLoyaltyId
+                paramsTemp["loyalty_id"] = String(userLoyaltyId)
             }
 
             if let loyaltyStatus = loyaltyStatus {
-                paramsTemp["loyalty_status"] = loyaltyStatus
+                paramsTemp["loyalty_status"] = String(loyaltyStatus)
             }
 
             if let fbID = fbID {
-                paramsTemp["fb_id"] = fbID
+                paramsTemp["fb_id"] = String(fbID)
             }
             
             if let vkID = vkID {
-                paramsTemp["vk_id"] = vkID
+                paramsTemp["vk_id"] = String(vkID)
             }
             
             if let telegramID = telegramID {
-                paramsTemp["telegram_id"] = telegramID
+                paramsTemp["telegram_id"] = String(telegramID)
             }
             
             if let userId = userId {
-                paramsTemp["id"] = userId
+                paramsTemp["id"] = String(userId)
             }
             
             if gender == .male {
@@ -949,7 +949,7 @@ class SimplePersonalizationSDK: PersonalizationSDK {
     }
     
     
-    func getStories(code: String, completion: @escaping (Result<StoriesResponse, SDKError>) -> Void) {
+    func getStories(code: String, completion: @escaping (Result<StoryContent, SDKError>) -> Void) {
         self.storiesCode = code
         let path = "stories/\(code)"
         let params: [String: String] = [
@@ -957,15 +957,14 @@ class SimplePersonalizationSDK: PersonalizationSDK {
             "did": deviceID
         ]
         let sessionConfig = URLSessionConfiguration.default
-        sessionConfig.timeoutIntervalForRequest = 1
+        sessionConfig.timeoutIntervalForRequest = 10
         self.urlSession = URLSession(configuration: sessionConfig)
         getRequest(path: path, params: params, true) { result in
 
             switch result {
             case let .success(successResult):
-                let resJSON = successResult
-                let resultResponse = StoriesResponse(json: resJSON)
-                completion(.success(resultResponse))
+                let res = StoryContent(json: successResult)
+                completion(.success(res))
             case let .failure(error):
                 completion(.failure(error))
             }
@@ -985,7 +984,6 @@ class SimplePersonalizationSDK: PersonalizationSDK {
     private func getRequest(path: String, params: [String: String], _ isInit: Bool = false, completion: @escaping (Result<[String: Any], SDKError>) -> Void) {
 
         let urlString = baseURL + path
-
         var url = URLComponents(string: urlString)
 
         var queryItems = [URLQueryItem]()
