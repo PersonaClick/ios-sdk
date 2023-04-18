@@ -21,11 +21,10 @@ This is iOS SDK for PersonaClick platform. Read documentation here: https://refe
   s.source       = { :git => "https://github.com/PersonaClick/ios-sdk.git", :branch => "master",
   :tag => s.version.to_s }
 
-  s.ios.deployment_target = '9.3'
+  s.ios.deployment_target = '11.0'
 
   s.source_files = 'PersonaClick/Classes/**/*'
-  s.pod_target_xcconfig = { 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64' }
-  s.user_target_xcconfig = { 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64' }
+  s.resources = 'PersonaClick/**/*.{xcassets,json,png}'
   s.swift_version = '5'
 
 end
