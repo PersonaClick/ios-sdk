@@ -1,8 +1,3 @@
-
-//
-//  SimplePersonaliztionSDK.swift
-//
-
 import Foundation
 
 public var global_EL: Bool = true

@@ -1,10 +1,3 @@
-//
-//  File.swift
-//  
-//
-//  Created by Роман Ковайкин on 15.03.2023.
-//
-
 import UIKit
 
 extension String {
