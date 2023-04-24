@@ -1,12 +1,4 @@
-//
-//  CustomButton.swift
-//  
-//
-//  Created by Роман Ковайкин on 15.03.2023.
-//
-
 import UIKit
-
 
 protocol CustomButtonDelegate: AnyObject {
     func openDeepLink(url: String)

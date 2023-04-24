@@ -1,7 +1,3 @@
-//
-//  PersonalizationSDK.swift
-//
-
 import Foundation
 import UIKit
 
