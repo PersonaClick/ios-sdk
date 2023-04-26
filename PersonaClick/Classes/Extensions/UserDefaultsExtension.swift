@@ -21,7 +21,10 @@ extension UserDefaults {
         removeObject(forKey: key.name)
     }
 }
+<<<<<<< HEAD
 
 extension UserDefaults.Key {
     static let currentStory = UserDefaults.Key("currentStory")
 }
+=======
+>>>>>>> dfcfbd8 (GenerateStructurePod 26 Apr)
