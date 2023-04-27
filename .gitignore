@@ -3,7 +3,8 @@
 /Packages
 /*.xcodeproj
 xcuserdata/
+Example
 Example/Pods
 .idea
 .swiftpm
-
+/.swiftpm

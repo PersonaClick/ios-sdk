@@ -34,8 +34,8 @@ public class NotificationService: NotificationServiceProtocol {
             if res {
                 if #available(iOS 10.0, *) {
                     let categoryIdentifier = "carousel"
-                    let carouselNext = UNNotificationAction(identifier: "carousel.next", title: "Следующий", options: [])
-                    let carouselPrevious = UNNotificationAction(identifier: "carousel.previous", title: "Предыдущий", options: [])
+                    let carouselNext = UNNotificationAction(identifier: "carousel.next", title: "Next", options: [])
+                    let carouselPrevious = UNNotificationAction(identifier: "carousel.previous", title: "Previous", options: [])
 
                     let carouselCategory = UNNotificationCategory(identifier: categoryIdentifier, actions: [carouselNext, carouselPrevious], intentIdentifiers: [], options: [])
                     UNUserNotificationCenter.current().setNotificationCategories([carouselCategory])
