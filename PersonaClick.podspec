@@ -5,12 +5,13 @@ Pod::Spec.new do |s|
   s.summary                     = 'PersonaClick SDK for iOS'
 
   s.description                 = <<-DESC
-                                This is PersonaClick SDK for iOS platform. Read documentation here: https://reference.api.personaclick.com/
+                                This is PersonaClick SDK for iOS platform.
+                                Read documentation here: https://reference.api.personaclick.com/
                                 DESC
 
   s.homepage                    = 'https://reference.api.personaclick.com/'
   s.social_media_url            = 'https://personaclick.com/'
-  s.license          = { :type => 'MIT', :file => 'LICENSE' }
+  s.license                     = { :type => 'MIT', :file => 'LICENSE' }
   s.author                      = { 'PersonaClick' => '«support@personaclick.com»' }
 
   s.source                      = { :git => "https://github.com/PersonaClick/ios-sdk.git", :branch => "master",
