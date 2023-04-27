@@ -20,7 +20,7 @@ Pod::Spec.new do |s|
   s.ios.deployment_target       = '11.0'
 
   s.source_files                = 'PersonaClick/Classes/**/*'
-  s.resources                   = 'PersonaClick/**/*.{xcassets,json,png}'
+  s.resources                   = 'PersonaClick/**/*.{png}'
 
   s.swift_version = '5'
 
