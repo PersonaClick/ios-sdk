@@ -1,6 +1,17 @@
 import UIKit
+import WebKit
+
+public protocol StoryViewControllerProtocol: AnyObject {
+    func didTapLinkIosOpeningExternal(url: String)
+    func reloadStoriesCollectionSubviews()
+}
+
+public protocol StoriesAppDelegateProtocol: AnyObject {
+    func didTapLinkIosOpeningForAppDelegate(url: String)
+}
 
 class StoryViewController: UIViewController, UIGestureRecognizerDelegate {
+    
     private var collectionView: UICollectionView = {
         let frame = CGRect(x: 0, y: 0, width: 300, height: 100)
         let layout = UICollectionViewFlowLayout()
@@ -15,9 +26,7 @@ class StoryViewController: UIViewController, UIGestureRecognizerDelegate {
         collectionView.showsVerticalScrollIndicator = false
         collectionView.showsHorizontalScrollIndicator = false
 //        collectionView.isScrollEnabled = false
-        if #available(iOS 10.0, *) {
-            collectionView.isPrefetchingEnabled = false
-        }
+        collectionView.isPrefetchingEnabled = false
         return collectionView
     }()
 
@@ -54,6 +63,7 @@ class StoryViewController: UIViewController, UIGestureRecognizerDelegate {
     private var needSaveStoryLocal = true
     
     public var sdk: PersonalizationSDK?
+    public var linkDelegate: StoriesViewMainProtocol?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -72,6 +82,7 @@ class StoryViewController: UIViewController, UIGestureRecognizerDelegate {
     func didEnterBackground() {
         pauseTimer()
     }
+    
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         timer.invalidate()
@@ -104,10 +115,18 @@ class StoryViewController: UIViewController, UIGestureRecognizerDelegate {
         NSLayoutConstraint(item: pageIndicator, attribute: NSLayoutConstraint.Attribute.height, relatedBy: NSLayoutConstraint.Relation.equal, toItem: nil, attribute: NSLayoutConstraint.Attribute.notAnAttribute, multiplier: 1, constant: 4).isActive = true
         
         closeButton.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint(item: closeButton, attribute: NSLayoutConstraint.Attribute.right, relatedBy: NSLayoutConstraint.Relation.equal, toItem: view, attribute: NSLayoutConstraint.Attribute.right, multiplier: 1, constant: -10).isActive = true
-        NSLayoutConstraint(item: closeButton, attribute: NSLayoutConstraint.Attribute.top, relatedBy: NSLayoutConstraint.Relation.equal, toItem: pageIndicator, attribute: NSLayoutConstraint.Attribute.bottom, multiplier: 1, constant: 10).isActive = true
-        NSLayoutConstraint(item: closeButton, attribute: NSLayoutConstraint.Attribute.width, relatedBy: NSLayoutConstraint.Relation.equal, toItem: nil, attribute: NSLayoutConstraint.Attribute.notAnAttribute, multiplier: 1, constant: 30).isActive = true
-        NSLayoutConstraint(item: closeButton, attribute: NSLayoutConstraint.Attribute.height, relatedBy: NSLayoutConstraint.Relation.equal, toItem: nil, attribute: NSLayoutConstraint.Attribute.notAnAttribute, multiplier: 1, constant: 30).isActive = true
+        
+        if valueDynamicIsland {
+            NSLayoutConstraint(item: closeButton, attribute: NSLayoutConstraint.Attribute.right, relatedBy: NSLayoutConstraint.Relation.equal, toItem: view, attribute: NSLayoutConstraint.Attribute.right, multiplier: 1, constant: -10).isActive = true
+            NSLayoutConstraint(item: closeButton, attribute: NSLayoutConstraint.Attribute.top, relatedBy: NSLayoutConstraint.Relation.equal, toItem: pageIndicator, attribute: NSLayoutConstraint.Attribute.bottom, multiplier: 1, constant: 26).isActive = true
+            NSLayoutConstraint(item: closeButton, attribute: NSLayoutConstraint.Attribute.width, relatedBy: NSLayoutConstraint.Relation.equal, toItem: nil, attribute: NSLayoutConstraint.Attribute.notAnAttribute, multiplier: 1, constant: 30).isActive = true
+            NSLayoutConstraint(item: closeButton, attribute: NSLayoutConstraint.Attribute.height, relatedBy: NSLayoutConstraint.Relation.equal, toItem: nil, attribute: NSLayoutConstraint.Attribute.notAnAttribute, multiplier: 1, constant: 30).isActive = true
+        } else {
+            NSLayoutConstraint(item: closeButton, attribute: NSLayoutConstraint.Attribute.right, relatedBy: NSLayoutConstraint.Relation.equal, toItem: view, attribute: NSLayoutConstraint.Attribute.right, multiplier: 1, constant: -10).isActive = true
+            NSLayoutConstraint(item: closeButton, attribute: NSLayoutConstraint.Attribute.top, relatedBy: NSLayoutConstraint.Relation.equal, toItem: pageIndicator, attribute: NSLayoutConstraint.Attribute.bottom, multiplier: 1, constant: 5).isActive = true
+            NSLayoutConstraint(item: closeButton, attribute: NSLayoutConstraint.Attribute.width, relatedBy: NSLayoutConstraint.Relation.equal, toItem: nil, attribute: NSLayoutConstraint.Attribute.notAnAttribute, multiplier: 1, constant: 30).isActive = true
+            NSLayoutConstraint(item: closeButton, attribute: NSLayoutConstraint.Attribute.height, relatedBy: NSLayoutConstraint.Relation.equal, toItem: nil, attribute: NSLayoutConstraint.Attribute.notAnAttribute, multiplier: 1, constant: 30).isActive = true
+        }
 
         configureView()
         closeButton.addTarget(self, action: #selector(didTapCloseButton), for: .touchUpInside)
@@ -171,7 +190,7 @@ class StoryViewController: UIViewController, UIGestureRecognizerDelegate {
             
             var allStoriesMainArray: [String] = []
             for (index, _) in stories[currentPosition.section + 1].slides.enumerated() {
-                print("Story has \(index + 1): \(stories[currentPosition.section + 1].slides[(index)].id)")
+                //print("Story has \(index + 1): \(stories[currentPosition.section + 1].slides[(index)].id)")
                 allStoriesMainArray.append(String(stories[currentPosition.section + 1].slides[(index)].id))
             }
             
@@ -185,7 +204,6 @@ class StoryViewController: UIViewController, UIGestureRecognizerDelegate {
                 var currentDefaultIndex = 0
                 for name in allStoriesMainArray {
                     if name == lastWatchedIndexValue {
-                        print("Story \(name) for index \(currentDefaultIndex)")
                         break
                     }
                     currentDefaultIndex += 1
@@ -222,7 +240,7 @@ class StoryViewController: UIViewController, UIGestureRecognizerDelegate {
     
     private func handleLeftTap() {
         
-        if currentPosition.row > 0 { 
+        if currentPosition.row > 0 {
             currentPosition.row -= 1
             collectionView.scrollToItem(at: currentPosition, at: .left, animated: true)
             DispatchQueue.main.async {
@@ -240,7 +258,7 @@ class StoryViewController: UIViewController, UIGestureRecognizerDelegate {
             
             var allStoriesMainArray: [String] = []
             for (index, _) in stories[currentPosition.section - 1].slides.enumerated() {
-                print("Story has \(index + 1): \(stories[currentPosition.section - 1].slides[(index)].id)")
+                //print("Story has \(index + 1): \(stories[currentPosition.section - 1].slides[(index)].id)")
                 allStoriesMainArray.append(String(stories[currentPosition.section - 1].slides[(index)].id))
             }
             
@@ -254,7 +272,7 @@ class StoryViewController: UIViewController, UIGestureRecognizerDelegate {
                 var currentDefaultIndex = 0
                 for name in allStoriesMainArray {
                     if name == lastWatchedIndexValue {
-                        print("Story \(name) for index \(currentDefaultIndex)")
+                        //print("Story \(name) for index \(currentDefaultIndex)")
                         break
                     }
                     currentDefaultIndex += 1
@@ -313,7 +331,7 @@ class StoryViewController: UIViewController, UIGestureRecognizerDelegate {
             
             var allStoriesMainArray: [String] = []
             for (index, _) in stories[currentPosition.section + 1].slides.enumerated() {
-                print("Story has \(index + 1): \(stories[currentPosition.section + 1].slides[(index)].id)")
+                //print("Story has \(index + 1): \(stories[currentPosition.section + 1].slides[(index)].id)")
                 allStoriesMainArray.append(String(stories[currentPosition.section + 1].slides[(index)].id))
             }
             
@@ -327,7 +345,7 @@ class StoryViewController: UIViewController, UIGestureRecognizerDelegate {
                 var currentDefaultIndex = 0
                 for name in allStoriesMainArray {
                     if name == lastWatchedIndexValue {
-                        print("Story \(name) for index \(currentDefaultIndex)")
+                        //print("Story \(name) for index \(currentDefaultIndex)")
                         break
                     }
                     currentDefaultIndex += 1
@@ -379,7 +397,7 @@ class StoryViewController: UIViewController, UIGestureRecognizerDelegate {
             
             var allStoriesMainArray: [String] = []
             for (index, _) in stories[currentPosition.section - 1].slides.enumerated() {
-                print("Story has \(index + 1): \(stories[currentPosition.section - 1].slides[(index)].id)")
+                //print("Story has \(index + 1): \(stories[currentPosition.section - 1].slides[(index)].id)")
                 allStoriesMainArray.append(String(stories[currentPosition.section - 1].slides[(index)].id))
             }
             
@@ -393,7 +411,7 @@ class StoryViewController: UIViewController, UIGestureRecognizerDelegate {
                 var currentDefaultIndex = 0
                 for name in allStoriesMainArray {
                     if name == lastWatchedIndexValue {
-                        print("Story \(name) for index \(currentDefaultIndex)")
+                        //print("Story \(name) for index \(currentDefaultIndex)")
                         break
                     }
                     currentDefaultIndex += 1
@@ -437,15 +455,22 @@ class StoryViewController: UIViewController, UIGestureRecognizerDelegate {
     private func configureView() {
         collectionView.delegate = self
         collectionView.dataSource = self
-        let bundle = Bundle(for: classForCoder)
-        closeButton.setImage(UIImage(named: "iconStoryClose", in: bundle, compatibleWith: nil), for: .normal)
+        
+        var mainBundle = Bundle(for: classForCoder)
+#if SWIFT_PACKAGE
+        mainBundle = Bundle.module
+#endif
+        let image = UIImage(named: "iconStoryClose", in: mainBundle, compatibleWith: nil)
+        closeButton.setImage(image, for: .normal)
 
         collectionView.register(StoryCollectionViewCell.self, forCellWithReuseIdentifier: StoryCollectionViewCell.cellId)
+        //preloader = StoriesRingLoader.createStoriesLoader()
         updateSlides()
     }
 
     @objc
     func didTapCloseButton() {
+        self.linkDelegate?.reloadStoriesCollectionSubviews()
         dismiss(animated: true)
     }
 
@@ -475,8 +500,37 @@ class StoryViewController: UIViewController, UIGestureRecognizerDelegate {
         let duration: Float = Float(timeLeft)
         currentProgressView = progressView
         currentDuration = duration
-        timer.invalidate()
-        timer = Timer.scheduledTimer(timeInterval: 0.05, target: self, selector: #selector(updateTime), userInfo: nil, repeats: true)
+        
+        let storyImageSlideId = String(stories[currentPosition.section].slides[currentPosition.row].id)
+        let prefix = "waitStorySlideCached." + storyImageSlideId
+        let imagesForStoriesDownloadedArray: [String] = UserDefaults.standard.getValue(for: UserDefaults.Key(prefix)) as? [String] ?? []
+        let imageStoryIdDownloaded = imagesForStoriesDownloadedArray.contains(where: {
+            $0.range(of: String(prefix)) != nil
+        })
+        
+        if imageStoryIdDownloaded {
+            timer.invalidate()
+            timer = Timer.scheduledTimer(timeInterval: 0.05, target: self, selector: #selector(updateTime), userInfo: nil, repeats: true)
+            //preloader.stopPreloaderAnimation()
+        } else {
+            let name = "waitStorySlideCached." + storyImageSlideId
+            NotificationCenter.default.addObserver(self, selector: #selector(self.updateVisibleCells(notification:)), name: Notification.Name(name), object: nil)
+            
+            //preloader = StoriesRingLoader.createStoriesLoader()
+            //preloader.startAnimation()
+        }
+    }
+    
+    @objc func updateVisibleCells(notification: NSNotification){
+        DispatchQueue.main.async {
+            if let visibleCell = self.collectionView.indexPathsForVisibleItems.first {
+                self.currentPosition = visibleCell
+                self.collectionView.reloadItems(at: self.collectionView.indexPathsForVisibleItems)
+                DispatchQueue.main.async {
+                    self.updateSlides()
+                }
+            }
+        }
     }
 
     @objc func updateTime() {
@@ -505,7 +559,7 @@ class StoryViewController: UIViewController, UIGestureRecognizerDelegate {
                 
                 var allStoriesMainArray: [String] = []
                 for (index, _) in stories[currentPosition.section + 1].slides.enumerated() {
-                    print("Story has \(index + 1): \(stories[currentPosition.section + 1].slides[(index)].id)")
+                    //print("Story has \(index + 1): \(stories[currentPosition.section + 1].slides[(index)].id)")
                     allStoriesMainArray.append(String(stories[currentPosition.section + 1].slides[(index)].id))
                 }
                 
@@ -519,7 +573,7 @@ class StoryViewController: UIViewController, UIGestureRecognizerDelegate {
                     var currentDefaultIndex = 0
                     for name in allStoriesMainArray {
                         if name == lastWatchedIndexValue {
-                            print("Story \(name) for index \(currentDefaultIndex)")
+                            //print("Story \(name) for index \(currentDefaultIndex)")
                             break
                         }
                         currentDefaultIndex += 1
@@ -553,13 +607,27 @@ class StoryViewController: UIViewController, UIGestureRecognizerDelegate {
         }
     }
     
+    private func saveStorySlideWatching(index: IndexPath) {
+        let storyId = String(stories[index.section].id)
+        let storyName = "story." + storyId
+        let slideId = String(stories[index.section].slides[index.row].id)
+        
+        var watchedStoriesArray: [String] = UserDefaults.standard.getValue(for: UserDefaults.Key(storyName)) as? [String] ?? []
+        let watchedStoryIdExists = watchedStoriesArray.contains(where: {
+            $0.range(of: String(slideId)) != nil
+        })
+        
+        if !watchedStoryIdExists {
+            watchedStoriesArray.append(slideId)
+            UserDefaults.standard.setValue(watchedStoriesArray, for: UserDefaults.Key(storyName))
+        }
+    }
+    
     private func openUrl(link: String) {
         if let url = URL(string: link) {
-            if #available(iOS 10.0, *) {
-                pauseTimer()
-                present(url: url, completion: nil)
-                //UIApplication.shared.open(url) //Safari default
-            }
+            pauseTimer()
+            present(url: url, completion: nil)
+            //UIApplication.shared.open(url) //Safari default
         }
     }
     
@@ -567,7 +635,7 @@ class StoryViewController: UIViewController, UIGestureRecognizerDelegate {
         timer.invalidate()
     }
     
-    private func continueTimer() {
+    @objc private func continueTimer() {
         endTime = Date().addingTimeInterval(timeLeft)
         timer = Timer.scheduledTimer(timeInterval: 0.05, target: self, selector: #selector(updateTime), userInfo: nil, repeats: true)
     }
@@ -584,22 +652,6 @@ class StoryViewController: UIViewController, UIGestureRecognizerDelegate {
         let slideId = String(stories[index.section].slides[index.row].id)
         sdk?.track(event: .slideClick(storyId: storyId, slideId: slideId), recommendedBy: nil, completion: { result in
         })
-    }
-    
-    private func saveStorySlideWatching(index: IndexPath) {
-        let storyId = String(stories[index.section].id)
-        let storyName = "story." + storyId
-        let slideId = String(stories[index.section].slides[index.row].id)
-        
-        var watchedStoriesArray: [String] = UserDefaults.standard.getValue(for: UserDefaults.Key(storyName)) as? [String] ?? []
-        let watchedStoryIdExists = watchedStoriesArray.contains(where: {
-            $0.range(of: String(slideId)) != nil
-        })
-        
-        if !watchedStoryIdExists {
-            watchedStoriesArray.append(slideId)
-            UserDefaults.standard.setValue(watchedStoriesArray, for: UserDefaults.Key(storyName))
-        }
     }
     
     private func setupLongGestureRecognizerOnCollection() {
@@ -638,6 +690,10 @@ class StoryViewController: UIViewController, UIGestureRecognizerDelegate {
         func currentScroll(direction: String) {
             currentScrollDirection = direction
         }
+    }
+    
+    public func didTapOpenLinkIosExternalWeb(url: String, slide: Slide) {
+        self.linkDelegate?.extendLinkIos(url: url)
     }
 }
 
@@ -682,7 +738,6 @@ extension StoryViewController: UICollectionViewDelegate, UICollectionViewDataSou
                 flowLayout.currentScroll(direction: scrollDirection)
             }
             lastContentStoryOffset = currentOffset
-            //print(needSaveStoryLocal)
             if (scrollDirection == "Left" && needSaveStoryLocal) {
                 saveStorySlideWatching(index: indexPath)
             }
@@ -713,6 +768,7 @@ extension StoryViewController: UICollectionViewDelegate, UICollectionViewDataSou
         }
     }
 }
+
 extension StoryViewController: StoryCollectionViewCellDelegate {
     func didTapUrlButton(url: String, slide: Slide) {
         self.openUrl(link: url)
@@ -723,6 +779,12 @@ extension StoryViewController: StoryCollectionViewCellDelegate {
                 }
             }
         }
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(continueTimer), name: Notification.Name("ContinueTimerWebKitClosed"), object: nil)
+    }
+    
+    public func didTapLinkIosOpeningForAppDelegate(url: String, slide: Slide) {
+    self.linkDelegate?.extendLinkIos(url: url)// extendLinkIos(url: url)// didTapLinkIosOpeningExternal(url: url)
     }
 }
 

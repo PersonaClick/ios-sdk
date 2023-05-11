@@ -32,7 +32,7 @@
                         </constraints>
                         <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <state key="normal" title="Button"/>
-                        <buttonConfiguration key="configuration" style="plain" title="TAP ME"/>
+                        <buttonConfiguration key="configuration" style="plain" title="Continue"/>
                     </button>
                 </subviews>
             </view>

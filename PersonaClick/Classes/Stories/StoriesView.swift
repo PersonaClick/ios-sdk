@@ -1,6 +1,17 @@
 import Foundation
 import UIKit
 
+public protocol StoriesAdsService: AnyObject {
+    func openLinkWebKit(url: String)
+}
+
+public protocol StoriesViewMainProtocol: AnyObject {
+    func extendLinkIos(url: String)
+    func reloadStoriesCollectionSubviews()
+    var storiesDelegate: StoriesViewMainProtocol? { get set }
+    //var adsService: StoriesAdsService? { get set }
+}
+
 public class StoriesView: UIView {
     
     let cellId = "StoriesCollectionViewPreviewCell"
@@ -8,7 +19,7 @@ public class StoriesView: UIView {
     private var collectionView: UICollectionView = {
         let testFrame = CGRect(x: 0, y: 0, width: 300, height: 113)
         let layout = UICollectionViewFlowLayout()
-//        layout.horizontalAlignment = .left
+        //layout.horizontalAlignment = .left
         layout.minimumLineSpacing = 10
         layout.minimumInteritemSpacing = 10
         layout.scrollDirection = .horizontal
@@ -24,6 +35,9 @@ public class StoriesView: UIView {
     private var stories: [Story]?
     private var settings: StoriesSettings?
     private var sdk: PersonalizationSDK?
+    
+    public var storiesDelegate: StoriesViewMainProtocol?
+    
     private var mainVC: UIViewController?
     private var code: String = ""
     
@@ -66,12 +80,8 @@ public class StoriesView: UIView {
     private func setBgColor(color: String) {
         let hex = color.hexToRGB()
         DispatchQueue.main.async {
-            self.collectionView.backgroundColor = UIColor(red: hex.red, green: hex.green, blue: hex.blue, alpha: 1)
+            self.collectionView.backgroundColor = UIColor(red: hex.red, green: hex.green, blue: hex.blue, alpha: 0)
         }
-    }
-    
-    public func reloadData() {
-        self.collectionView.reloadData()
     }
 
     private func loadData() {
@@ -109,6 +119,7 @@ extension StoriesView: UICollectionViewDelegate, UICollectionViewDataSource, UIC
     
     public func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: StoriesCollectionViewPreviewCell.cellId, for: indexPath) as? StoriesCollectionViewPreviewCell else {return UICollectionViewCell()}
+        
         if let currentStory = stories?[indexPath.row] {
             
             let storyId = String(currentStory.id)
@@ -116,12 +127,11 @@ extension StoriesView: UICollectionViewDelegate, UICollectionViewDataSource, UIC
             
             var allStoriesMainArray: [String] = []
             for (index, _) in currentStory.slides.enumerated() {
-                print("Story has \(index + 1): \(currentStory.slides[(index)].id)")
+                //print("Story has \(index + 1): \(currentStory.slides[(index)].id)")
                 allStoriesMainArray.append(String(currentStory.slides[(index)].id))
             }
             
             let watchedStoriesArray: [String] = UserDefaults.standard.getValue(for: UserDefaults.Key(storyName)) as? [String] ?? []
-            //let watchedStoriesArray: [String] = defaults.stringArray(forKey: storyName) ?? []
             if (watchedStoriesArray.count == allStoriesMainArray.count) {
                 cell.configureCell(settings: settings, viewed: currentStory.viewed, viewedLocalKey: true)
                 cell.configure(story: currentStory)
@@ -130,12 +140,17 @@ extension StoriesView: UICollectionViewDelegate, UICollectionViewDataSource, UIC
                 cell.configure(story: currentStory)
             }
         }
+//        if let currentStory = stories?[indexPath.row] {
+//            cell.configureCell(settings: settings, viewed: currentStory.viewed, viewedLocalKey: false)
+//            cell.configure(story: currentStory)
+//        }
         return cell
     }
 
     public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if let currentStory = stories?[indexPath.row] {
             let storyVC = StoryViewController()
+            storyVC.linkDelegate = self
             storyVC.sdk = sdk
             storyVC.stories = stories ?? []
             
@@ -174,6 +189,23 @@ extension StoriesView: UICollectionViewDelegate, UICollectionViewDataSource, UIC
                 storyVC.modalPresentationStyle = .fullScreen
                 mainVC?.present(storyVC, animated: true)
             }
+        }
+    }
+}
+
+extension StoriesView: StoriesViewMainProtocol {
+    public func extendLinkIos(url: String) {
+        print("Open linkIos url for external \(url)")
+    }
+    
+    public func didTapLinkIosOpeningExternal(url: String) {
+        print("Open linkIos url for external \(url)")
+    }
+
+    public func reloadStoriesCollectionSubviews() {
+        UICollectionView.performWithoutAnimation {
+            self.collectionView.layoutIfNeeded()
+            self.collectionView.reloadData()
         }
     }
 }
