@@ -25,7 +25,7 @@ class StoryViewController: UIViewController, UIGestureRecognizerDelegate {
         collectionView.backgroundColor = .black
         collectionView.showsVerticalScrollIndicator = false
         collectionView.showsHorizontalScrollIndicator = false
-//        collectionView.isScrollEnabled = false
+        //collectionView.isScrollEnabled = false
         collectionView.isPrefetchingEnabled = false
         return collectionView
     }()
@@ -64,6 +64,8 @@ class StoryViewController: UIViewController, UIGestureRecognizerDelegate {
     
     public var sdk: PersonalizationSDK?
     public var linkDelegate: StoriesViewMainProtocol?
+    
+    var preloader = StoriesRingView()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -71,6 +73,9 @@ class StoryViewController: UIViewController, UIGestureRecognizerDelegate {
         setupLongGestureRecognizerOnCollection()
         NotificationCenter.default.addObserver(self, selector: #selector(willEnterForeground), name: UIApplication.willEnterForegroundNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(didEnterBackground), name: UIApplication.didEnterBackgroundNotification, object: nil)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(pauseTimer), name: .init(rawValue: "ExternalActionStoryPause"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(continueTimer), name: .init(rawValue: "ExternalActionStoryPlay"), object: nil)
     }
     
     @objc
@@ -105,8 +110,7 @@ class StoryViewController: UIViewController, UIGestureRecognizerDelegate {
 
         NSLayoutConstraint(item: pageIndicator, attribute: NSLayoutConstraint.Attribute.left, relatedBy: NSLayoutConstraint.Relation.equal, toItem: view, attribute: NSLayoutConstraint.Attribute.left, multiplier: 1, constant: 16).isActive = true
         
-        let valueDynamicIsland = UIDevice().checkIfHasDynamicIsland()
-        if valueDynamicIsland {
+        if UIDevice().checkIfHasDynamicIsland() {
             NSLayoutConstraint(item: pageIndicator, attribute: NSLayoutConstraint.Attribute.top, relatedBy: NSLayoutConstraint.Relation.equal, toItem: view, attribute: NSLayoutConstraint.Attribute.top, multiplier: 1, constant: 62).isActive = true }
         else {
             NSLayoutConstraint(item: pageIndicator, attribute: NSLayoutConstraint.Attribute.top, relatedBy: NSLayoutConstraint.Relation.equal, toItem: view, attribute: NSLayoutConstraint.Attribute.top, multiplier: 1, constant: 40).isActive = true
@@ -116,7 +120,7 @@ class StoryViewController: UIViewController, UIGestureRecognizerDelegate {
         
         closeButton.translatesAutoresizingMaskIntoConstraints = false
         
-        if valueDynamicIsland {
+        if UIDevice().checkIfHasDynamicIsland() {
             NSLayoutConstraint(item: closeButton, attribute: NSLayoutConstraint.Attribute.right, relatedBy: NSLayoutConstraint.Relation.equal, toItem: view, attribute: NSLayoutConstraint.Attribute.right, multiplier: 1, constant: -10).isActive = true
             NSLayoutConstraint(item: closeButton, attribute: NSLayoutConstraint.Attribute.top, relatedBy: NSLayoutConstraint.Relation.equal, toItem: pageIndicator, attribute: NSLayoutConstraint.Attribute.bottom, multiplier: 1, constant: 26).isActive = true
             NSLayoutConstraint(item: closeButton, attribute: NSLayoutConstraint.Attribute.width, relatedBy: NSLayoutConstraint.Relation.equal, toItem: nil, attribute: NSLayoutConstraint.Attribute.notAnAttribute, multiplier: 1, constant: 30).isActive = true
@@ -140,7 +144,6 @@ class StoryViewController: UIViewController, UIGestureRecognizerDelegate {
         collectionView.addGestureRecognizer(leftSwipe)
         collectionView.addGestureRecognizer(rightSwipe)
         collectionView.addGestureRecognizer(tap)
-        
     }
     
     @objc private func didTapOnScreen(_ gestureRecognizer: UITapGestureRecognizer) {
@@ -382,7 +385,7 @@ class StoryViewController: UIViewController, UIGestureRecognizerDelegate {
     
     private func scrollToFirstRow() {
         let sectionFrame = collectionView.layoutAttributesForItem(at: IndexPath(item: 0, section: currentPosition.section))?.frame ?? .zero
-        print(sectionFrame)
+        //print(sectionFrame)
         collectionView.setContentOffset(CGPoint(x: sectionFrame.origin.x - collectionView.contentInset.left, y: 0), animated: false)
     }
     
@@ -631,11 +634,13 @@ class StoryViewController: UIViewController, UIGestureRecognizerDelegate {
         }
     }
     
+    @objc
     private func pauseTimer() {
         timer.invalidate()
     }
     
-    @objc private func continueTimer() {
+    @objc
+    private func continueTimer() {
         endTime = Date().addingTimeInterval(timeLeft)
         timer = Timer.scheduledTimer(timeInterval: 0.05, target: self, selector: #selector(updateTime), userInfo: nil, repeats: true)
     }
@@ -656,12 +661,18 @@ class StoryViewController: UIViewController, UIGestureRecognizerDelegate {
     
     private func setupLongGestureRecognizerOnCollection() {
         let longPressedGesture = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress(gestureRecognizer:)))
-        longPressedGesture.minimumPressDuration = 0.2
+        longPressedGesture.minimumPressDuration = 0.15
+        longPressedGesture.allowableMovement = 70
         longPressedGesture.delegate = self
         longPressedGesture.delaysTouchesBegan = true
+        longPressedGesture.cancelsTouchesInView = true
         collectionView.addGestureRecognizer(longPressedGesture)
     }
-
+    
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRequireFailureOf otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        return false
+    }
+    
     @objc func handleLongPress(gestureRecognizer: UILongPressGestureRecognizer) {
         if gestureRecognizer.state == .ended {
             let p = gestureRecognizer.location(in: collectionView)
@@ -673,10 +684,16 @@ class StoryViewController: UIViewController, UIGestureRecognizerDelegate {
             return
         }
         if (gestureRecognizer.state != .began) {
+            let p = gestureRecognizer.location(in: collectionView)
+
+            if let indexPath = collectionView.indexPathForItem(at: p) {
+                let slide = stories[indexPath.section].slides[indexPath.row]
+                NotificationCenter.default.post(name: .init(rawValue: "PauseVideoLongTap"), object: nil, userInfo: ["slideID": slide.id])
+                pauseTimer()
+            }
             return
         } else {
             let p = gestureRecognizer.location(in: collectionView)
-
             if let indexPath = collectionView.indexPathForItem(at: p) {
                 let slide = stories[indexPath.section].slides[indexPath.row]
                 NotificationCenter.default.post(name: .init(rawValue: "PauseVideoLongTap"), object: nil, userInfo: ["slideID": slide.id])
@@ -784,7 +801,7 @@ extension StoryViewController: StoryCollectionViewCellDelegate {
     }
     
     public func didTapLinkIosOpeningForAppDelegate(url: String, slide: Slide) {
-    self.linkDelegate?.extendLinkIos(url: url)// extendLinkIos(url: url)// didTapLinkIosOpeningExternal(url: url)
+        self.linkDelegate?.extendLinkIos(url: url)
     }
 }
 
@@ -805,7 +822,7 @@ extension UIDevice {
         }
         
         var sysinfo = utsname()
-        uname(&sysinfo) //ignore return value
+        uname(&sysinfo)
         let name =  String(bytes: Data(bytes: &sysinfo.machine, count: Int(_SYS_NAMELEN)), encoding: .ascii)!.trimmingCharacters(in: .controlCharacters)
         return name == "iPhone15,2" || name == "iPhone15,3" ? true : false
     }

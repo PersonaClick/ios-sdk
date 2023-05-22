@@ -1,7 +1,7 @@
 
 Pod::Spec.new do |s|
   s.name                        = 'PersonaClick'
-  s.version                     = '3.3.5'
+  s.version                     = '3.3.6'
   s.summary                     = 'PersonaClick SDK for iOS'
 
   s.description                 = <<-DESC

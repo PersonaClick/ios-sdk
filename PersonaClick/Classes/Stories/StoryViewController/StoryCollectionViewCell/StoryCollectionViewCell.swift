@@ -25,6 +25,8 @@ class StoryCollectionViewCell: UICollectionViewCell {
     var player = AVPlayer()
     private let timeObserverKeyPath: String = "timeControlStatus"
     
+    var preloader = StoriesRingView()
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         
@@ -84,8 +86,7 @@ class StoryCollectionViewCell: UICollectionViewCell {
         imageView.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
         imageView.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
         
-        let valueDynamicIsland = UIDevice().checkIfHasDynamicIsland()
-        if valueDynamicIsland {
+        if UIDevice().checkIfHasDynamicIsland() {
             storyButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16).isActive = true
             storyButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16).isActive = true
             storyButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -18).isActive = true
@@ -95,6 +96,13 @@ class StoryCollectionViewCell: UICollectionViewCell {
             storyButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16).isActive = true
             storyButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -22).isActive = true
             storyButton.heightAnchor.constraint(equalToConstant: 60).isActive = true
+            
+            if GlobalHelper.DeviceType.IS_IPHONE_XS_MAX {
+                storyButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16).isActive = true
+                storyButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16).isActive = true
+                storyButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -18).isActive = true
+                storyButton.heightAnchor.constraint(equalToConstant: 54).isActive = true
+            }
         }
         
 //        storyButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16).isActive = true
@@ -120,16 +128,6 @@ class StoryCollectionViewCell: UICollectionViewCell {
 //    }
     
     @objc
-    private func showSpinnner(_ notification: NSNotification) {
-        //preloader.startPreloaderAnimation()
-    }
-    
-    @objc
-    private func hideSpinnner(_ notification: NSNotification) {
-        //preloader.stopPreloaderAnimation()
-    }
-    
-    @objc
     private func pauseVideo(_ notification: NSNotification) {
         if let slideID = notification.userInfo?["slideID"] as? Int {
             if let currentSlide = currentSlide {
@@ -143,7 +141,6 @@ class StoryCollectionViewCell: UICollectionViewCell {
     @objc
     private func playVideo(_ notification: NSNotification) {
         //preloader.stopPreloaderAnimation()
-        
         if let slideID = notification.userInfo?["slideID"] as? Int {
             if let currentSlide = currentSlide {
                 if currentSlide.id == slideID {
@@ -272,7 +269,6 @@ class StoryCollectionViewCell: UICollectionViewCell {
     func stopPlayer() {
         player.pause()
     }
-
     
     @objc
     private func didTapButton() {
@@ -310,26 +306,13 @@ class StoryCollectionViewCell: UICollectionViewCell {
         task.resume()
     }
 
-    private func hexStringToUIColor (hex:String) -> UIColor {
-        var cString:String = hex.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()
-
-        if (cString.hasPrefix("#")) {
-            cString.remove(at: cString.startIndex)
-        }
-
-        if ((cString.count) != 6) {
-            return UIColor.gray
-        }
-
-        var rgbValue:UInt64 = 0
-        Scanner(string: cString).scanHexInt64(&rgbValue)
-
-        return UIColor(
-            red: CGFloat((rgbValue & 0xFF0000) >> 16) / 255.0,
-            green: CGFloat((rgbValue & 0x00FF00) >> 8) / 255.0,
-            blue: CGFloat(rgbValue & 0x0000FF) / 255.0,
-            alpha: CGFloat(1.0)
-        )
+    @objc
+    private func showSpinnner(_ notification: NSNotification) {
+        //preloader.startPreloaderAnimation()
     }
     
+    @objc
+    private func hideSpinnner(_ notification: NSNotification) {
+        //preloader.stopPreloaderAnimation()
+    }
 }
