@@ -1,15 +1,14 @@
 import Foundation
 import UIKit
 
-public protocol StoriesAdsService: AnyObject {
-    func openLinkWebKit(url: String)
+public protocol StoriesCommunicationProtocol: AnyObject {
+    func receiveIosLink(text: String)
 }
 
 public protocol StoriesViewMainProtocol: AnyObject {
     func extendLinkIos(url: String)
     func reloadStoriesCollectionSubviews()
     var storiesDelegate: StoriesViewMainProtocol? { get set }
-    //var adsService: StoriesAdsService? { get set }
 }
 
 public class StoriesView: UIView {
@@ -25,6 +24,7 @@ public class StoriesView: UIView {
         layout.scrollDirection = .horizontal
         
         layout.itemSize = CGSize(width: 76, height: 113)
+        layout.sectionInset = UIEdgeInsets(top: 0, left: 18, bottom: 0, right: 18)
         
         let collectionView = UICollectionView(frame: testFrame, collectionViewLayout: layout)
         collectionView.showsHorizontalScrollIndicator = false
@@ -37,6 +37,7 @@ public class StoriesView: UIView {
     private var sdk: PersonalizationSDK?
     
     public var storiesDelegate: StoriesViewMainProtocol?
+    public weak var communicationDelegate: StoriesCommunicationProtocol?
     
     private var mainVC: UIViewController?
     private var code: String = ""
@@ -105,6 +106,14 @@ public class StoriesView: UIView {
             }
         }
     }
+    
+    public func pauseStoryNow() {
+        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "ExternalActionStoryPause"), object: nil)
+    }
+    
+    public func playStoryNow() {
+        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "ExternalActionStoryPlay"), object: nil)
+    }
 }
 
 extension StoriesView: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
@@ -114,7 +123,10 @@ extension StoriesView: UICollectionViewDelegate, UICollectionViewDataSource, UIC
 
     public func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return isInDownloadMode ? 4 : stories?.count ?? 0
-        
+    }
+
+    public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return 18
     }
     
     public func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -140,10 +152,6 @@ extension StoriesView: UICollectionViewDelegate, UICollectionViewDataSource, UIC
                 cell.configure(story: currentStory)
             }
         }
-//        if let currentStory = stories?[indexPath.row] {
-//            cell.configureCell(settings: settings, viewed: currentStory.viewed, viewedLocalKey: false)
-//            cell.configure(story: currentStory)
-//        }
         return cell
     }
 
@@ -195,7 +203,7 @@ extension StoriesView: UICollectionViewDelegate, UICollectionViewDataSource, UIC
 
 extension StoriesView: StoriesViewMainProtocol {
     public func extendLinkIos(url: String) {
-        print("Open linkIos url for external \(url)")
+        self.communicationDelegate?.receiveIosLink(text: url)
     }
     
     public func didTapLinkIosOpeningExternal(url: String) {
