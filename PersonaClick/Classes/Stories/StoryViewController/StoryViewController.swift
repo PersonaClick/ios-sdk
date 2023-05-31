@@ -70,7 +70,8 @@ class StoryViewController: UIViewController, UIGestureRecognizerDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         commonInit()
-        setupLongGestureRecognizerOnCollection()
+        setupGestureRecognizerOnCollection()
+        
         NotificationCenter.default.addObserver(self, selector: #selector(willEnterForeground), name: UIApplication.willEnterForegroundNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(didEnterBackground), name: UIApplication.didEnterBackgroundNotification, object: nil)
         
@@ -134,19 +135,9 @@ class StoryViewController: UIViewController, UIGestureRecognizerDelegate {
 
         configureView()
         closeButton.addTarget(self, action: #selector(didTapCloseButton), for: .touchUpInside)
-        
-        let leftSwipe = UISwipeGestureRecognizer(target: self, action: #selector(didSwipeLeft))
-        leftSwipe.direction = .left
-        let rightSwipe = UISwipeGestureRecognizer(target: self, action: #selector(didSwipeRight))
-        rightSwipe.direction = .right
-        let tap = UITapGestureRecognizer(target: self, action: #selector(didTapOnScreen(_:)))
-        
-        collectionView.addGestureRecognizer(leftSwipe)
-        collectionView.addGestureRecognizer(rightSwipe)
-        collectionView.addGestureRecognizer(tap)
     }
     
-    @objc private func didTapOnScreen(_ gestureRecognizer: UITapGestureRecognizer) {
+    @objc private func didSingleTapOnScreen(_ gestureRecognizer: UITapGestureRecognizer) {
         let tapLocation = gestureRecognizer.location(in: self.view)
         let halfWidth = self.view.bounds.width / 2.0
         if tapLocation.x < halfWidth {
@@ -659,21 +650,41 @@ class StoryViewController: UIViewController, UIGestureRecognizerDelegate {
         })
     }
     
-    private func setupLongGestureRecognizerOnCollection() {
+    private func setupGestureRecognizerOnCollection() {
+        
         let longPressedGesture = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress(gestureRecognizer:)))
-        longPressedGesture.minimumPressDuration = 0.15
-        longPressedGesture.allowableMovement = 70
-        longPressedGesture.delegate = self
+        
+        collectionView.gestureRecognizers = []
+        longPressedGesture.isEnabled = true
+        longPressedGesture.minimumPressDuration = 0.20
+
+        longPressedGesture.allowableMovement = 50
         longPressedGesture.delaysTouchesBegan = true
         longPressedGesture.cancelsTouchesInView = true
+        let singleTap = UITapGestureRecognizer(target: self, action: #selector(didSingleTapOnScreen(_:)))
+        singleTap.require(toFail: longPressedGesture)
         collectionView.addGestureRecognizer(longPressedGesture)
+        collectionView.addGestureRecognizer(singleTap)
+        
+        
+        let leftSwipe = UISwipeGestureRecognizer(target: self, action: #selector(didSwipeLeft))
+        leftSwipe.direction = .left
+        leftSwipe.require(toFail: longPressedGesture)
+        let rightSwipe = UISwipeGestureRecognizer(target: self, action: #selector(didSwipeRight))
+        rightSwipe.direction = .right
+        rightSwipe.require(toFail: longPressedGesture)
+        
+        collectionView.addGestureRecognizer(leftSwipe)
+        collectionView.addGestureRecognizer(rightSwipe)
+        
+        
     }
     
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRequireFailureOf otherGestureRecognizer: UIGestureRecognizer) -> Bool {
         return false
     }
     
-    @objc func handleLongPress(gestureRecognizer: UILongPressGestureRecognizer) {
+    @objc private func handleLongPress(gestureRecognizer: UILongPressGestureRecognizer) {
         if gestureRecognizer.state == .ended {
             let p = gestureRecognizer.location(in: collectionView)
             if let indexPath = collectionView.indexPathForItem(at: p) {
@@ -770,7 +781,7 @@ extension StoryViewController: UICollectionViewDelegate, UICollectionViewDataSou
     }
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        
+
         guard let cell = collectionView.cellForItem(at: indexPath) as? StoryCollectionViewCell else {return}
         cell.stopPlayer()
     }
