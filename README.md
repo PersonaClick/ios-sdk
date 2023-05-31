@@ -1,8 +1,8 @@
 # PersonaClick SDK
 
 [![Version](https://img.shields.io/cocoapods/v/PersonaClick.svg?style=flat)](https://cocoapods.org/pods/PersonaClick)
-[![License](https://img.shields.io/cocoapods/l/PersonaClick.svg?style=flat)](https://cocoapods.org/pods/PersonaClick)
-[![Platform](https://img.shields.io/cocoapods/p/PersonaClick.svg?style=flat)](https://cocoapods.org/pods/PersonaClick)
+![iOS](https://img.shields.io/badge/iOS-release)
+![Release](https://img.shields.io/badge/release-blueviolet)
 
 ## Installation
 
@@ -140,7 +140,7 @@ sdk.track(event: .synchronizeCart(items: [CartItem(productId: "784"), CartItem(p
 ### User is made a purchase
 
 ```swift
-sdk.track(event: .orderCreated(orderId: "ORDER_ID", totalValue: 33.3, products: [(id: "PRODUCT_1_ID", amount: 3), (id: "PRODUCT_2_ID", amount: 1)])) { _ in
+sdk.track(event: .orderCreated(orderId: "123", totalValue: 33.3, products: [(id: "PRODUCT_2_ID", amount: 3, price: 500)], deliveryAddress: "Address" , deliveryType: "post", promocode: "999", paymentType: "cash", taxFree: true)) { trackResponse in _ in
   print("Order is created callback")
 }
 ```

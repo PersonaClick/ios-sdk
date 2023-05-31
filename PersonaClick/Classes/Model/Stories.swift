@@ -146,25 +146,19 @@ class Slide {
         }
         
         let request = URLRequest(url: url)
-        
-        let downloadKey = self.downloadManager.downloadFile(withRequest: request,
-                                                           inDirectory: directoryName,
-                                                           onProgress:  { [weak self] (progress) in
-                                                            let percentage = String(format: "%.1f %", (progress * 100))
-                                                            debugPrint(percentage)
-                                                            //self?.progressView.setProgress(Float(progress), animated: true)
-                                                            //self?.progressLabel.text = "\(percentage) %"
+        _ = self.downloadManager.downloadStoryMediaFile(withRequest: request,
+                                                        inDirectory: directoryName,
+                                                        shouldDownloadInBackground: false,
+                                                        onProgress: {(progress) in
+            // let percent = String(format: "%.1f %", (progress * 100))
+            // let progressCounter = Float(progress)
+            // print("Background video download progress : \(percent) for task \(request.debugDescription)")
             
-            let percentageD = String(format: "%.1f %", (progress * 100))
-            debugPrint("Background download video progress: \(percentageD) for task \(request.debugDescription)")
-            
-        }) { [weak self] (error, url) in
-            
+        }) {(error, url) in
             if let error = error {
                 print("Error is \(error as NSError)")
             } else {
                 if let url = url {
-                    debugPrint("Downloaded file's url is \(url.path)")
                     do {
                         try fileManager.moveItem(at: url, to: temporaryFileURL)
                         completion(.success(temporaryFileURL))
@@ -174,8 +168,6 @@ class Slide {
                 }
             }
         }
-        
-        debugPrint("The video with key is downloaded \(downloadKey!)")
     }
     
     func getVideoData(from fileURL: URL) -> Data? {
@@ -197,6 +189,7 @@ class Slide {
                 guard let unwrappedData = data, let image = UIImage(data: unwrappedData) else { return }
                 if isPreview {
                     self.previewImage = image
+                    //print("Downloaded preview for image for VIDEO story with id = \(self.id)")
                 } else {
                     self.downloadedImage = image
                     print("Downloaded image for story id = \(self.id)")

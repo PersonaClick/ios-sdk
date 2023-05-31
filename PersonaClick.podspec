@@ -1,8 +1,10 @@
 
 Pod::Spec.new do |s|
   s.name                        = 'PersonaClick'
-  s.version                     = '3.3.6'
+  s.version                     = '3.3.7'
+
   s.summary                     = 'PersonaClick SDK for iOS'
+  s.readme                      = 'https://reference.api.personaclick.com/#{spec.version.to_s}/README.md'
 
   s.description                 = <<-DESC
                                 This is PersonaClick SDK for iOS platform.
