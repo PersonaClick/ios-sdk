@@ -2,10 +2,6 @@ import Foundation
 import UserNotifications
 import UIKit
 
-public protocol StoryDelegate : AnyObject {
-    func openStoryWeb(url: String)
-}
-
 public protocol NotificationServicePushDelegate: AnyObject {
     func openCategory(categoryId: String)
     func openProduct(productId: String)
@@ -32,14 +28,12 @@ public class NotificationService: NotificationServiceProtocol {
         self.sdk = sdk
         requireUserPrivacy { res in
             if res {
-                if #available(iOS 10.0, *) {
-                    let categoryIdentifier = "carousel"
-                    let carouselNext = UNNotificationAction(identifier: "carousel.next", title: "Next", options: [])
-                    let carouselPrevious = UNNotificationAction(identifier: "carousel.previous", title: "Previous", options: [])
+                let categoryIdentifier = "carousel"
+                let carouselNext = UNNotificationAction(identifier: "carousel.next", title: "Next", options: [])
+                let carouselPrevious = UNNotificationAction(identifier: "carousel.previous", title: "Previous", options: [])
 
-                    let carouselCategory = UNNotificationCategory(identifier: categoryIdentifier, actions: [carouselNext, carouselPrevious], intentIdentifiers: [], options: [])
-                    UNUserNotificationCenter.current().setNotificationCategories([carouselCategory])
-                }
+                let carouselCategory = UNNotificationCategory(identifier: categoryIdentifier, actions: [carouselNext, carouselPrevious], intentIdentifiers: [], options: [])
+                UNUserNotificationCenter.current().setNotificationCategories([carouselCategory])
             }
         }
     }
@@ -57,9 +51,9 @@ public class NotificationService: NotificationServiceProtocol {
             case let .failure(error):
                 switch error {
                 case let .custom(customError):
-                    print("Error: ", customError)
+                    print("Error:", customError)
                 default:
-                    print("Error: ", error.localizedDescription)
+                    print("Error:", error.description)
                 }
             }
         }
@@ -83,9 +77,9 @@ public class NotificationService: NotificationServiceProtocol {
             case let .failure(error):
                 switch error {
                 case let .custom(customError):
-                    print("Error: ", customError)
+                    print("Error:", customError)
                 default:
-                    print("Error: ", error.localizedDescription)
+                    print("Error:", error.description)
                 }
             }
         }
@@ -108,20 +102,19 @@ public class NotificationService: NotificationServiceProtocol {
     }
     
     private func requireUserPrivacy(completion: @escaping (Bool) -> Void) {
-        if #available(iOS 10.0, *) {
-            let center = UNUserNotificationCenter.current()
-            center.requestAuthorization(options: [.badge, .alert, .sound]) { _, _ in }
-            UIApplication.shared.registerForRemoteNotifications()
-            let options: UNAuthorizationOptions = [.alert]
-            UNUserNotificationCenter.current().requestAuthorization(options: options) { authorized, _ in
-                completion(authorized)
-            }
+        let center = UNUserNotificationCenter.current()
+        center.requestAuthorization(options: [.badge, .alert, .sound]) { _, _ in }
+        UIApplication.shared.registerForRemoteNotifications()
+        let options: UNAuthorizationOptions = [.alert]
+        UNUserNotificationCenter.current().requestAuthorization(options: options) { authorized, _ in
+            completion(authorized)
         }
     }
     
     private func pushProcessing(userInfo: [AnyHashable: Any]) {
         guard let eventJSON = parseDictionary(key: "event", userInfo: userInfo) else {
-            guard let basicPush = parseDictionary(key: "aps", userInfo: userInfo) else {
+            //guard let basicPush = parseDictionary(key: "aps", userInfo: userInfo) else {
+            guard parseDictionary(key: "aps", userInfo: userInfo) != nil else {
                 processingNotSDKPush(userInfo: userInfo)
                 return
             }
@@ -234,8 +227,6 @@ public class NotificationService: NotificationServiceProtocol {
             }
             processingEventType(eventType: eventType, eventLink: eventLink)
         }
-        
-        
     }
     
     private func notificationClicked(type: String, code: String) {

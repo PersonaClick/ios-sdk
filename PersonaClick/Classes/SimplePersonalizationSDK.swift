@@ -57,7 +57,7 @@ class SimplePersonalizationSDK: PersonalizationSDK {
                         if let completion = completion {
                             completion(nil)
                         }
-                    }else{
+                    } else {
                         if let completion = completion {
                             completion(.decodeError)
                         }
@@ -66,6 +66,23 @@ class SimplePersonalizationSDK: PersonalizationSDK {
                 case .failure(let error):
                     if let completion = completion {
                         completion(error)
+                        
+                        if #available(iOS 12.0, *) {
+                            let networkManager = NetworkStatus.manager
+                            let connectionStatus = networkManager.connectionStatus
+                            let typeOfConnection = networkManager.connectionType
+                            print("SDK Network status: \(connectionStatus) \nConnection Type: \(typeOfConnection ?? .notdetected)")
+                            //print("Connection Type: \(typeOfConnection ?? .notdetected)")
+                            
+                            if connectionStatus == .Online {
+                                completion(error)
+                            } else if connectionStatus == .Offline {
+                                //completion(.networkOfflineError)
+                                completion(.custom(error: typeOfConnection?.description ?? "f" ))
+                            }
+                        } else {
+                            completion(error)
+                        }
                     }
                     self.semaphore.signal()
                     break
@@ -348,7 +365,7 @@ class SimplePersonalizationSDK: PersonalizationSDK {
                 params["items"] = [["id":id]]
                 paramEvent = "view"
             case let .productAddedToCart(id, amount):
-                params["items"] = [["id":id, "amount":amount]]
+                params["items"] = [["id":id, "amount":amount] as [String : Any]]
                 paramEvent = "cart"
             case let .productAddedToFavorities(id):
                 params["items"] = [["id":id]]
@@ -418,7 +435,7 @@ class SimplePersonalizationSDK: PersonalizationSDK {
                 // Recomended params is invalidate
                 UserDefaults.standard.setValue(nil, forKey: "recomendedCode")
                 UserDefaults.standard.setValue(nil, forKey: "recomendedType")
-            }else{
+            } else {
                 let savedCode = UserDefaults.standard.string(forKey: "recomendedCode") ?? ""
                 let savedType = UserDefaults.standard.string(forKey: "recomendedType") ?? ""
                 let sourceParams: [String: Any] = [
@@ -481,7 +498,7 @@ class SimplePersonalizationSDK: PersonalizationSDK {
                 // Recomended params is invalidate
                 UserDefaults.standard.setValue(nil, forKey: "recomendedCode")
                 UserDefaults.standard.setValue(nil, forKey: "recomendedType")
-            }else{
+            } else {
                 let savedCode = UserDefaults.standard.string(forKey: "recomendedCode") ?? ""
                 let savedType = UserDefaults.standard.string(forKey: "recomendedType") ?? ""
                 let sourceParams: [String: Any] = [
@@ -490,7 +507,6 @@ class SimplePersonalizationSDK: PersonalizationSDK {
                 ]
                 params["source"] = sourceParams
             }
-            
             
             self.postRequest(path: path, params: params, completion: { result in
                 switch result {
@@ -630,7 +646,6 @@ class SimplePersonalizationSDK: PersonalizationSDK {
                     params["no_clarification"] = "1"
                 }
             }
-
             
             let sessionConfig = URLSessionConfiguration.default
             sessionConfig.timeoutIntervalForRequest = timeOut ?? 1
@@ -669,7 +684,6 @@ class SimplePersonalizationSDK: PersonalizationSDK {
             if let extended = extended{
                 params["extended"] = extended
             }
-            
             
             let sessionConfig = URLSessionConfiguration.default
             sessionConfig.timeoutIntervalForRequest = timeOut ?? 1
@@ -928,6 +942,7 @@ class SimplePersonalizationSDK: PersonalizationSDK {
         
         let sessionConfig = URLSessionConfiguration.default
         sessionConfig.timeoutIntervalForRequest = 1
+        sessionConfig.waitsForConnectivity = true
         self.urlSession = URLSession(configuration: sessionConfig)
         getRequest(path: path, params: params, true) { result in
 
@@ -943,7 +958,6 @@ class SimplePersonalizationSDK: PersonalizationSDK {
         }
     }
     
-    
     func getStories(code: String, completion: @escaping (Result<StoryContent, SDKError>) -> Void) {
         self.storiesCode = code
         let path = "stories/\(code)"
@@ -953,6 +967,7 @@ class SimplePersonalizationSDK: PersonalizationSDK {
         ]
         let sessionConfig = URLSessionConfiguration.default
         sessionConfig.timeoutIntervalForRequest = 10
+        sessionConfig.waitsForConnectivity = true
         self.urlSession = URLSession(configuration: sessionConfig)
         getRequest(path: path, params: params, true) { result in
 
@@ -965,7 +980,6 @@ class SimplePersonalizationSDK: PersonalizationSDK {
             }
         }
     }
-    
 
     private let jsonDecoder: JSONDecoder = {
         let jsonDecoder = JSONDecoder()
@@ -1012,7 +1026,20 @@ class SimplePersonalizationSDK: PersonalizationSDK {
                         completion(.failure(.decodeError))
                     }
                 case .failure:
-                    completion(.failure(.invalidResponse))
+                    if #available(iOS 12.0, *) {
+                        let networkManager = NetworkStatus.manager
+                        let connectionStatus = networkManager.connectionStatus
+                        
+                        if connectionStatus == .Online {
+                            completion(.failure(.invalidResponse))
+                        } else if connectionStatus == .Offline {
+                            completion(.failure(.networkOfflineError))
+
+                        }
+                    } else {
+                        completion(.failure(.invalidResponse))
+                        //Deprecated next releases
+                    }
                 }
             }.resume()
         } else {
@@ -1040,6 +1067,7 @@ class SimplePersonalizationSDK: PersonalizationSDK {
             }
             request.addValue("application/json", forHTTPHeaderField: "Content-Type")
             request.addValue("application/json", forHTTPHeaderField: "Accept")
+            
             urlSession.postTask(with: request) { result in
                 switch result {
                 case .success(let (response, data)):
@@ -1073,23 +1101,26 @@ class SimplePersonalizationSDK: PersonalizationSDK {
                         completion(.failure(.decodeError))
                     }
                 case .failure:
-                    completion(.failure(.responseError))
+                    if #available(iOS 12.0, *) {
+                        let networkManager = NetworkStatus.manager
+                        let connectionStatus = networkManager.connectionStatus
+                        
+                        if connectionStatus == .Online {
+                            completion(.failure(.invalidResponse))
+                        } else if connectionStatus == .Offline {
+                            completion(.failure(.networkOfflineError))
+                        }
+                    } else {
+                        completion(.failure(.invalidResponse)) //Deprecated in next releases
+                    }
                 }
             }.resume()
         } else {
             completion(.failure(.invalidResponse))
         }
     }
-
-    // @DELETE after 2022-09-15
-//    private func getPostString(params: [String: Any]) -> String {
-//        var data = [String]()
-//        for (key, value) in params {
-//            data.append(key + "=\(value)")
-//        }
-//        return data.map { String($0) }.joined(separator: "&")
-//    }
 }
+
 
 extension URLSession {
     func dataTask(with url: URL, result: @escaping (Result<(URLResponse, Data), Error>) -> Void) -> URLSessionDataTask {
@@ -1128,3 +1159,4 @@ extension URLSession {
         }
     }
 }
+

@@ -75,7 +75,7 @@ public class StoriesView: UIView {
         self.sdk = sdk
         self.mainVC = mainVC
         self.code = code
-        loadData()
+        loadStoriesData()
     }
     
     private func setBgColor(color: String) {
@@ -85,7 +85,7 @@ public class StoriesView: UIView {
         }
     }
 
-    private func loadData() {
+    private func loadStoriesData() {
         sdk?.getStories(code: code) { result in
             switch result {
             case let .success(response):
@@ -99,9 +99,9 @@ public class StoriesView: UIView {
             case let .failure(error):
                 switch error {
                 case let .custom(customError):
-                    print("Error: ", customError)
+                    print("Error:", customError)
                 default:
-                    print("Error: ", error.localizedDescription)
+                    print("Error:", error.description)
                 }
             }
         }
@@ -199,15 +199,45 @@ extension StoriesView: UICollectionViewDelegate, UICollectionViewDataSource, UIC
             }
         }
     }
+
+//    fileprivate var sectionInsets: UIEdgeInsets {
+//        return .zero
+//    }
+//
+//    fileprivate var itemsPerRow: CGFloat {
+//        return 4
+//    }
+//
+//    fileprivate var interitemSpace: CGFloat {
+//        return 5.0
+//    }
+//
+//    public func collectionView(_ collectionView: UICollectionView,
+//                            layout collectionViewLayout: UICollectionViewLayout,
+//                            sizeForItemAt indexPath: IndexPath) -> CGSize {
+//        let sectionPadding = sectionInsets.left * (itemsPerRow + 1)
+//        let interitemPadding = max(0.0, itemsPerRow - 1) * interitemSpace
+//        let availableWidth = collectionView.bounds.width - sectionPadding - interitemPadding
+//        let widthPerItem = availableWidth / itemsPerRow
+//
+//        return CGSize(width: widthPerItem, height: widthPerItem)
+//    }
+//
+//    public override var intrinsicContentSize: CGSize {
+//        return collectionView.collectionViewLayout.collectionViewContentSize
+//    }
+//
+//    public func collectionView(_ collectionView: UICollectionView,
+//                            layout collectionViewLayout: UICollectionViewLayout,
+//                            insetForSectionAt section: Int) -> UIEdgeInsets {
+//        return sectionInsets
+//    }
 }
 
 extension StoriesView: StoriesViewMainProtocol {
     public func extendLinkIos(url: String) {
         self.communicationDelegate?.receiveIosLink(text: url)
-    }
-    
-    public func didTapLinkIosOpeningExternal(url: String) {
-        print("Open linkIos url for external \(url)")
+        print("Received linkIos for external use: \(url)")
     }
 
     public func reloadStoriesCollectionSubviews() {
