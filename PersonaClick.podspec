@@ -1,7 +1,7 @@
 
 Pod::Spec.new do |s|
   s.name                        = 'PersonaClick'
-  s.version                     = '3.3.9'
+  s.version                     = '3.4.0'
 
   s.summary                     = 'PersonaClick SDK for iOS'
   s.readme                      = 'https://reference.api.personaclick.com/#{spec.version.to_s}/README.md'
@@ -21,7 +21,7 @@ Pod::Spec.new do |s|
 
   s.ios.deployment_target       = '11.0'
 
-  s.source_files                = 'PersonaClick/Classes/**/*.swift'
+  s.source_files                = 'PersonaClick/Classes/**/*.{swift,xib,storyboard}'
   s.resources                   = 'PersonaClick/**/*.{xcassets,json,png}'
 
   s.swift_version = '5'
