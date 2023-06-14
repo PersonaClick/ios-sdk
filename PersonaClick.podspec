@@ -1,14 +1,13 @@
 
 Pod::Spec.new do |s|
   s.name                        = 'PersonaClick'
-  s.version                     = '3.4.0'
+  s.version                     = '3.4.1'
 
-  s.summary                     = 'PersonaClick SDK for iOS'
+  s.summary                     = 'PersonaClick SDK for iOS platform - the wide toolset for eCommerce apps. This SDK can be used to integrate in your own app for iOS in few steps.'
   s.readme                      = 'https://reference.api.personaclick.com/#{spec.version.to_s}/README.md'
 
   s.description                 = <<-DESC
-                                This is PersonaClick SDK for iOS platform.
-                                Read documentation here: https://reference.api.personaclick.com/
+                                For detailed information on methods, please refer to the documentation available at the following link: https://personaclick.atlassian.net/wiki/spaces/english/overview?mode=global
                                 DESC
 
   s.homepage                    = 'https://reference.api.personaclick.com/'
@@ -21,8 +20,8 @@ Pod::Spec.new do |s|
 
   s.ios.deployment_target       = '11.0'
 
-  s.source_files                = 'PersonaClick/Classes/**/*.{swift,xib,storyboard}'
-  s.resources                   = 'PersonaClick/**/*.{xcassets,json,png}'
+  s.source_files                = 'PersonaClick/Classes/**/*.{swift}'
+  s.resources                   = 'PersonaClick/**/*.{xcassets,xib,json,png}'
 
   s.swift_version = '5'
 
