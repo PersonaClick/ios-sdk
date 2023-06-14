@@ -21,6 +21,11 @@ let package = Package(
                 path: "PersonaClick/Classes",
                 resources: [
                     .process("Resources")
+                ],
+                linkerSettings: [
+                    .linkedFramework("Foundation"),
+                    .linkedFramework("UIKit", .when(platforms: [.iOS])),
+                    .linkedFramework("AppKit", .when(platforms: [.macOS])),
                 ]
         )
     ]
