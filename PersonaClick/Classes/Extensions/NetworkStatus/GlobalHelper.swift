@@ -31,6 +31,18 @@ class GlobalHelper {
         static let IS_IPHONE_14_PLUS = UIDevice.current.userInterfaceIdiom == .phone && ScreenSize.SCREEN_MAX_LENGTH == 926.0
         static let IS_IPHONE_14_PRO_MAX = UIDevice.current.userInterfaceIdiom == .phone && ScreenSize.SCREEN_MAX_LENGTH == 932.0
     }
+    
+    func checkIfHasDynamicIsland() -> Bool {
+        if let simulatorModelIdentifier = ProcessInfo().environment["SIMULATOR_MODEL_IDENTIFIER"] {
+            let nameSimulator = simulatorModelIdentifier
+            return nameSimulator == "iPhone15,2" || nameSimulator == "iPhone15,3" ? true : false
+        }
+        
+        var sysinfo = utsname()
+        uname(&sysinfo)
+        let name =  String(bytes: Data(bytes: &sysinfo.machine, count: Int(_SYS_NAMELEN)), encoding: .ascii)!.trimmingCharacters(in: .controlCharacters)
+        return name == "iPhone15,2" || name == "iPhone15,3" ? true : false
+    }
 }
 
 
@@ -67,6 +79,21 @@ public extension DispatchQueue {
         _onceTracker = [""]
     }
 }
+
+
+//public extension UIDevice {
+//    func checkIfHasDynamicIsland() -> Bool {
+//        if let simulatorModelIdentifier = ProcessInfo().environment["SIMULATOR_MODEL_IDENTIFIER"] {
+//            let nameSimulator = simulatorModelIdentifier
+//            return nameSimulator == "iPhone15,2" || nameSimulator == "iPhone15,3" ? true : false
+//        }
+//
+//        var sysinfo = utsname()
+//        uname(&sysinfo)
+//        let name =  String(bytes: Data(bytes: &sysinfo.machine, count: Int(_SYS_NAMELEN)), encoding: .ascii)!.trimmingCharacters(in: .controlCharacters)
+//        return name == "iPhone15,2" || name == "iPhone15,3" ? true : false
+//    }
+//}
 
 
 public extension UIColor {

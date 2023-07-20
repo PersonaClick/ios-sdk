@@ -14,7 +14,7 @@
 #### Code integration
 0 - Import Library
     
-    import PersonaClick
+    import REES46
 
 1 - Create view in .swift.
 
