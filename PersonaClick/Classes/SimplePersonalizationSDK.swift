@@ -999,6 +999,10 @@ class SimplePersonalizationSDK: PersonalizationSDK {
         jsonDecoder.dateDecodingStrategy = .formatted(dateFormatter)
         return jsonDecoder
     }()
+    
+    func configuration() -> SdkConfiguration.Type {
+        return SdkConfiguration.self
+    }
 
     private func getRequest(path: String, params: [String: String], _ isInit: Bool = false, completion: @escaping (Result<[String: Any], SDKError>) -> Void) {
 
@@ -1114,6 +1118,8 @@ class SimplePersonalizationSDK: PersonalizationSDK {
                     if #available(iOS 12.0, *) {
                         let networkManager = NetworkStatus.manager
                         let connectionStatus = networkManager.connectionStatus
+                        //let typeOfConnection = networkManager.connectionType
+                        //print("SDK Network status: \(connectionStatus) \nConnection Type: \(typeOfConnection ?? .notdetected)")
                         
                         if connectionStatus == .Online {
                             completion(.failure(.invalidResponse))

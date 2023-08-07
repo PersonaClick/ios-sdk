@@ -35,8 +35,6 @@ public class StoriesSettings {
         self.borderNotViewed = json["border_not_viewed"] as? String ?? ""
         self.backgroundProgress = json["background_progress"] as? String ?? ""
         self.pinSymbol = json["pin_symbol"] as? String ?? ""
-        //self.background = json["background"] as? String ?? "" //DEPRECATED
-        //self.backgroundOpacity = json["background_opacity"] as? Int ?? 100 //DEPRECATED
     }
 }
 

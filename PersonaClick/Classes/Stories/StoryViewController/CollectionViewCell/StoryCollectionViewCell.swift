@@ -106,7 +106,7 @@ class StoryCollectionViewCell: UICollectionViewCell {
         imageView.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
         imageView.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
         
-        if GlobalHelper.sharedInstance.checkIfHasDynamicIsland() {
+        if SdkGlobalHelper.sharedInstance.willDeviceHaveDynamicIsland() {
             
             clearConstraints()
             
@@ -126,7 +126,7 @@ class StoryCollectionViewCell: UICollectionViewCell {
                     productsButton.heightAnchor.constraint(equalToConstant: 36)
                 ]
                 
-                if GlobalHelper.DeviceType.IS_IPHONE_5 {
+                if SdkGlobalHelper.DeviceType.IS_IPHONE_5 {
                     productsButtonConstraints = [
                         productsButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 52),
                         productsButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -52),
@@ -161,7 +161,7 @@ class StoryCollectionViewCell: UICollectionViewCell {
                     productsButton.heightAnchor.constraint(equalToConstant: 36)
                 ]
                 
-                if GlobalHelper.DeviceType.IS_IPHONE_5 {
+                if SdkGlobalHelper.DeviceType.IS_IPHONE_5 {
                     productsButtonConstraints = [
                         productsButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 52),
                         productsButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -52),
@@ -203,7 +203,7 @@ class StoryCollectionViewCell: UICollectionViewCell {
                     productsButton.heightAnchor.constraint(equalToConstant: 36)
                 ]
                 
-                if GlobalHelper.DeviceType.IS_IPHONE_5 {
+                if SdkGlobalHelper.DeviceType.IS_IPHONE_5 {
                     productsButtonConstraints = [
                         productsButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 52),
                         productsButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -52),
@@ -238,7 +238,7 @@ class StoryCollectionViewCell: UICollectionViewCell {
                     productsButton.heightAnchor.constraint(equalToConstant: 36)
                 ]
                 
-                if GlobalHelper.DeviceType.IS_IPHONE_5 {
+                if SdkGlobalHelper.DeviceType.IS_IPHONE_5 {
                     productsButtonConstraints = [
                         productsButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 52),
                         productsButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -52),
