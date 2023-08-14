@@ -1,6 +1,6 @@
 import UIKit
 
-class StoriesCollectionViewPreviewCell: UICollectionViewCell {
+class StoriesCollectionViewPreviewCell: UICollectionViewCell, SdkStyleCustomColorSchemeAwareView, SdkStyleCustomFontsAwareView {
     
     static let cellId = "NewStoriesPreviewCellId"
     
@@ -19,7 +19,6 @@ class StoriesCollectionViewPreviewCell: UICollectionViewCell {
         super.init(frame: frame)
         
         let bgColor = UIColor(red: 214/255, green: 214/255, blue: 214/255, alpha: 214/255)
-        
         storyBackCircle.backgroundColor = .clear
         storyBackCircle.contentMode = .scaleToFill
         storyBackCircle.isUserInteractionEnabled = true
@@ -90,12 +89,6 @@ class StoriesCollectionViewPreviewCell: UICollectionViewCell {
         pinSymbolView.isHidden = !story.pinned
     }
     
-    public func setFont(story: Story) {
-        setImage(imagePathSdk: story.avatar)
-        storyAuthorNameLabel.text = "\(story.name)"
-        pinSymbolView.isHidden = !story.pinned
-    }
-    
     func configureCell(settings: StoriesSettings?, viewed: Bool, viewedLocalKey: Bool, storyId: Int) {
         storyWhiteBackCircle.isHidden = false
         storySuperClearBackCircle.isHidden = false
@@ -103,36 +96,50 @@ class StoriesCollectionViewPreviewCell: UICollectionViewCell {
         
         if let settings = settings {
             
-            var labelColor = settings.color.hexToRGB()
-            if #available(iOS 12.0, *) {
-                if self.traitCollection.userInterfaceStyle == .dark {
-                    labelColor = "#FFFFFF".hexToRGB()
-                }
-            }
+            let labelColor = settings.color.hexToRGB()
+//            //DEPRECATED
+//            if #available(iOS 12.0, *) {
+//                if self.traitCollection.userInterfaceStyle == .dark {
+//                    labelColor = "#FFFFFF".hexToRGB()
+//                }
+//            }
+//            storyAuthorNameLabel.font = .systemFont(ofSize: CGFloat(settings.fontSize))
+//            storyAuthorNameLabel.textColor = UIColor(red: labelColor.red, green: labelColor.green, blue: labelColor.blue, alpha: 1)
             
             preloadIndicator.strokeColor = .white
+            storyAuthorNameLabel.backgroundColor = .clear
+            
+            if (SdkStyle.shared.currentColorScheme?.storiesBlockFontColor == UIColor.sdkDefaultBlackColor) {
+                storyAuthorNameLabel.textColor = UIColor(red: labelColor.red, green: labelColor.green, blue: labelColor.blue, alpha: 1)
+            } else {
+                //storyAuthorNameLabel.textColor = SdkStyle.shared.currentColorScheme?.storiesBlockFontColor
+                if #available(iOS 13.0, *) {
+                    if SdkConfiguration.isDarkMode {
+                        storyAuthorNameLabel.textColor = SdkConfiguration.stories.storiesBlockTextColorChanged_Dark
+                    } else {
+                        storyAuthorNameLabel.textColor = SdkConfiguration.stories.storiesBlockTextColorChanged_Light
+                    }
+                } else {
+                    storyAuthorNameLabel.textColor = .black
+                }
+            }
             
             if SdkConfiguration.stories.storiesBlockFontNameChanged != nil {
-                if SdkConfiguration.stories.storiesBlockFontSizeChanged != nil {
-                    storyAuthorNameLabel.font = UIFont(name: (SdkConfiguration.stories.storiesBlockFontNameChanged)!, size:  SdkConfiguration.stories.storiesBlockFontSizeChanged ?? 14.0)
+                if SdkConfiguration.stories.storiesBlockMinimumFontSizeChanged != nil {
+                    //let size = SdkStyle.shared.currentColorScheme?.storiesBlockSelectFontSize
+                    storyAuthorNameLabel.font = SdkStyle.shared.currentColorScheme?.storiesBlockSelectFontName.withSize(SdkStyle.shared.currentColorScheme!.storiesBlockSelectFontSize)
                 } else {
-                    storyAuthorNameLabel.font = .systemFont(ofSize: CGFloat(settings.fontSize))
+                    storyAuthorNameLabel.font = SdkStyle.shared.currentColorScheme?.storiesBlockSelectFontName
                 }
             } else {
-                if SdkConfiguration.stories.storiesBlockFontSizeChanged != nil {
-                    storyAuthorNameLabel.font = .systemFont(ofSize: SdkConfiguration.stories.storiesBlockFontSizeChanged ?? 14.0)
+                if SdkConfiguration.stories.storiesBlockMinimumFontSizeChanged != 0.0 {
+                    storyAuthorNameLabel.font = .systemFont(ofSize: CGFloat(settings.fontSize))
+                    
+                    //storyAuthorNameLabel.font = .systemFont(ofSize: CGFloat(SdkStyle.shared.currentColorScheme!.storiesBlockSelectFontSize))
                 } else {
                     storyAuthorNameLabel.font = .systemFont(ofSize: CGFloat(settings.fontSize))
                 }
             }
-            
-            if SdkConfiguration.stories.storiesBlockTextColorChanged != nil {
-                storyAuthorNameLabel.textColor = SdkConfiguration.stories.storiesBlockTextColorChanged
-            } else {
-                storyAuthorNameLabel.textColor = UIColor(red: labelColor.red, green: labelColor.green, blue: labelColor.blue, alpha: 1)
-            }
-            
-            storyAuthorNameLabel.backgroundColor = .clear
             
             storyBackCircle.backgroundColor = .white
             let pinBgColor = settings.backgroundPin.hexToRGB()
@@ -148,10 +155,10 @@ class StoriesCollectionViewPreviewCell: UICollectionViewCell {
                 UIColor(red: storiesViewdBg.red, green: storiesViewdBg.green, blue: storiesViewdBg.blue, alpha: 1)
                 
                 preloadIndicator.strokeColor = viewed ?
-                UIColor(red: storiesViewdBg.red, green: storiesViewdBg.green, blue: storiesViewdBg.blue, alpha: 1) :
-                UIColor(red: storiesNotViewBg.red, green: storiesNotViewBg.green, blue: storiesNotViewBg.blue, alpha: 1)
-                //UIColor(red: 255/255, green: 118/255, blue: 0/255, alpha: 1) :
-                //UIColor(red: 255/255, green: 118/255, blue: 0/255, alpha: 1)
+                //UIColor(red: storiesViewdBg.red, green: storiesViewdBg.green, blue: storiesViewdBg.blue, alpha: 1) :
+                //UIColor(red: storiesNotViewBg.red, green: storiesNotViewBg.green, blue: storiesNotViewBg.blue, alpha: 1)
+                UIColor(red: 255/255, green: 118/255, blue: 0/255, alpha: 1) :
+                UIColor(red: 255/255, green: 118/255, blue: 0/255, alpha: 1)
             } else {
                 storyWhiteBackCircle.backgroundColor = viewedLocalKey ?
                 UIColor(red: storiesViewdBg.red, green: storiesViewdBg.green, blue: storiesViewdBg.blue, alpha: 1) :
@@ -254,6 +261,14 @@ class StoriesCollectionViewPreviewCell: UICollectionViewCell {
         
         pinSymbolLabel.centerXAnchor.constraint(equalTo: pinSymbolView.centerXAnchor).isActive = true
         pinSymbolLabel.centerYAnchor.constraint(equalTo: pinSymbolView.centerYAnchor).isActive = true
+    }
+    
+    func applyCustomColorScheme(_ colorScheme: SdkStyleCustomColorScheme) {
+        //
+    }
+    
+    func applySdkCustomFonts(_ fonts: SdkStyleCustomFonts) {
+        //
     }
     
     public func showSdkPreloadIndicator() {

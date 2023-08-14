@@ -15,6 +15,7 @@ class CarouselCollectionView: UICollectionView, UICollectionViewDelegate, UIColl
         super.init(frame: .zero, collectionViewLayout: layout)
         
         backgroundColor = UIColor(red: 240/255, green: 240/255, blue: 240/255, alpha: 255/255)
+        //UIColor(red: 255/255, green: 255/255, blue: 255/255, alpha: 171/255)
         delegate = self
         dataSource = self
         register(CarouselCollectionViewCell.self, forCellWithReuseIdentifier: CarouselCollectionViewCell.reuseId)
