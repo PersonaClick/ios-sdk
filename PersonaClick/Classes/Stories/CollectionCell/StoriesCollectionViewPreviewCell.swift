@@ -95,16 +95,8 @@ class StoriesCollectionViewPreviewCell: UICollectionViewCell, SdkStyleCustomColo
         layoutIfNeeded()
         
         if let settings = settings {
-            
+            //storyAuthorNameLabel.font = SdkStyle.shared.currentColorScheme?.storiesBlockSelectFontName.withSize(SdkStyle.shared.currentColorScheme!.storiesBlockSelectFontSize)
             let labelColor = settings.color.hexToRGB()
-//            //DEPRECATED
-//            if #available(iOS 12.0, *) {
-//                if self.traitCollection.userInterfaceStyle == .dark {
-//                    labelColor = "#FFFFFF".hexToRGB()
-//                }
-//            }
-//            storyAuthorNameLabel.font = .systemFont(ofSize: CGFloat(settings.fontSize))
-//            storyAuthorNameLabel.textColor = UIColor(red: labelColor.red, green: labelColor.green, blue: labelColor.blue, alpha: 1)
             
             preloadIndicator.strokeColor = .white
             storyAuthorNameLabel.backgroundColor = .clear
@@ -113,8 +105,8 @@ class StoriesCollectionViewPreviewCell: UICollectionViewCell, SdkStyleCustomColo
                 storyAuthorNameLabel.textColor = UIColor(red: labelColor.red, green: labelColor.green, blue: labelColor.blue, alpha: 1)
             } else {
                 //storyAuthorNameLabel.textColor = SdkStyle.shared.currentColorScheme?.storiesBlockFontColor
-                if #available(iOS 13.0, *) {
-                    if SdkConfiguration.isDarkMode {
+                if #available(iOS 12.0, *) {
+                    if self.traitCollection.userInterfaceStyle == .dark {
                         storyAuthorNameLabel.textColor = SdkConfiguration.stories.storiesBlockTextColorChanged_Dark
                     } else {
                         storyAuthorNameLabel.textColor = SdkConfiguration.stories.storiesBlockTextColorChanged_Light
@@ -126,16 +118,14 @@ class StoriesCollectionViewPreviewCell: UICollectionViewCell, SdkStyleCustomColo
             
             if SdkConfiguration.stories.storiesBlockFontNameChanged != nil {
                 if SdkConfiguration.stories.storiesBlockMinimumFontSizeChanged != nil {
-                    //let size = SdkStyle.shared.currentColorScheme?.storiesBlockSelectFontSize
                     storyAuthorNameLabel.font = SdkStyle.shared.currentColorScheme?.storiesBlockSelectFontName.withSize(SdkStyle.shared.currentColorScheme!.storiesBlockSelectFontSize)
                 } else {
                     storyAuthorNameLabel.font = SdkStyle.shared.currentColorScheme?.storiesBlockSelectFontName
                 }
             } else {
                 if SdkConfiguration.stories.storiesBlockMinimumFontSizeChanged != 0.0 {
-                    storyAuthorNameLabel.font = .systemFont(ofSize: CGFloat(settings.fontSize))
-                    
-                    //storyAuthorNameLabel.font = .systemFont(ofSize: CGFloat(SdkStyle.shared.currentColorScheme!.storiesBlockSelectFontSize))
+                    let size = SdkStyle.shared.currentColorScheme?.storiesBlockSelectFontSize ?? 15.0
+                    storyAuthorNameLabel.font = .systemFont(ofSize: CGFloat(size))
                 } else {
                     storyAuthorNameLabel.font = .systemFont(ofSize: CGFloat(settings.fontSize))
                 }

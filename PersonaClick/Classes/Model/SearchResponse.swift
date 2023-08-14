@@ -166,7 +166,6 @@ public struct Product {
     public var isNew: Bool?
     public var params: [[String: Any]]?
 
-    // @deprecated Use resizedImageUrl instead (same value)
     public var picture: String
     
     init(json: [String: Any]) {

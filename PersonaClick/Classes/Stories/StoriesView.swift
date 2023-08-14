@@ -89,19 +89,26 @@ public class StoriesView: UIView, UINavigationControllerDelegate {
                     DispatchQueue.main.async {
                         self.collectionView.backgroundColor = SdkConfiguration.stories.storiesBlockBackgroundColorChanged_Light
                         self.reloadStoriesCollectionSubviews()
+                        self.updateBgColor()
                     }
                 case .light:
                     DispatchQueue.main.async {
                         self.collectionView.backgroundColor = SdkConfiguration.stories.storiesBlockBackgroundColorChanged_Light
                         self.reloadStoriesCollectionSubviews()
+                        self.updateBgColor()
                     }
                 case .dark:
                     DispatchQueue.main.async {
                         self.collectionView.backgroundColor = SdkConfiguration.stories.storiesBlockBackgroundColorChanged_Dark
                         self.reloadStoriesCollectionSubviews()
+                        self.updateBgColor()
                     }
                 @unknown default:
                     break
+                }
+            } else {
+                DispatchQueue.main.async {
+                    self.updateBgColor()
                 }
             }
         } else {
@@ -255,31 +262,16 @@ extension StoriesView: UICollectionViewDelegate, UICollectionViewDataSource, UIC
                 storyVC.startWithIndexPath = IndexPath(row: Int(currentDefaultIndex + 1), section: indexPath.row)
                 storyVC.modalPresentationStyle = .fullScreen
                 mainVC?.present(storyVC, animated: true)
-                
-//                let nav = UINavigationController(rootViewController: mainVC!)
-//                window?.rootViewController = nav
-//                nav.present(storyVC, animated: true, completion: nil)
-                
             } else if (currentDefaultIndex + 1 == allStoriesMainArray.count) {
                 storyVC.currentPosition = IndexPath(row: Int(0), section: indexPath.row)
                 storyVC.startWithIndexPath = IndexPath(row: Int(0), section: indexPath.row)
                 storyVC.modalPresentationStyle = .fullScreen
                 mainVC?.present(storyVC, animated: true)
-                
-//                let nav = UINavigationController(rootViewController: mainVC!)
-//                window?.rootViewController = nav
-//                nav.present(storyVC, animated: true, completion: nil)
-                
             } else {
                 storyVC.currentPosition = IndexPath(row: currentStory.startPosition, section: indexPath.row)
                 storyVC.startWithIndexPath = IndexPath(row: currentStory.startPosition, section: indexPath.row)
                 storyVC.modalPresentationStyle = .fullScreen
                 mainVC?.present(storyVC, animated: true)
-                
-//                let nav = UINavigationController(rootViewController: mainVC!)
-//                window?.rootViewController = nav
-//                nav.present(storyVC, animated: true, completion: nil)
-                
             }
         }
     }
@@ -311,7 +303,10 @@ extension StoriesView: StoriesViewLinkProtocol {
     }
     
     public func updateBgColor() {
-        self.setBgColor()
+        DispatchQueue.main.async {
+            self.collectionView.reloadItems(at: self.collectionView.indexPathsForVisibleItems)
+            self.setBgColor()
+        }
     }
     
     public func printSlideObject(objElementClass: StoriesElement) {
