@@ -15,11 +15,11 @@ public class SdkFontFamily {
     }
     
     internal lazy var ultraLight: String = {
-        return mostSimilarFontName(regularName: regular, usage: "UltraLight") ?? thin // ?? light ?? regular
+        return mostSimilarFontName(regularName: regular, usage: "UltraLight") ?? thin
     }()
     
     internal lazy var thin: String = {
-        return mostSimilarFontName(regularName: regular, usage: "thin") ?? light // ?? regular
+        return mostSimilarFontName(regularName: regular, usage: "thin") ?? light
     }()
     
     internal lazy var light: String = {
@@ -37,23 +37,23 @@ public class SdkFontFamily {
     }()
     
     internal lazy var semibold: String = {
-        return mostSimilarFontName(regularName: regular, usage: "semibold") ?? medium // ?? regular
+        return mostSimilarFontName(regularName: regular, usage: "semibold") ?? medium
     }()
     
     internal lazy var bold: String = {
-        return mostSimilarFontName(regularName: regular, usage: "bold") ?? semibold // ?? medium ?? regular
+        return mostSimilarFontName(regularName: regular, usage: "bold") ?? semibold
     }()
     
     internal lazy var emphasized: String = {
-        return mostSimilarFontName(regularName: regular, usage: "emphasized") ?? bold // ?? medium ?? regular
+        return mostSimilarFontName(regularName: regular, usage: "emphasized") ?? bold
     }()
     
     internal lazy var heavy: String = {
-        return mostSimilarFontName(regularName: regular, usage: "heavy") ?? bold // ?? semibold ?? medium ?? regular
+        return mostSimilarFontName(regularName: regular, usage: "heavy") ?? bold
     }()
     
     internal lazy var black: String = {
-        return mostSimilarFontName(regularName: regular, usage: "black") ?? heavy // ?? bold ?? semibold ?? medium ?? regular
+        return mostSimilarFontName(regularName: regular, usage: "black") ?? heavy
     }()
     
     public init(regular: String,

@@ -1,8 +1,8 @@
 import Foundation
 
 public struct RecommenderResponse {
-    public var recommended: [Recommended] /// products  array
-    public var title: String = "" ///title block recommendation
+    public var recommended: [Recommended] // Products array
+    public var title: String = "" // Title block recommendation
 
     init(json: [String: Any]) {
         let recs = json["recommends"] as? [[String: Any]] ?? []

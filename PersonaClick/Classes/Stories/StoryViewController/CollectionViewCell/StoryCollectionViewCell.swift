@@ -42,7 +42,7 @@ class StoryCollectionViewCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        self.backgroundColor = .black //.white
+        self.backgroundColor = .black
         videoView.backgroundColor = .black
         
         NotificationCenter.default.addObserver(self, selector: #selector(pauseVideo(_:)), name: .init(rawValue: "PauseVideoLongTap"), object: nil)
@@ -214,7 +214,6 @@ class StoryCollectionViewCell: UICollectionViewCell {
                 
                 let muteButtonConstraints = [
                     muteButton.leadingAnchor.constraint(equalTo: storyButton.leadingAnchor, constant: -7),
-                    //muteButton.centerYAnchor.constraint(equalTo: productsButton.centerYAnchor),
                     muteButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -83),
                     muteButton.widthAnchor.constraint(equalToConstant: 48),
                     muteButton.heightAnchor.constraint(equalToConstant: 48)
@@ -332,14 +331,7 @@ class StoryCollectionViewCell: UICollectionViewCell {
     public func configure(slide: Slide) {
         self.currentSlide = slide
         if slide.type == .video {
-//            if let preview = slide.previewImage {
-//                DispatchQueue.main.async {
-//                    self.imageView.image = preview
-//                    self.videoView.isHidden = true
-//                    self.imageView.isHidden = false
-//                }
-//            }
-
+            
             videoView.isHidden = false
             imageView.isHidden = true
 
@@ -355,11 +347,6 @@ class StoryCollectionViewCell: UICollectionViewCell {
                 let asset = AVAsset(url: videoURL)
                 let volume = AVAudioSession.sharedInstance().outputVolume
                 print("output volume: \(volume)")
-//                if (volume < Float(kMinVolume)) {
-//                    player.volume = 0
-//                } else if (volume >= Float(kMinVolume)) {
-//                    player.volume = 1
-//                }
                 
                 let playerItem = AVPlayerItem(asset: asset)
                 self.player = AVPlayer(playerItem: playerItem)
@@ -367,7 +354,6 @@ class StoryCollectionViewCell: UICollectionViewCell {
                 let screenSize = UIScreen.main.bounds.size
                 playerLayer.frame = CGRect(x: 0, y: 0, width: screenSize.width, height: screenSize.height)
                 playerLayer.name = "VIDEO"
-                //playerLayer.videoGravity = .resizeAspectFill
                 
                 if playerItem.asset.tracks.filter({$0.mediaType == .audio}).count != 0 {
                     var mainBundle = Bundle(for: classForCoder)
@@ -514,7 +500,7 @@ class StoryCollectionViewCell: UICollectionViewCell {
         if let productsList = selectedProductsElement?.products, productsList.count != 0 {
             UserDefaults.standard.set(Int(currentSlide!.id), forKey: "LastViewedSlideMemorySetting")
             let products = productsList
-            cellDelegate?.openProductsCarouselView(withProducts: products, hideLabel: (selectedProductsElement?.labels!.hideCarousel)!)
+            cellDelegate?.openProductsCarouselView(withProducts: products, hideLabel: (selectedProductsElement?.labels?.hideCarousel)!)
             return
         }
     }

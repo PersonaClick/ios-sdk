@@ -1,6 +1,6 @@
 import UIKit
 
-class StoriesCollectionViewPreviewCell: UICollectionViewCell, SdkStyleCustomColorSchemeAwareView, SdkStyleCustomFontsAwareView {
+class StoriesCollectionViewPreviewCell: UICollectionViewCell {
     
     static let cellId = "NewStoriesPreviewCellId"
     
@@ -18,7 +18,7 @@ class StoriesCollectionViewPreviewCell: UICollectionViewCell, SdkStyleCustomColo
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        let bgColor = UIColor(red: 214/255, green: 214/255, blue: 214/255, alpha: 214/255)
+        let bgColor = UIColor(red: 214/255, green: 214/255, blue: 214/255, alpha: 0.8)
         storyBackCircle.backgroundColor = .clear
         storyBackCircle.contentMode = .scaleToFill
         storyBackCircle.isUserInteractionEnabled = true
@@ -51,14 +51,17 @@ class StoriesCollectionViewPreviewCell: UICollectionViewCell, SdkStyleCustomColo
         preloadIndicator.animationDuration = Double(Int.random(in: 2..<3))
         preloadIndicator.rotationDuration = 7
         preloadIndicator.numSegments = Int(Double(Int.random(in: 9..<17)))
-        preloadIndicator.lineWidth = 3.9
+        preloadIndicator.lineWidth = SdkConfiguration.stories.iconBorderWidth + 1.6 //3.9
         preloadIndicator.alpha = 0
         storyWhiteBackCircle.addSubview(preloadIndicator)
         
         storyAuthorNameLabel.textAlignment = .center
-        storyAuthorNameLabel.numberOfLines = 2
-        storyAuthorNameLabel.lineBreakMode = .byWordWrapping
-        //storyAuthorNameLabel.font = .boldSystemFont(ofSize: 23)
+        storyAuthorNameLabel.numberOfLines = SdkConfiguration.stories.storiesBlockNumberOfLines
+        if SdkConfiguration.stories.storiesBlockCharWrapping {
+            storyAuthorNameLabel.lineBreakMode = .byTruncatingTail
+        } else {
+            storyAuthorNameLabel.lineBreakMode = .byWordWrapping
+        }
         storyAuthorNameLabel.translatesAutoresizingMaskIntoConstraints = false
         storyAuthorNameLabel.backgroundColor = bgColor
         addSubview(storyAuthorNameLabel)
@@ -72,7 +75,7 @@ class StoriesCollectionViewPreviewCell: UICollectionViewCell, SdkStyleCustomColo
         pinSymbolLabel.translatesAutoresizingMaskIntoConstraints = false
         pinSymbolView.addSubview(pinSymbolLabel)
 
-        makeConstraints()
+        makeStoiesBlockCollectionConstraints()
     }
     
     required init?(coder: NSCoder) {
@@ -83,9 +86,21 @@ class StoriesCollectionViewPreviewCell: UICollectionViewCell, SdkStyleCustomColo
         task?.cancel()
     }
     
+    private func setImage(imagePathSdk: String) {
+        guard let url = URL(string: imagePathSdk) else {
+            return
+        }
+        
+        self.storyImage.load.request(with: url)
+    }
+    
     public func configure(story: Story) {
         setImage(imagePathSdk: story.avatar)
-        storyAuthorNameLabel.text = "\(story.name)"
+        if SdkConfiguration.stories.storiesBlockCharWrapping {
+            storyAuthorNameLabel.text = "\(story.name)".truncWords(length: SdkConfiguration.stories.storiesBlockCharCountWrap)
+        } else {
+            storyAuthorNameLabel.text = "\(story.name)"
+        }
         pinSymbolView.isHidden = !story.pinned
     }
     
@@ -95,7 +110,8 @@ class StoriesCollectionViewPreviewCell: UICollectionViewCell, SdkStyleCustomColo
         layoutIfNeeded()
         
         if let settings = settings {
-            //storyAuthorNameLabel.font = SdkStyle.shared.currentColorScheme?.storiesBlockSelectFontName.withSize(SdkStyle.shared.currentColorScheme!.storiesBlockSelectFontSize)
+            storyAuthorNameLabel.font = SdkStyle.shared.currentColorScheme?.storiesBlockSelectFontName.withSize(SdkStyle.shared.currentColorScheme!.storiesBlockSelectFontSize)
+            
             let labelColor = settings.color.hexToRGB()
             
             preloadIndicator.strokeColor = .white
@@ -104,9 +120,8 @@ class StoriesCollectionViewPreviewCell: UICollectionViewCell, SdkStyleCustomColo
             if (SdkStyle.shared.currentColorScheme?.storiesBlockFontColor == UIColor.sdkDefaultBlackColor) {
                 storyAuthorNameLabel.textColor = UIColor(red: labelColor.red, green: labelColor.green, blue: labelColor.blue, alpha: 1)
             } else {
-                //storyAuthorNameLabel.textColor = SdkStyle.shared.currentColorScheme?.storiesBlockFontColor
                 if #available(iOS 12.0, *) {
-                    if self.traitCollection.userInterfaceStyle == .dark {
+                    if SdkConfiguration.isDarkMode {
                         storyAuthorNameLabel.textColor = SdkConfiguration.stories.storiesBlockTextColorChanged_Dark
                     } else {
                         storyAuthorNameLabel.textColor = SdkConfiguration.stories.storiesBlockTextColorChanged_Light
@@ -133,40 +148,80 @@ class StoriesCollectionViewPreviewCell: UICollectionViewCell, SdkStyleCustomColo
             
             storyBackCircle.backgroundColor = .white
             let pinBgColor = settings.backgroundPin.hexToRGB()
-            pinSymbolView.backgroundColor = UIColor(red: pinBgColor.red, green: pinBgColor.green, blue: pinBgColor.blue, alpha: 1)
+            if SdkConfiguration.stories.pinColor != "" {
+                var updPinColor = SdkConfiguration.stories.pinColor.hexToRGB()
+                if #available(iOS 12.0, *) {
+                    if SdkConfiguration.isDarkMode {
+                        updPinColor = SdkConfiguration.stories.pinColorDarkMode.hexToRGB()
+                    }
+                }
+                pinSymbolView.backgroundColor = UIColor(red: updPinColor.red, green: updPinColor.green, blue: updPinColor.blue, alpha: 1)
+            } else {
+                pinSymbolView.backgroundColor = UIColor(red: pinBgColor.red, green: pinBgColor.green, blue: pinBgColor.blue, alpha: 1)
+            }
             pinSymbolLabel.text = settings.pinSymbol
             
             let storiesViewdBg = settings.borderViewed.hexToRGB()
             let storiesNotViewBg = settings.borderNotViewed.hexToRGB()
             
             if (viewed) {
-                storyWhiteBackCircle.backgroundColor = viewed ?
-                UIColor(red: storiesViewdBg.red, green: storiesViewdBg.green, blue: storiesViewdBg.blue, alpha: 1) :
-                UIColor(red: storiesViewdBg.red, green: storiesViewdBg.green, blue: storiesViewdBg.blue, alpha: 1)
-                
-                preloadIndicator.strokeColor = viewed ?
-                //UIColor(red: storiesViewdBg.red, green: storiesViewdBg.green, blue: storiesViewdBg.blue, alpha: 1) :
-                //UIColor(red: storiesNotViewBg.red, green: storiesNotViewBg.green, blue: storiesNotViewBg.blue, alpha: 1)
-                UIColor(red: 255/255, green: 118/255, blue: 0/255, alpha: 1) :
-                UIColor(red: 255/255, green: 118/255, blue: 0/255, alpha: 1)
+                if SdkConfiguration.stories.iconViewedBorderColor == "" {
+                    storyWhiteBackCircle.backgroundColor = viewed ?
+                    UIColor(red: storiesViewdBg.red, green: storiesViewdBg.green, blue: storiesViewdBg.blue, alpha: 1) :
+                    UIColor(red: storiesViewdBg.red, green: storiesViewdBg.green, blue: storiesViewdBg.blue, alpha: 1)
+                    
+                    preloadIndicator.strokeColor = viewed ?
+                    UIColor(red: storiesNotViewBg.red, green: storiesNotViewBg.green, blue: storiesNotViewBg.blue, alpha: 1) :
+                    UIColor(red: storiesNotViewBg.red, green: storiesNotViewBg.green, blue: storiesNotViewBg.blue, alpha: 1)
+                } else {
+                    var updViewedColor = SdkConfiguration.stories.iconViewedBorderColor.hexToRGB()
+                    let preloaderColor = SdkConfiguration.stories.iconPreloaderColor.hexToRGB()
+                    if #available(iOS 12.0, *) {
+                        if SdkConfiguration.isDarkMode {
+                            updViewedColor = SdkConfiguration.stories.iconViewedBorderColorDarkMode.hexToRGB()
+                        }
+                    }
+                    storyWhiteBackCircle.backgroundColor = UIColor(red: updViewedColor.red, green: updViewedColor.green, blue: updViewedColor.blue, alpha: 1)
+                    
+                    preloadIndicator.strokeColor = UIColor(red: preloaderColor.red, green: preloaderColor.green, blue: preloaderColor.blue, alpha: 1)
+                }
             } else {
-                storyWhiteBackCircle.backgroundColor = viewedLocalKey ?
-                UIColor(red: storiesViewdBg.red, green: storiesViewdBg.green, blue: storiesViewdBg.blue, alpha: 1) :
-                UIColor(red: storiesNotViewBg.red, green: storiesNotViewBg.green, blue: storiesNotViewBg.blue, alpha: 1)
-                
-                preloadIndicator.strokeColor = UIColor(red: storiesViewdBg.red, green: storiesViewdBg.green, blue: storiesViewdBg.blue, alpha: 1)
+                if SdkConfiguration.stories.iconNotViewedBorderColor == "" {
+                    storyWhiteBackCircle.backgroundColor = viewedLocalKey ?
+                    UIColor(red: storiesViewdBg.red, green: storiesViewdBg.green, blue: storiesViewdBg.blue, alpha: 1) :
+                    UIColor(red: storiesNotViewBg.red, green: storiesNotViewBg.green, blue: storiesNotViewBg.blue, alpha: 1)
+                    
+                    preloadIndicator.strokeColor = UIColor(red: storiesViewdBg.red, green: storiesViewdBg.green, blue: storiesViewdBg.blue, alpha: 1)
+                } else {
+                    var updNotViewedColor = SdkConfiguration.stories.iconNotViewedBorderColor.hexToRGB()
+                    let preloaderColor = SdkConfiguration.stories.iconPreloaderColor.hexToRGB()
+                    if #available(iOS 12.0, *) {
+                        if SdkConfiguration.isDarkMode {
+                            updNotViewedColor = SdkConfiguration.stories.iconNotViewedBorderColorDarkMode.hexToRGB()
+                        }
+                    }
+                    storyWhiteBackCircle.backgroundColor = UIColor(red: updNotViewedColor.red, green: updNotViewedColor.green, blue: updNotViewedColor.blue, alpha: 1)
+                    
+                    preloadIndicator.strokeColor = UIColor(red: preloaderColor.red, green: preloaderColor.green, blue: preloaderColor.blue, alpha: 1)
+                }
             }
             storyWhiteBackCircle.layer.cornerRadius = storyWhiteBackCircle.frame.width / 2
             storyWhiteBackCircle.layer.masksToBounds = true
             
-            if (viewed || viewedLocalKey) {
+            if SdkConfiguration.stories.iconViewedTransparency != SdkConfiguration.stories.defaultIconViewedTransparency {
                 UIView.animate(withDuration: 1.0, animations: {
-                    self.storyImage.alpha = 0.9
+                    self.storyImage.alpha = SdkConfiguration.stories.iconViewedTransparency
                 })
             } else {
-                UIView.animate(withDuration: 1.0, animations: {
-                    self.storyImage.alpha = 1.0
-                })
+                if (viewed || viewedLocalKey) {
+                    UIView.animate(withDuration: 1.0, animations: {
+                        self.storyImage.alpha = 0.9
+                    })
+                } else {
+                    UIView.animate(withDuration: 1.0, animations: {
+                        self.storyImage.alpha = 1.0
+                    })
+                }
             }
             
             storySuperClearBackCircle.backgroundColor = .white
@@ -177,7 +232,6 @@ class StoriesCollectionViewPreviewCell: UICollectionViewCell, SdkStyleCustomColo
             UIView.animate(withDuration: 1.0, animations: {
                 self.storyImage.alpha = 0.9
             })
-            //storyAuthorNameLabel.textColor = .black
             storyBackCircle.backgroundColor = .white
             storyWhiteBackCircle.backgroundColor = .white
             storySuperClearBackCircle.backgroundColor = .white
@@ -203,15 +257,7 @@ class StoriesCollectionViewPreviewCell: UICollectionViewCell, SdkStyleCustomColo
         }
     }
     
-    private func setImage(imagePathSdk: String) {
-        guard let url = URL(string: imagePathSdk) else {
-            return
-        }
-        
-        self.storyImage.load.request(with: url)
-    }
-    
-    private func makeConstraints() {
+    private func makeStoiesBlockCollectionConstraints() {
         
         storyBackCircle.topAnchor.constraint(equalTo: topAnchor).isActive = true
         storyBackCircle.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
@@ -223,26 +269,33 @@ class StoriesCollectionViewPreviewCell: UICollectionViewCell, SdkStyleCustomColo
         storyWhiteBackCircle.trailingAnchor.constraint(equalTo: storyBackCircle.trailingAnchor, constant: 0).isActive = true
         storyWhiteBackCircle.bottomAnchor.constraint(equalTo: storyBackCircle.bottomAnchor, constant: 0).isActive = true
         
-        storySuperClearBackCircle.topAnchor.constraint(equalTo: storyBackCircle.topAnchor, constant: 2.3).isActive = true
-        storySuperClearBackCircle.leadingAnchor.constraint(equalTo: storyBackCircle.leadingAnchor, constant:2.3).isActive = true
-        storySuperClearBackCircle.trailingAnchor.constraint(equalTo: storyBackCircle.trailingAnchor, constant: -2.3).isActive = true
-        storySuperClearBackCircle.bottomAnchor.constraint(equalTo: storyBackCircle.bottomAnchor, constant: -2.3).isActive = true
+        storySuperClearBackCircle.topAnchor.constraint(equalTo: storyBackCircle.topAnchor, constant: SdkConfiguration.stories.iconBorderWidth).isActive = true
+        storySuperClearBackCircle.leadingAnchor.constraint(equalTo: storyBackCircle.leadingAnchor, constant:SdkConfiguration.stories.iconBorderWidth).isActive = true
+        storySuperClearBackCircle.trailingAnchor.constraint(equalTo: storyBackCircle.trailingAnchor, constant: -SdkConfiguration.stories.iconBorderWidth).isActive = true
+        storySuperClearBackCircle.bottomAnchor.constraint(equalTo: storyBackCircle.bottomAnchor, constant: -SdkConfiguration.stories.iconBorderWidth).isActive = true
         
         preloadIndicator.topAnchor.constraint(equalTo: storyBackCircle.topAnchor, constant: 0).isActive = true
         preloadIndicator.leadingAnchor.constraint(equalTo: storyBackCircle.leadingAnchor, constant: 0).isActive = true
         preloadIndicator.trailingAnchor.constraint(equalTo: storyBackCircle.trailingAnchor, constant: 0).isActive = true
         preloadIndicator.bottomAnchor.constraint(equalTo: storyBackCircle.bottomAnchor, constant: 0).isActive = true
-        preloadIndicator.heightAnchor.constraint(equalTo: storyBackCircle.widthAnchor).isActive = true
-        preloadIndicator.heightAnchor.constraint(equalTo: storyBackCircle.widthAnchor).isActive = true
+        preloadIndicator.widthAnchor.constraint(equalTo: storyBackCircle.widthAnchor).isActive = true
+        preloadIndicator.heightAnchor.constraint(equalTo: storyBackCircle.heightAnchor).isActive = true
         
         storyImage.topAnchor.constraint(equalTo: storyWhiteBackCircle.topAnchor, constant: 4.2).isActive = true
         storyImage.leadingAnchor.constraint(equalTo: storyWhiteBackCircle.leadingAnchor, constant: 4.2).isActive = true
         storyImage.trailingAnchor.constraint(equalTo: storyWhiteBackCircle.trailingAnchor, constant: -4.2).isActive = true
         storyImage.bottomAnchor.constraint(equalTo: storyWhiteBackCircle.bottomAnchor, constant: -4.2).isActive = true
         
-        storyAuthorNameLabel.topAnchor.constraint(equalTo: storyBackCircle.bottomAnchor, constant: 8).isActive = true
-        storyAuthorNameLabel.leadingAnchor.constraint(equalTo: storyBackCircle.leadingAnchor,constant: -10).isActive = true
-        storyAuthorNameLabel.trailingAnchor.constraint(equalTo: storyBackCircle.trailingAnchor, constant: 10).isActive = true
+        storyAuthorNameLabel.topAnchor.constraint(equalTo: storyBackCircle.bottomAnchor, constant: SdkConfiguration.stories.iconMarginBottom).isActive = true
+        
+        if (SdkConfiguration.stories.labelWidth > SdkConfiguration.stories.iconSize) {
+            let delta = (SdkConfiguration.stories.labelWidth / 2) + 10
+            storyAuthorNameLabel.leadingAnchor.constraint(equalTo: storyBackCircle.leadingAnchor, constant: -delta).isActive = true
+            storyAuthorNameLabel.trailingAnchor.constraint(equalTo: storyBackCircle.trailingAnchor, constant: delta).isActive = true
+        } else {
+            storyAuthorNameLabel.leadingAnchor.constraint(equalTo: storyBackCircle.leadingAnchor, constant: -10).isActive = true
+            storyAuthorNameLabel.trailingAnchor.constraint(equalTo: storyBackCircle.trailingAnchor, constant: 10).isActive = true
+        }
         
         pinSymbolView.bottomAnchor.constraint(equalTo: storyBackCircle.bottomAnchor).isActive = true
         pinSymbolView.trailingAnchor.constraint(equalTo: storyBackCircle.trailingAnchor, constant: -4).isActive = true
@@ -251,14 +304,6 @@ class StoriesCollectionViewPreviewCell: UICollectionViewCell, SdkStyleCustomColo
         
         pinSymbolLabel.centerXAnchor.constraint(equalTo: pinSymbolView.centerXAnchor).isActive = true
         pinSymbolLabel.centerYAnchor.constraint(equalTo: pinSymbolView.centerYAnchor).isActive = true
-    }
-    
-    func applyCustomColorScheme(_ colorScheme: SdkStyleCustomColorScheme) {
-        //
-    }
-    
-    func applySdkCustomFonts(_ fonts: SdkStyleCustomFonts) {
-        //
     }
     
     public func showSdkPreloadIndicator() {
@@ -281,4 +326,48 @@ class StoriesCollectionViewPreviewCell: UICollectionViewCell, SdkStyleCustomColo
             storyBackCircle.layer.cornerRadius = bounds.width / 2
         }
     }
+}
+
+
+private extension UIColor {
+   private var rgbHexAlpha: (red: CGFloat, green: CGFloat, blue: CGFloat, alpha: CGFloat) {
+       var red = CGFloat.zero
+       var green = CGFloat.zero
+       var blue = CGFloat.zero
+       var alpha = CGFloat.zero
+    
+       guard getRed(&red, green: &green, blue: &blue, alpha: &alpha) else {
+           debugPrint("color could not be retrieved")
+           return (1.0, 1.0, 1.0, 1.0)
+       }
+       return (red, green, blue, alpha)
+   }
+
+   static func == (lhs: UIColor, rhs: UIColor) -> Bool {
+       return  lhs.rgbHexAlpha == rhs.rgbHexAlpha
+   }
+}
+
+
+extension String {
+    enum TruncationPosition {
+        case head
+        case middle
+        case tail
+    }
+    
+    public func truncWords(length: Int, trailing: String = "…") -> String {
+        if (self.count <= length) {
+          return self
+        }
+        var truncated = self.prefix(length)
+        while truncated.last != " " {
+
+              guard truncated.count > length else {
+                break
+              }
+          truncated = truncated.dropLast()
+        }
+        return truncated + trailing
+      }
 }
