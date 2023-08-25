@@ -1,10 +1,9 @@
 .DS_Store
+.idea
+.swiftpm
 /.build
 /Packages
 /*.xcodeproj
-xcuserdata/
-Example
-Example/Pods
-.idea
-.swiftpm
 /.swiftpm
+/Pods
+xcuserdata/
