@@ -8,9 +8,8 @@ final public class VideoDownloadManager: NSObject {
     public typealias BackgroundDownloadCompletionHandler = () -> Void
     
     private var session: URLSession!
-    private var ongoingDownloads: [String : VideoDownloadObject] = [:]
+    private var ongoingDownloads: [String:VideoDownloadObject] = [:]
     private var backgroundSession: URLSession!
-    private var eSession: URLSession!
     
     public var backgroundCompletionHandler: BackgroundDownloadCompletionHandler?
     public var localNotificationText: String?
@@ -49,7 +48,7 @@ final public class VideoDownloadManager: NSObject {
         let key = self.getExDownloadKey(withUrl: url)
         self.ongoingDownloads[key] = download
         downloadTask.resume()
-        return key;
+        return key
     }
     
     public func getExDownloadKey(withUrl url: URL) -> String {
@@ -121,8 +120,6 @@ final public class VideoDownloadManager: NSObject {
         super.init()
         let sessionConfiguration = URLSessionConfiguration.default
         self.session = URLSession(configuration: sessionConfiguration, delegate: self, delegateQueue: nil)
-        //let ephemeralConfiguration = URLSessionConfiguration.ephemeral
-        //self.eSession = URLSession(configuration: ephemeralConfiguration, delegate: self, delegateQueue: nil)
         let backgroundConfiguration = URLSessionConfiguration.background(withIdentifier: Bundle.main.bundleIdentifier!)
         self.backgroundSession = URLSession(configuration: backgroundConfiguration, delegate: self, delegateQueue: OperationQueue())
     }
@@ -165,11 +162,17 @@ extension VideoDownloadManager : URLSessionDelegate, URLSessionDownloadDelegate 
                 let finalFileUrl = fileMovingResult.2
                 
                 OperationQueue.main.addOperation({
-                    (didSucceed ? download.completionBlock(nil, finalFileUrl) : download.completionBlock(error,nil))
+                    (didSucceed ? download.completionBlock(nil, finalFileUrl) : download.completionBlock(error, nil))
                 })
             }
         }
-        self.ongoingDownloads.removeValue(forKey:key)
+        
+        if self.ongoingDownloads.removeValue(forKey: key) != nil {
+            self.ongoingDownloads.removeValue(forKey:key)
+            //print("SDK VideoDownloadManager Key value \(removedValue) was removed")
+        } else {
+            print("SDK VideoDownloadManager dictionary does not contain Key value \(key)")
+        }
     }
     
     public func urlSession(_ session: URLSession,
@@ -179,7 +182,7 @@ extension VideoDownloadManager : URLSessionDelegate, URLSessionDownloadDelegate 
                              totalBytesExpectedToWrite: Int64) {
         guard totalBytesExpectedToWrite > 0 else {
             print("SDK Could not calculate progress as totalBytesExpectedToWrite is less than 0")
-            return;
+            return
         }
         
         if let download = self.ongoingDownloads[(downloadTask.originalRequest?.url?.absoluteString)!],
@@ -200,7 +203,7 @@ extension VideoDownloadManager : URLSessionDelegate, URLSessionDownloadDelegate 
             let key = (downloadTask.originalRequest?.url?.absoluteString)!
             if let download = self.ongoingDownloads[key] {
                 OperationQueue.main.addOperation({
-                    download.completionBlock(error,nil)
+                    download.completionBlock(error, nil)
                 })
             }
             self.ongoingDownloads.removeValue(forKey:key)
