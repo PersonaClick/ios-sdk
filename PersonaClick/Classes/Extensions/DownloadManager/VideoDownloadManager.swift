@@ -10,6 +10,7 @@ final public class VideoDownloadManager: NSObject {
     private var session: URLSession!
     private var ongoingDownloads: [String:VideoDownloadObject] = [:]
     private var backgroundSession: URLSession!
+    //private var eSession: URLSession!
     
     public var backgroundCompletionHandler: BackgroundDownloadCompletionHandler?
     public var localNotificationText: String?
@@ -120,6 +121,8 @@ final public class VideoDownloadManager: NSObject {
         super.init()
         let sessionConfiguration = URLSessionConfiguration.default
         self.session = URLSession(configuration: sessionConfiguration, delegate: self, delegateQueue: nil)
+        //let ephemeralConfiguration = URLSessionConfiguration.ephemeral
+        //self.eSession = URLSession(configuration: ephemeralConfiguration, delegate: self, delegateQueue: nil)
         let backgroundConfiguration = URLSessionConfiguration.background(withIdentifier: Bundle.main.bundleIdentifier!)
         self.backgroundSession = URLSession(configuration: backgroundConfiguration, delegate: self, delegateQueue: OperationQueue())
     }
@@ -166,13 +169,15 @@ extension VideoDownloadManager : URLSessionDelegate, URLSessionDownloadDelegate 
                 })
             }
         }
-        
-        if self.ongoingDownloads.removeValue(forKey: key) != nil {
-            self.ongoingDownloads.removeValue(forKey:key)
-            //print("SDK VideoDownloadManager Key value \(removedValue) was removed")
-        } else {
-            print("SDK VideoDownloadManager dictionary does not contain Key value \(key)")
-        }
+        self.ongoingDownloads.removeValue(forKey:key)
+//        if let removedValue = self.ongoingDownloads.removeValue(forKey: key) {
+//            self.ongoingDownloads.removeValue(forKey:key)
+//            print("SDK VideoDownloadManager Key value \(removedValue) was removed")
+//            //self.ongoingDownloads.removeValue(forKey:key)
+//        } else {
+//            //self.ongoingDownloads.removeValue(forKey:key)
+//            print("SDK VideoDownloadManager dictionary does not contain Key value \(key)")
+//        }
     }
     
     public func urlSession(_ session: URLSession,
@@ -187,7 +192,7 @@ extension VideoDownloadManager : URLSessionDelegate, URLSessionDownloadDelegate 
         
         if let download = self.ongoingDownloads[(downloadTask.originalRequest?.url?.absoluteString)!],
             let progressBlock = download.progressBlock {
-            let progress : CGFloat = CGFloat(totalBytesWritten) / CGFloat(totalBytesExpectedToWrite)
+            let progress: CGFloat = CGFloat(totalBytesWritten) / CGFloat(totalBytesExpectedToWrite)
             OperationQueue.main.addOperation({
                 progressBlock(progress)
             })

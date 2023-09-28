@@ -68,9 +68,20 @@
                                                        backgroundColor: "#5ec169",
                                                        textColorDarkMode: "#000000",
                                                        backgroundColorDarkMode: "#ffffff",
-                                                       cornerRadius: 5)
+                                                 s      cornerRadius: 5)
 
     sdk.configuration().stories.setProductsCard(fontName: "Museo")
+    
+    sdk.configuration().stories.setPromocodeCard(productTitleFontName: "Museo",
+                                                     productTitleFontSize: 19.0,
+                                                     productTitleTextColor: "#5ec169",
+                                                     productTitleTextColorDarkMode: "#5ec169",
+                                                     productBannerPriceSectionFontColor: "#d6d6d6",
+                                                     productBannerPromocodeSectionFontColor: "#5ec169",
+                                                     productBannerPriceSectionBackgroundColor: "#fd7c50",
+                                                     productBannerPromocodeSectionBackgroundColor: "#17aadf",
+                                                     discountSectionBackgroundColor: "#ea1717",
+                                                     productBannerDefaultMessage: "Copied")
         
     //SDK Stories block text label characters wrapping settings
     sdk.configuration().stories.storiesBlockNumberOfLines = 2

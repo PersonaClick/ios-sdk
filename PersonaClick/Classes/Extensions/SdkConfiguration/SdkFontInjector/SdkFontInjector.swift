@@ -76,6 +76,7 @@ open class SdkFontInjector: NSObject {
                                 SdkFontInjector.registeredFont[fontName!] = [:]
                             }
                         }
+                        //SdkFontInjector.registeredFont[fontName!]?[fontWeight] = fontName
                     }
                     SdkFontInjector.registeredFont[fontName!]?[UIFont.Weight.regular] = fontName
                     print("SDK Success registering font")

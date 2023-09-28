@@ -42,6 +42,7 @@ class CarouselCollectionView: UICollectionView, UICollectionViewDelegate, UIColl
             NSLayoutConstraint.activate([
                 stackView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor, constant: 58),
                 stackView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor, constant: -58),
+                //stackView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor),
                 stackView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor, constant: 15),
                 stackView.heightAnchor.constraint(equalToConstant: 36)
             ])

@@ -60,7 +60,8 @@ class StoriesCollectionViewPreviewCell: UICollectionViewCell {
         if SdkConfiguration.stories.storiesBlockCharWrapping {
             storyAuthorNameLabel.lineBreakMode = .byTruncatingTail
         } else {
-            storyAuthorNameLabel.lineBreakMode = .byWordWrapping
+            storyAuthorNameLabel.lineBreakMode = .byWordWrapping //.byTruncatingTail
+            //storyAuthorNameLabel.allowsDefaultTighteningForTruncation = false
         }
         storyAuthorNameLabel.translatesAutoresizingMaskIntoConstraints = false
         storyAuthorNameLabel.backgroundColor = bgColor
@@ -111,8 +112,9 @@ class StoriesCollectionViewPreviewCell: UICollectionViewCell {
         
         if let settings = settings {
             storyAuthorNameLabel.font = SdkStyle.shared.currentColorScheme?.storiesBlockSelectFontName.withSize(SdkStyle.shared.currentColorScheme!.storiesBlockSelectFontSize)
-            
             let labelColor = settings.color.hexToRGB()
+//            storyAuthorNameLabel.font = .systemFont(ofSize: CGFloat(settings.fontSize))
+//            storyAuthorNameLabel.textColor = UIColor(red: labelColor.red, green: labelColor.green, blue: labelColor.blue, alpha: 1)
             
             preloadIndicator.strokeColor = .white
             storyAuthorNameLabel.backgroundColor = .clear
@@ -142,6 +144,7 @@ class StoriesCollectionViewPreviewCell: UICollectionViewCell {
                     let size = SdkStyle.shared.currentColorScheme?.storiesBlockSelectFontSize ?? 15.0
                     storyAuthorNameLabel.font = .systemFont(ofSize: CGFloat(size))
                 } else {
+                    //storyAuthorNameLabel.maximumFontSizeBySdk = CGFloat(settings.fontSize)
                     storyAuthorNameLabel.font = .systemFont(ofSize: CGFloat(settings.fontSize))
                 }
             }
@@ -171,8 +174,10 @@ class StoriesCollectionViewPreviewCell: UICollectionViewCell {
                     UIColor(red: storiesViewdBg.red, green: storiesViewdBg.green, blue: storiesViewdBg.blue, alpha: 1)
                     
                     preloadIndicator.strokeColor = viewed ?
-                    UIColor(red: storiesNotViewBg.red, green: storiesNotViewBg.green, blue: storiesNotViewBg.blue, alpha: 1) :
-                    UIColor(red: storiesNotViewBg.red, green: storiesNotViewBg.green, blue: storiesNotViewBg.blue, alpha: 1)
+                    //UIColor(red: storiesViewdBg.red, green: storiesViewdBg.green, blue: storiesViewdBg.blue, alpha: 1) :
+                    //UIColor(red: storiesNotViewBg.red, green: storiesNotViewBg.green, blue: storiesNotViewBg.blue, alpha: 1)
+                    UIColor(red: 255/255, green: 118/255, blue: 0/255, alpha: 1) :
+                    UIColor(red: 255/255, green: 118/255, blue: 0/255, alpha: 1)
                 } else {
                     var updViewedColor = SdkConfiguration.stories.iconViewedBorderColor.hexToRGB()
                     let preloaderColor = SdkConfiguration.stories.iconPreloaderColor.hexToRGB()
@@ -205,8 +210,14 @@ class StoriesCollectionViewPreviewCell: UICollectionViewCell {
                     preloadIndicator.strokeColor = UIColor(red: preloaderColor.red, green: preloaderColor.green, blue: preloaderColor.blue, alpha: 1)
                 }
             }
-            storyWhiteBackCircle.layer.cornerRadius = storyWhiteBackCircle.frame.width / 2
             storyWhiteBackCircle.layer.masksToBounds = true
+            if storyImage.image == nil {
+                if SdkConfiguration.stories.iconDisplayFormatSquare {
+                    //Square implementation not needed corner
+                } else {
+                    storyWhiteBackCircle.layer.cornerRadius = storyWhiteBackCircle.frame.width / 2
+                }
+            }
             
             if SdkConfiguration.stories.iconViewedTransparency != SdkConfiguration.stories.defaultIconViewedTransparency {
                 UIView.animate(withDuration: 1.0, animations: {
@@ -226,8 +237,12 @@ class StoriesCollectionViewPreviewCell: UICollectionViewCell {
             
             storySuperClearBackCircle.backgroundColor = .white
             storySuperClearBackCircle.alpha = 1.0
-            storySuperClearBackCircle.layer.cornerRadius = storySuperClearBackCircle.frame.width / 2
             storySuperClearBackCircle.layer.masksToBounds = true
+            if SdkConfiguration.stories.iconDisplayFormatSquare {
+                //Square implementation coming soon
+            } else {
+                storySuperClearBackCircle.layer.cornerRadius = storySuperClearBackCircle.frame.width / 2
+            }
         } else {
             UIView.animate(withDuration: 1.0, animations: {
                 self.storyImage.alpha = 0.9
@@ -298,7 +313,11 @@ class StoriesCollectionViewPreviewCell: UICollectionViewCell {
         }
         
         pinSymbolView.bottomAnchor.constraint(equalTo: storyBackCircle.bottomAnchor).isActive = true
-        pinSymbolView.trailingAnchor.constraint(equalTo: storyBackCircle.trailingAnchor, constant: -4).isActive = true
+        if SdkConfiguration.stories.iconDisplayFormatSquare {
+            pinSymbolView.trailingAnchor.constraint(equalTo: storyBackCircle.trailingAnchor, constant: 0).isActive = true
+        } else {
+            pinSymbolView.trailingAnchor.constraint(equalTo: storyBackCircle.trailingAnchor, constant: -4).isActive = true
+        }
         pinSymbolView.heightAnchor.constraint(equalToConstant: 32).isActive = true
         pinSymbolView.widthAnchor.constraint(equalToConstant: 32).isActive = true
         
@@ -316,14 +335,19 @@ class StoriesCollectionViewPreviewCell: UICollectionViewCell {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        storyBackCircle.layer.cornerRadius = storyBackCircle.frame.width / 2
-        storyImage.layer.cornerRadius = storyImage.frame.width / 2
-        storyWhiteBackCircle.layer.cornerRadius = storyWhiteBackCircle.frame.width / 2
-        storySuperClearBackCircle.layer.cornerRadius = storySuperClearBackCircle.frame.width / 2
-        pinSymbolView.layer.cornerRadius = pinSymbolView.frame.width / 2
-        
-        if storyImage.image == nil {
-            storyBackCircle.layer.cornerRadius = bounds.width / 2
+        print(SdkConfiguration.stories.iconDisplayFormatSquare)
+        if SdkConfiguration.stories.iconDisplayFormatSquare {
+            //Square implementation coming soon
+        } else {
+            storyBackCircle.layer.cornerRadius = storyBackCircle.frame.width / 2
+            storyImage.layer.cornerRadius = storyImage.frame.width / 2
+            storyWhiteBackCircle.layer.cornerRadius = storyWhiteBackCircle.frame.width / 2
+            storySuperClearBackCircle.layer.cornerRadius = storySuperClearBackCircle.frame.width / 2
+            pinSymbolView.layer.cornerRadius = pinSymbolView.frame.width / 2
+
+            if storyImage.image == nil {
+                storyBackCircle.layer.cornerRadius = bounds.width / 2
+            }
         }
     }
 }

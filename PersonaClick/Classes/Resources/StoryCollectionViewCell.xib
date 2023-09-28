@@ -25,7 +25,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="302" height="352"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     </view>
-                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Zyd-aI-pG7" customClass="StoryButton" customModule="REES46" customModuleProvider="target">
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Zyd-aI-pG7" customClass="StoryButton" customModule="PersonaClick" customModuleProvider="target">
                         <rect key="frame" x="16" y="248" width="270" height="60"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="60" id="ze9-rQ-ihk"/>
@@ -34,7 +34,7 @@
                         <state key="normal" title="Button"/>
                         <buttonConfiguration key="configuration" style="plain" title="TAP ME"/>
                     </button>
-                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="XCQ-jK-yKE" userLabel="ProductsButton" customClass="ProductsButton" customModule="REES46" customModuleProvider="target">
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="XCQ-jK-yKE" userLabel="ProductsButton" customClass="ProductsButton" customModule="PersonaClicks" customModuleProvider="target">
                         <rect key="frame" x="16" y="248" width="270" height="60"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="60" id="xtg-m6-ZLB"/>
