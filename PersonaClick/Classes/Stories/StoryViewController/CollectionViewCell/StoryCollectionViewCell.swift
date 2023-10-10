@@ -15,7 +15,7 @@ class StoryCollectionViewCell: UICollectionViewCell {
     static let cellId = "StoryCollectionViewCellId"
     
     let videoView = UIView()
-    let imageView = UIImageView()
+    let storySlideImageView = UIImageView()
     let storyButton = StoryButton()
     let productsButton = ProductsButton()
     let muteButton = UIButton()
@@ -25,11 +25,9 @@ class StoryCollectionViewCell: UICollectionViewCell {
     private var selectedProductsElement: StoriesElement?
     private var selectedPromoElement: StoriesPromoElement?
     
-    public let promoCodeView = PromoCodeView()
-    public let dismissablePromocodeBanner = PromocodeBanner(location: PromocodeBannerLocation.bottomLeft)
-    public let toastBanner = PromocodeBanner(location: PromocodeBannerLocation.bottomLeft)
-    //public let toast = SdkInfoView(title: "Copied")
-    public let toast = SdkInfoView(title: SdkConfiguration.stories.defaultCopiedMessage)
+    public let productWithPromocodeSuperview = PromoCodeView()
+    public let promocodeBannerView = PromocodeBanner(location: PromocodeBannerLocation.bottomLeft)
+    public var sdkPopupAlertView = SdkPopupAlertView(title: SdkConfiguration.stories.defaultCopiedMessage)
     
     public weak var cellDelegate: StoryCollectionViewCellDelegate?
     public weak var mainStoriesDelegate: StoriesViewLinkProtocol?
@@ -45,7 +43,6 @@ class StoryCollectionViewCell: UICollectionViewCell {
         super.init(frame: frame)
         
         if currentSlide?.backgroundColor != nil {
-            //Backend
             //let color = currentSlide?.backgroundColor.hexToRGB()
             //self.backgroundColor = UIColor(red: color!.red, green: color!.green, blue: color!.blue, alpha: 1)
         } else {
@@ -63,15 +60,15 @@ class StoryCollectionViewCell: UICollectionViewCell {
         videoView.translatesAutoresizingMaskIntoConstraints = false
         addSubview(videoView)
         
-        imageView.contentMode = .scaleAspectFit
-        imageView.clipsToBounds = true
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        addSubview(imageView)
+        storySlideImageView.contentMode = .scaleAspectFit
+        storySlideImageView.clipsToBounds = true
+        storySlideImageView.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(storySlideImageView)
         
-        promoCodeView.translatesAutoresizingMaskIntoConstraints = false
-        promoCodeView.isHidden = true
-        promoCodeView.autoresizesSubviews = true
-        addSubview(promoCodeView)
+        productWithPromocodeSuperview.translatesAutoresizingMaskIntoConstraints = false
+        productWithPromocodeSuperview.isHidden = true
+        productWithPromocodeSuperview.autoresizesSubviews = true
+        addSubview(productWithPromocodeSuperview)
         
         storyButton.translatesAutoresizingMaskIntoConstraints = false
         storyButton.setTitle("Continue", for: .normal)
@@ -109,15 +106,15 @@ class StoryCollectionViewCell: UICollectionViewCell {
         videoView.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
         videoView.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
         
-        imageView.topAnchor.constraint(equalTo: topAnchor).isActive = true
-        imageView.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
-        imageView.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
-        imageView.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
+        storySlideImageView.topAnchor.constraint(equalTo: topAnchor).isActive = true
+        storySlideImageView.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
+        storySlideImageView.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
+        storySlideImageView.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
         
-        promoCodeView.topAnchor.constraint(equalTo: topAnchor).isActive = true
-        promoCodeView.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
-        promoCodeView.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
-        promoCodeView.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
+        productWithPromocodeSuperview.topAnchor.constraint(equalTo: topAnchor).isActive = true
+        productWithPromocodeSuperview.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
+        productWithPromocodeSuperview.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
+        productWithPromocodeSuperview.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
         
         if SdkGlobalHelper.sharedInstance.willDeviceHaveDynamicIsland() {
             
@@ -367,7 +364,7 @@ class StoryCollectionViewCell: UICollectionViewCell {
         
         if slide.type == .video {
             videoView.isHidden = false
-            imageView.isHidden = true
+            storySlideImageView.isHidden = true
 
             self.videoView.layer.sublayers?.forEach {
                 if $0.name == "VIDEO" {
@@ -376,18 +373,19 @@ class StoryCollectionViewCell: UICollectionViewCell {
             }
             if let videoURL = slide.videoURL {
                 videoView.isHidden = false
-                imageView.isHidden = true
+                storySlideImageView.isHidden = true
 
                 let asset = AVAsset(url: videoURL)
-                let volume = AVAudioSession.sharedInstance().outputVolume
-                print("output volume: \(volume)")
-                
                 let playerItem = AVPlayerItem(asset: asset)
                 self.player = AVPlayer(playerItem: playerItem)
                 let playerLayer = AVPlayerLayer(player: player)
                 let screenSize = UIScreen.main.bounds.size
                 playerLayer.frame = CGRect(x: 0, y: 0, width: screenSize.width, height: screenSize.height)
                 playerLayer.name = "VIDEO"
+                
+                //let videoDuration = asset.duration
+                //let durationTime = CMTimeGetSeconds(videoDuration)
+                //print(videoDuration)
                 //playerLayer.videoGravity = .resizeAspectFill
                 
                 if playerItem.asset.tracks.filter({$0.mediaType == .audio}).count != 0 {
@@ -422,19 +420,19 @@ class StoryCollectionViewCell: UICollectionViewCell {
             } else {
                 
                 muteButton.isHidden = true
-                imageView.isHidden = false
+                storySlideImageView.isHidden = false
                 videoView.isHidden = true
                 if let preview = slide.previewImage {
-                    self.imageView.image = preview
+                    self.storySlideImageView.image = preview
                 }
             }
         } else {
             
             muteButton.isHidden = true
-            imageView.isHidden = false
+            storySlideImageView.isHidden = false
             videoView.isHidden = true
             if let image = slide.downloadedImage {
-                self.imageView.image = image
+                self.storySlideImageView.image = image
             }
         }
         
@@ -472,27 +470,26 @@ class StoryCollectionViewCell: UICollectionViewCell {
                 
                 selectedPromoElement = elementProduct.product!
 
-                dismissablePromocodeBanner.dismissWithoutAnimation()
-                promoCodeView.configPromoView(promoData: selectedPromoElement!)
+                promocodeBannerView.dismissWithoutAnimation()
+                productWithPromocodeSuperview.configPromoView(promoData: selectedPromoElement!)
 
                 if selectedPromoElement!.discount_percent != 0 {
-                    promoCodeView.isHidden = false
+                    productWithPromocodeSuperview.isHidden = false
                     self.displayPromocodeBanner(promoTitle: elementProduct.title, promoData: self.selectedPromoElement!)
                 } else {
-                    promoCodeView.isHidden = false
+                    productWithPromocodeSuperview.isHidden = false
                     self.displayPromocodeBanner(promoTitle: elementProduct.title, promoData: self.selectedPromoElement!)
                 }
 
-                insertSubview(muteButton, aboveSubview: promoCodeView)
-                insertSubview(muteButton, aboveSubview: dismissablePromocodeBanner)
-                insertSubview(muteButton, aboveSubview: imageView)
+                insertSubview(muteButton, aboveSubview: productWithPromocodeSuperview)
+                insertSubview(muteButton, aboveSubview: promocodeBannerView)
+                insertSubview(muteButton, aboveSubview: storySlideImageView)
 
-                insertSubview(storyButton, aboveSubview: promoCodeView)
-                insertSubview(storyButton, aboveSubview: dismissablePromocodeBanner)
-                insertSubview(storyButton, aboveSubview: imageView)
+                insertSubview(storyButton, aboveSubview: productWithPromocodeSuperview)
+                insertSubview(storyButton, aboveSubview: promocodeBannerView)
+                insertSubview(storyButton, aboveSubview: storySlideImageView)
 
-                insertSubview(promoCodeView, aboveSubview: imageView)
-                //insertSubview(dismissablePromocodeBanner, aboveSubview: imageView)
+                insertSubview(productWithPromocodeSuperview, aboveSubview: storySlideImageView)
                 
                 makeConstraints()
             }
@@ -524,30 +521,52 @@ class StoryCollectionViewCell: UICollectionViewCell {
         }
     }
     
-    @objc func handleTap(_ sender: UITapGestureRecognizer? = nil) {
-        //Coming soon
-        let toast = SdkInfoView(title: "Pricedrop")
-        toast.show()
+    @objc func sdkPopupTapHandle(_ sender: UITapGestureRecognizer? = nil) {
+        var mainBundle = Bundle(for: classForCoder)
+#if SWIFT_PACKAGE
+        mainBundle = Bundle.module
+#endif
+        let errIcon = UIImage(named: "iconError", in: mainBundle, compatibleWith: nil)?.withRenderingMode(UIImage.RenderingMode.alwaysTemplate)
+        
+        if #available(iOS 13.0, *) {
+            let popupView = SdkPopupAlertView(
+                title: "",
+                titleFont: .systemFont(ofSize: 5, weight: .light),
+                subtitle: SdkConfiguration.stories.storiesSlideReloadPopupMessageError,
+                subtitleFont: .systemFont(ofSize: SdkConfiguration.stories.storiesSlideReloadPopupMessageFontSize, weight: SdkConfiguration.stories.storiesSlideReloadPopupMessageFontWeight),
+                icon: errIcon,
+                iconSpacing: 16,
+                position: .centerCustom,
+                onTap: { print("Sdk Alert popup tapped")
+                }
+            )
+            popupView.displayTime = SdkConfiguration.stories.storiesSlideReloadPopupMessageDisplayTime
+            popupView.show()
+        }
     }
     
     func displayPromocodeBanner(promoTitle: String?, promoData: StoriesPromoElement) {
         
         let screenSize: CGRect = UIScreen.main.bounds
-        dismissablePromocodeBanner.size = CGSize(width: screenSize.width - 32, height: 68)
-        dismissablePromocodeBanner.cornerRadius = 6
-        dismissablePromocodeBanner.displayTime = 0
-        dismissablePromocodeBanner.padding = (16, 90)
-        dismissablePromocodeBanner.animationDuration = 0.0 //0.75
+        promocodeBannerView.size = CGSize(width: screenSize.width - 32, height: 68)
+        promocodeBannerView.cornerRadius = 6
+        promocodeBannerView.displayTime = 0
+        promocodeBannerView.padding = (16, 90)
+        promocodeBannerView.animationDuration = 0.0 //0.75
         
         let presentedBannerLabel = UILabel()
-        let presentedColor = UIColor(red: 252/255, green: 107/255, blue: 63/255, alpha: 1.0) //TO DO
+        let presentedColor = UIColor(red: 252/255, green: 107/255, blue: 63/255, alpha: 1.0)
         presentedBannerLabel.backgroundColor = presentedColor
         
         let codePromo = promoData.promocode
         let normalClearText = ""
         let normalAttributedString = NSMutableAttributedString(string:normalClearText)
         
-        let oldPriceText = "     " + String(promoData.oldprice)
+        var oldPriceText = "     " + String(promoData.oldprice_formatted)
+        if (promoData.oldprice_formatted == "") {
+            oldPriceText = "     " + String(promoData.oldprice)
+        }
+
         if promoData.oldprice != 0 {
             let attrs = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 16, weight: .heavy),
                          NSAttributedString.Key.strikethroughStyle: NSUnderlineStyle.single.rawValue,
@@ -567,10 +586,14 @@ class StoryCollectionViewCell: UICollectionViewCell {
             //print("SDK Old Price Implementation")
         }
         
-        //TEST
-        //var newPriceText = "  " + (promoData.product?.price_with_promocode_formatted ?? "")
-        //let newPriceText = "   " + "7700005456004"  //" + String(promoData.price)
-        let newPriceText = "   " + String(promoData.price)
+        var formattedPriceWithPromocode = String(promoData.price_with_promocode_formatted)
+        if formattedPriceWithPromocode == "" {
+            formattedPriceWithPromocode = String(promoData.price_formatted)
+        }
+        let currentCurrency = promoData.currency
+        let replaceCurrencyPriceWithPromocode = formattedPriceWithPromocode.replacingOccurrences(of: currentCurrency, with: "")
+        
+        let newPriceText = "   " + replaceCurrencyPriceWithPromocode
         
         var newPriceTextAttributes = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 28, weight: .black), .foregroundColor: UIColor.white]
         if newPriceText.utf16.count <= 10 {
@@ -634,7 +657,7 @@ class StoryCollectionViewCell: UICollectionViewCell {
             } else if codePromo.utf16.count <= 16 {
                 priceLabelAttributes = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 15, weight: .bold), .foregroundColor: UIColor.white]
             } else if codePromo.utf16.count <= 18 {
-                priceLabelAttributes = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 13, weight: .bold), .foregroundColor: UIColor.white]
+                priceLabelAttributes = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 14, weight: .bold), .foregroundColor: UIColor.white]
             } else {
                 priceLabelAttributes = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 11, weight: .regular), .foregroundColor: UIColor.white]
             }
@@ -643,58 +666,79 @@ class StoryCollectionViewCell: UICollectionViewCell {
         }
         
         let v = UIView()
-        let tap = UITapGestureRecognizer(target: self, action: #selector(self.handleTap(_:)))
+        let tap = UITapGestureRecognizer(target: self, action: #selector(self.sdkPopupTapHandle(_:)))
         v.addGestureRecognizer(tap)
         v.addSubview(presentedBannerLabel)
         
-        let btn = UIButton()
+        let promoBtn = UIButton()
         if promoData.discount_percent != 0 || codePromo != "" {
-            btn.setAttributedTitle(attributedDiscountSectionString, for: .normal)
-            btn.titleLabel?.textAlignment = .left
-            btn.titleLabel?.numberOfLines = 3
+            promoBtn.setAttributedTitle(attributedDiscountSectionString, for: .normal)
+            promoBtn.titleLabel?.textAlignment = .left
+            promoBtn.titleLabel?.numberOfLines = 3
 
             var bgAdditionalColor = SdkConfiguration.stories.bannerPromocodeSectionBackgroundColor ?? UIColor(red: 23/255, green: 170/255, blue: 223/255, alpha: 1.0)
             
             if codePromo == "" {
                 bgAdditionalColor = SdkConfiguration.stories.bannerDiscountSectionBackgroundColor ?? UIColor(red: 251/255, green: 184/255, blue: 0/255, alpha: 1.0)
             } else {
-                btn.addTarget(self, action: #selector(copyPromocodeToClipboard), for: .touchUpInside)
+                
+                var mainBundle = Bundle(for: classForCoder)
+            #if SWIFT_PACKAGE
+                mainBundle = Bundle.module
+            #endif
+                let copyIcon = UIImage(named: "iconCopyLight", in: mainBundle, compatibleWith: nil)
+                
+                let copyIconImageView = UIImageView(image: copyIcon)
+                copyIconImageView.translatesAutoresizingMaskIntoConstraints = false
+                promoBtn.addSubview(copyIconImageView)
+                
+                let copyIconLength = CGFloat(17)
+                NSLayoutConstraint.activate([
+                    copyIconImageView.leadingAnchor.constraint(equalTo: promoBtn.trailingAnchor, constant: -28),
+                    copyIconImageView.centerYAnchor.constraint(equalTo: promoBtn.centerYAnchor, constant: -15),
+                    copyIconImageView.widthAnchor.constraint(equalToConstant: copyIconLength),
+                    copyIconImageView.heightAnchor.constraint(equalToConstant: copyIconLength)
+                ])
+                
+                promoBtn.addTarget(self, action: #selector(copyPromocodeToClipboard), for: .touchUpInside)
             }
-            btn.backgroundColor = bgAdditionalColor
-            v.addSubview(btn)
+            
+            promoBtn.backgroundColor = bgAdditionalColor
+            v.addSubview(promoBtn)
+            
         } else {
             let bgAdditionalColor = UIColor(red: 252/255, green: 107/255, blue: 63/255, alpha: 1.0)
             //let bgAdditionalColor = SdkConfiguration.stories.bannerPriceSectionBackgroundColor
-            btn.backgroundColor = bgAdditionalColor
-            v.addSubview(btn)
+            promoBtn.backgroundColor = bgAdditionalColor
+            v.addSubview(promoBtn)
         }
         
-        dismissablePromocodeBanner.setView(view: v)
-        showInCellPromocodeBanner(banner: dismissablePromocodeBanner)
+        promocodeBannerView.setView(view: v)
+        showInCellPromocodeBanner(banner: promocodeBannerView)
         
         if codePromo == "" {
             presentedBannerLabel.frame = CGRect(x: 0, y: 0, width: v.frame.width * 0.72, height: v.frame.height)
-            btn.frame = CGRect(x: (v.frame.width * 0.72) - 5, y: 0, width: v.frame.width - (v.frame.width * 0.72) + 10, height: v.frame.height)
+            promoBtn.frame = CGRect(x: (v.frame.width * 0.72) - 5, y: 0, width: v.frame.width - (v.frame.width * 0.72) + 10, height: v.frame.height)
         } else {
             if promoData.discount_percent != 0 || codePromo != "" {
                 if SdkGlobalHelper.DeviceType.IS_IPHONE_14_PRO_MAX || SdkGlobalHelper.DeviceType.IS_IPHONE_14_PLUS {
                     if codePromo.utf16.count < 11 {
                         presentedBannerLabel.frame = CGRect(x: 0, y: 0, width: v.frame.width * 0.6, height: v.frame.height)
-                        btn.frame = CGRect(x: v.frame.width * 0.6, y: 0, width: v.frame.width - (v.frame.width * 0.6), height: v.frame.height)
+                        promoBtn.frame = CGRect(x: v.frame.width * 0.6, y: 0, width: v.frame.width - (v.frame.width * 0.6), height: v.frame.height)
                     } else if codePromo.utf16.count <= 12 {
                         presentedBannerLabel.frame = CGRect(x: 0, y: 0, width: v.frame.width * 0.54, height: v.frame.height)
-                        btn.frame = CGRect(x: v.frame.width * 0.54, y: 0, width: v.frame.width - (v.frame.width * 0.54), height: v.frame.height)
+                        promoBtn.frame = CGRect(x: v.frame.width * 0.54, y: 0, width: v.frame.width - (v.frame.width * 0.54), height: v.frame.height)
                     } else {
                         presentedBannerLabel.frame = CGRect(x: 0, y: 0, width: v.frame.width * 0.6, height: v.frame.height)
-                        btn.frame = CGRect(x: v.frame.width * 0.6, y: 0, width: v.frame.width - (v.frame.width * 0.6), height: v.frame.height)
+                        promoBtn.frame = CGRect(x: v.frame.width * 0.6, y: 0, width: v.frame.width - (v.frame.width * 0.6), height: v.frame.height)
                     }
                 } else {
                     presentedBannerLabel.frame = CGRect(x: 0, y: 0, width: v.frame.width * 0.53, height: v.frame.height)
-                    btn.frame = CGRect(x: v.frame.width * 0.53, y: 0, width: v.frame.width - (v.frame.width * 0.53), height: v.frame.height)
+                    promoBtn.frame = CGRect(x: v.frame.width * 0.53, y: 0, width: v.frame.width - (v.frame.width * 0.53), height: v.frame.height)
                 }
             } else {
                 presentedBannerLabel.frame = CGRect(x: 0, y: 0, width: v.frame.width * 1.0, height: v.frame.height)
-                btn.frame = CGRect(x: v.frame.width * 1.0, y: 0, width: v.frame.width - (v.frame.width * 1.0), height: v.frame.height)
+                promoBtn.frame = CGRect(x: v.frame.width * 1.0, y: 0, width: v.frame.width - (v.frame.width * 1.0), height: v.frame.height)
             }
         }
     }
@@ -703,37 +747,22 @@ class StoryCollectionViewCell: UICollectionViewCell {
         let pasteboard = UIPasteboard.general
         pasteboard.string = selectedPromoElement?.promocode
         
-        if (toast.window != nil) {
+        if (sdkPopupAlertView.window != nil) {
             return
         }
-        toast.show()
+        sdkPopupAlertView.show()
     }
     
     @objc public func dismissPromocodeBanner() {
-        dismissablePromocodeBanner.dismiss()
+        promocodeBannerView.dismiss()
     }
     
     @objc public func dismissPromocodeBannerWithoutAnimation() {
-        dismissablePromocodeBanner.dismissWithoutAnimation()
-    }
-    
-    @objc public func displayBanner() {
-        toastBanner.size = CGSize(width: 200, height: 40)
-        toastBanner.displayTime = 2
-        toastBanner.animationDuration = 0.25
-        toastBanner.padding = (10, 10)
-        
-        let label = UILabel()
-        label.backgroundColor = UIColor(red: 0, green: 0.7, blue: 0.4, alpha: 1)
-        label.text = ""
-        label.textColor = .white
-        
-        toastBanner.setView(view: label)
-        showInCellPromocodeBanner(banner: toastBanner)
+        promocodeBannerView.dismissWithoutAnimation()
     }
     
     override public func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
-        //Do nothing coming soon
+        //Video time seek & play/pause implementation
     }
     
     func stopPlayer() {
@@ -780,10 +809,12 @@ class StoryCollectionViewCell: UICollectionViewCell {
             if error == nil {
                 guard let unwrappedData = data, let image = UIImage(data: unwrappedData) else { return }
                 DispatchQueue.main.async {
-                    self.imageView.tintColor = UIColor.magenta
-                    self.imageView.isOpaque = false
-                    self.imageView.image = image
+                    self.storySlideImageView.tintColor = UIColor.black
+                    self.storySlideImageView.isOpaque = false
+                    self.storySlideImageView.image = image
                 }
+            } else {
+                self.sdkPopupTapHandle()
             }
         })
         task.resume()
