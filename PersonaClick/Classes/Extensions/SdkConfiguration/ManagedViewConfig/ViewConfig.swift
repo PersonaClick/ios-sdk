@@ -3,7 +3,7 @@ import SwiftUI
 
 @available(iOS 14.0, *)
 @propertyWrapper public struct ViewConfig<InternalValue>: DynamicProperty {
-
+    
     private final class Listener<Value>: ObservableObject {
         var subscriber: NSObjectProtocol?
         var value: Value? {

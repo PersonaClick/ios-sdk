@@ -8,7 +8,7 @@ final public class VideoDownloadManager: NSObject {
     public typealias BackgroundDownloadCompletionHandler = () -> Void
     
     private var session: URLSession!
-    private var ongoingDownloads: [String:VideoDownloadObject] = [:]
+    private var ongoingDownloads: [String : VideoDownloadObject] = [:]
     private var backgroundSession: URLSession!
     //private var eSession: URLSession!
     
@@ -50,7 +50,7 @@ final public class VideoDownloadManager: NSObject {
         let key = self.getExDownloadKey(withUrl: url)
         self.ongoingDownloads[key] = download
         downloadTask.resume()
-        return key
+        return key;
     }
     
     public func getExDownloadKey(withUrl url: URL) -> String {
@@ -212,12 +212,13 @@ extension VideoDownloadManager : URLSessionDelegate, URLSessionDownloadDelegate 
                              totalBytesExpectedToWrite: Int64) {
         guard totalBytesExpectedToWrite > 0 else {
             debugPrint("SDK Could not calculate progress as total bytes to Write is less than 0")
-            return
+            return;
         }
         
         if let download = self.ongoingDownloads[(downloadTask.originalRequest?.url?.absoluteString)!],
             let progressBlock = download.progressBlock {
             let progress : CGFloat = CGFloat(totalBytesWritten) / CGFloat(totalBytesExpectedToWrite)
+            //let percent = String(format:"%.0f", progress * 100) + "%"
             OperationQueue.main.addOperation({
                 progressBlock(progress)
             })

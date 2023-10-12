@@ -526,7 +526,7 @@ class StoryCollectionViewCell: UICollectionViewCell {
 #if SWIFT_PACKAGE
         mainBundle = Bundle.module
 #endif
-        let errIcon = UIImage(named: "iconError", in: mainBundle, compatibleWith: nil)?.withRenderingMode(UIImage.RenderingMode.alwaysTemplate)
+        let errorIcon = UIImage(named: "iconError", in: mainBundle, compatibleWith: nil)?.withRenderingMode(UIImage.RenderingMode.alwaysTemplate)
         
         if #available(iOS 13.0, *) {
             let popupView = SdkPopupAlertView(
@@ -534,7 +534,7 @@ class StoryCollectionViewCell: UICollectionViewCell {
                 titleFont: .systemFont(ofSize: 5, weight: .light),
                 subtitle: SdkConfiguration.stories.storiesSlideReloadPopupMessageError,
                 subtitleFont: .systemFont(ofSize: SdkConfiguration.stories.storiesSlideReloadPopupMessageFontSize, weight: SdkConfiguration.stories.storiesSlideReloadPopupMessageFontWeight),
-                icon: errIcon,
+                icon: errorIcon,
                 iconSpacing: 16,
                 position: .centerCustom,
                 onTap: { print("Sdk Alert popup tapped")

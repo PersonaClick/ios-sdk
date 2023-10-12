@@ -61,7 +61,7 @@ public class SdkPopupAlertView: UIView {
         let label = UILabel()
         label.numberOfLines = 0 //1
         if #available(iOS 13.0, *) {
-            label.textColor = .label
+            label.textColor = .black //.label
         } else {
             label.textColor = .black
         }
@@ -71,7 +71,6 @@ public class SdkPopupAlertView: UIView {
     private var popupDefaultBackgroundColor: UIColor? {
         if #available(iOS 12.0, *) {
             return traitCollection.userInterfaceStyle == .dark ? lightBackgroundColor : lightBackgroundColor
-            //return traitCollection.userInterfaceStyle == .dark ? darkBackgroundColor : lightBackgroundColor
         } else {
             return lightBackgroundColor
         }
@@ -104,7 +103,7 @@ public class SdkPopupAlertView: UIView {
 
     public var titleTextColor: UIColor = .black {
         didSet {
-            titleLabel.textColor = titleTextColor
+            titleLabel.textColor = .black//titleTextColor
         }
     }
 
@@ -129,7 +128,6 @@ public class SdkPopupAlertView: UIView {
 
         super.init(frame: .zero)
 
-        backgroundColor = popupDefaultBackgroundColor
         backgroundColor = popupDefaultBackgroundColor
 
         hStack.spacing = iconSpacing
@@ -182,7 +180,7 @@ public class SdkPopupAlertView: UIView {
         if let subtitle = subtitle {
             let subtitleLabel = UILabel()
             if #available(iOS 13.0, *) {
-                subtitleLabel.textColor = .secondaryLabel
+                subtitleLabel.textColor = .black
             } else {
                 subtitleLabel.textColor = .lightGray
             }
