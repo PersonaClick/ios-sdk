@@ -1,6 +1,6 @@
 import UIKit
 
-class SDFileUtils: NSObject {
+class VideoFileUtils: NSObject {
     
     static func moveFile(fromUrl url:URL,
                          toDirectory directory:String? ,

@@ -1,6 +1,33 @@
 import UIKit
 import Foundation
 
+struct Profile: Codable {
+    let id: String!
+    let url: URL
+}
+
+struct UserProfileCache {
+    static let key = "userProfileCache"
+    
+    static func save(_ value: Profile!) {
+         UserDefaults.standard.set(try? PropertyListEncoder().encode(value), forKey: key)
+    }
+    
+    static func get() -> Profile! {
+        var userData: Profile!
+        if let data = UserDefaults.standard.value(forKey: key) as? Data {
+            userData = try? PropertyListDecoder().decode(Profile.self, from: data)
+            return userData!
+        } else {
+            return userData
+        }
+    }
+    
+    static func remove() {
+        UserDefaults.standard.removeObject(forKey: key)
+    }
+}
+
 class SdkGlobalHelper {
 
     class var sharedInstance: SdkGlobalHelper {
@@ -42,6 +69,32 @@ class SdkGlobalHelper {
         uname(&sysinfo)
         let name =  String(bytes: Data(bytes: &sysinfo.machine, count: Int(_SYS_NAMELEN)), encoding: .ascii)!.trimmingCharacters(in: .controlCharacters)
         return name == "iPhone15,2" || name == "iPhone15,3" || name == "iPhone15,4" || name == "iPhone15,5" || name == "iPhone16,1" || name == "iPhone16,2" ? true : false
+    }
+    
+    func saveVideoParamsToDictionary(parentSlideId: String, paramsDictionary: [String:String]) {
+       var stringValuesToSave: [String:String] = [:]
+        
+       for key in paramsDictionary.keys {
+          let valueToStore = paramsDictionary[key]!
+          let keyVideoStr: String = key
+          let durationVideoStr: String = valueToStore
+
+          stringValuesToSave[keyVideoStr] = durationVideoStr
+       }
+       UserDefaults.standard.setValue(stringValuesToSave, forKeyPath: parentSlideId)
+    }
+    
+    func retrieveVideoCachedParamsDictionary(parentSlideId: String) -> [String:String] {
+        let savedDownloadedVideosValues: [String:String] = UserDefaults.standard.object(forKey: parentSlideId) as? [String : String] ?? [String:String]()
+        
+        var convertedDurationsDictionary:[String:String] = [:]
+        for key in savedDownloadedVideosValues.keys {
+            let keyVideoStr: String = key
+            let durationVideoStr: String = savedDownloadedVideosValues[key]!
+            convertedDurationsDictionary[keyVideoStr] = durationVideoStr
+        }
+        
+        return convertedDurationsDictionary
     }
 }
 
@@ -142,6 +195,16 @@ extension UIColor {
             return hexString
         }
     }
+    
+    var rgba: (red: CGFloat, green: CGFloat, blue: CGFloat, alpha: CGFloat) {
+        var red: CGFloat = 0
+        var green: CGFloat = 0
+        var blue: CGFloat = 0
+        var alpha: CGFloat = 0
+        getRed(&red, green: &green, blue: &blue, alpha: &alpha)
+
+        return (red, green, blue, alpha)
+    }
 }
 
 
@@ -155,29 +218,52 @@ extension UIColor {
 }
 
 
-extension Bundle {
-    public func decodeSdkClassFromBundle<T: Codable>(_ file: String) -> T {
-        guard let url = self.url(forResource: file, withExtension: nil) else {
-            fatalError("Failed to locate \(file) in  bundle")
-        }
-        
-        guard let data = try? Data(contentsOf: url) else {
-            fatalError("Failed to load \(file) from bundle")
-        }
-        
-        let decoder = JSONDecoder()
-        
-        guard let loadedData = try? decoder.decode(T.self, from: data) else {
-            fatalError("Failed to decode \(file) from bundle")
-        }
-        
-        return loadedData
+extension String {
+    var wordCountDeprecated: Int {
+        let rgx = try? NSRegularExpression(pattern: "\\w+")
+        return rgx?.numberOfMatches(in: self, range: NSRange(location: 0, length: self.utf16.count)) ?? 0
+    }
+
+    func localizeUI(withComment comment: String? = nil) -> String {
+        return NSLocalizedString(self, comment: comment ?? "")
     }
 }
 
 
-public extension String {
-    func localizeUI(withComment comment: String? = nil) -> String {
-        return NSLocalizedString(self, comment: comment ?? "")
+extension Int {
+    static func parseIntSymbols(from string: String) -> Int? {
+        Int(string.components(separatedBy: CharacterSet.decimalDigits.inverted).joined())
+    }
+}
+
+
+extension Error {
+    var errorCode:Int? {
+        return (self as NSError).code
+    }
+}
+
+
+extension UIView {
+    func fixInView(_ container: UIView!) {
+        translatesAutoresizingMaskIntoConstraints = false
+        frame = container.frame
+        container.addSubview(self)
+        NSLayoutConstraint(item: self, attribute: .leading, relatedBy: .equal, toItem: container, attribute: .leading, multiplier: 1.0, constant: 0).isActive = true
+        NSLayoutConstraint(item: self, attribute: .trailing, relatedBy: .equal, toItem: container, attribute: .trailing, multiplier: 1.0, constant: 0).isActive = true
+        NSLayoutConstraint(item: self, attribute: .top, relatedBy: .equal, toItem: container, attribute: .top, multiplier: 1.0, constant: 0).isActive = true
+        NSLayoutConstraint(item: self, attribute: .bottom, relatedBy: .equal, toItem: container, attribute: .bottom, multiplier: 1.0, constant: 0).isActive = true
+    }
+}
+
+
+extension NSObject {
+    func safeRemoveObserver(_ observer: NSObject, forKeyPath keyPath: String) {
+        switch self.observationInfo {
+        case .some:
+            self.removeObserver(observer, forKeyPath: keyPath)
+        default: break
+            //debugPrint("SDK Error deleting Observer does not exist")
+        }
     }
 }
