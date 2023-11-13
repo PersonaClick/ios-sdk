@@ -82,9 +82,36 @@
                                                      productBannerPriceSectionBackgroundColor: "#fd7c50",
                                                      productBannerPromocodeSectionBackgroundColor: "#17aadf",
                                                      discountSectionBackgroundColor: "#ea1717",
-                                                     productBannerDefaultMessage: "Copied")
+                                                     copyToClipboardMessage: "Copied")
 
+        //SDK Recommendations Widget settings
+        sdk.configuration().recommendations.setWidgetBlock(widgetFontName: "Museo",
+                                                           widgetBackgroundColor: "#ffffff",
+                                                           widgetBackgroundColorDarkMode: "#000000",
+                                                           widgetCellBackgroundColor: "#ffffff",
+                                                           widgetCellBackgroundColorDarkMode: "#000000",
+                                                           widgetBorderWidth: 1,
+                                                           widgetBorderColor: "#c3c3c3",
+                                                           widgetBorderColorDarkMode: "#c3c3c3",
+                                                           widgetBorderTransparent: 0.4,
+                                                           widgetCornerRadius: 9,
+                                                           widgetStarsColor: "#ff9500",
+                                                           widgetAddToCartButtonText: "Add to cart",
+                                                           widgetRemoveFromCartButtonText: "Remove from cart",
+                                                           widgetAddToCartButtonFontSize: 17,
+                                                           widgetRemoveFromCartButtonFontSize: 14,
+                                                           widgetCartButtonTextColor: "#ffffff",
+                                                           widgetCartButtonTextColorDarkMode: "#ffffff",
+                                                           widgetCartButtonBackgroundColor: "#000000",
+                                                           widgetCartButtonBackgroundColorDarkMode: "#ffffff",
+                                                           widgetCartButtonNeedOpenWebUrl: false,
+                                                           widgetFavoritesIconColor: "#000000",
+                                                           widgetFavoritesIconColorDarkMode: "#ffffff",
+                                                           widgetPreloadIndicatorColor: "#ffffff")
+        
+        
         //SDK Stories block autoreload settings
+        sdk.configuration().stories.useSdkOldInitialization = false //default false - will be deprecated November 14
         sdk.configuration().stories.storiesSlideReloadManually = false //default false - autoreload enabled
         sdk.configuration().stories.storiesSlideReloadTimeoutInterval = 10 //default infinity
         sdk.configuration().stories.storiesSlideReloadIndicatorDisabled = false //default false - indicator enabled
@@ -95,7 +122,7 @@
         sdk.configuration().stories.storiesSlideReloadIndicatorAnimationDuration = 1
         sdk.configuration().stories.storiesSlideReloadIndicatorRotationDuration = 17
 
-        //SDK Stories alert popup settings
+        //SDK Alert popup connection settings
         sdk.configuration().stories.storiesSlideReloadPopupMessageError = "Failed to retrieve data. Please check your connection and try again."
         sdk.configuration().stories.storiesSlideReloadPopupMessageFontSize = 17.0
         sdk.configuration().stories.storiesSlideReloadPopupMessageFontWeight = .medium
