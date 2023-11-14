@@ -1129,7 +1129,6 @@ class SimplePersonalizationSDK: PersonalizationSDK {
                         completion(.failure(.invalidResponse))
                     } else if connectionStatus == .Offline {
                         completion(.failure(.networkOfflineError))
-
                     }
                 }
             }.resume()
@@ -1152,6 +1151,7 @@ class SimplePersonalizationSDK: PersonalizationSDK {
             request.httpMethod = "POST"
             
 //            do {
+//                let sBody = try JSONSerialization.data(withJSONObject: requestParams, options: .prettyPrinted)
 //                request.httpBody = try JSONSerialization.data(withJSONObject: requestParams, options: .prettyPrinted)
 //            } catch let error {
 //                completion(.failure(.custom(error: "00001: \(error.localizedDescription)")))
@@ -1215,7 +1215,7 @@ class SimplePersonalizationSDK: PersonalizationSDK {
     }
     
     func createDataForBody(withParameters params: [String: Any]?, content: [DataUploadStruct]?, boundary: String) -> Data {
-
+        
         let lineBreak = "\r\n"
         var body = Data()
 
@@ -1259,7 +1259,7 @@ class SimplePersonalizationSDK: PersonalizationSDK {
             self.mimeType = "image/jpg"
             self.fileName = "\(arc4random()).jpeg"
 
-            guard let data = image.jpegData(compressionQuality: 0.5) else { return nil }
+            guard let data = image.jpegData(compressionQuality: 1.0) else { return nil }
             self.data = data
         }
     }
