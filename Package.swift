@@ -13,7 +13,7 @@ let package = Package(
             targets: ["PersonaClick"]),
         ],
         dependencies: [
-             // .package(url: /* personaclick.com */, now: pod "3.5.8"),
+             // .package(url: /* personaclick.com */, now: pod "3.5.9"),
         ],
         targets: [
             .target(
