@@ -71,7 +71,9 @@
                                                            backgroundColorDarkMode: "#ffffff",
                                                            cornerRadius: 5)
 
-        sdk.configuration().stories.setProductsCard(fontName: "Museo")
+        sdk.configuration().stories.setProductsCard(fontName: "Museo",
+                                                    showProductsButtonText: "See all products",
+                                                    hideProductsButtonText: "Hide products")
 
         sdk.configuration().stories.setPromocodeCard(productBannerFontName: "Museo",
                                                      productTitleFontSize: 16.0,
