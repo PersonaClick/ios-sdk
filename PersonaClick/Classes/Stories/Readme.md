@@ -113,17 +113,21 @@
                                                            widgetPreloadIndicatorColor: "#ffffff")
         
         
-        //SDK Stories block autoreload settings
-        sdk.configuration().stories.useSdkOldInitialization = false //default false - will be deprecated November 14
-        sdk.configuration().stories.storiesSlideReloadManually = false //default false - autoreload enabled
-        sdk.configuration().stories.storiesSlideReloadTimeoutInterval = 10 //default infinity
-        sdk.configuration().stories.storiesSlideReloadIndicatorDisabled = false //default false - indicator enabled
+        //SDK Stories block collection cell indicator
+        sdk.configuration().stories.storiesBlockPreloadIndicatorDisabled = true //default false - cell indicator enabled
+
+        //SDK Stories Slide default indicator
+        sdk.configuration().stories.storiesSlideReloadIndicatorDisabled = true //default false - slide indicator enabled
         sdk.configuration().stories.storiesSlideReloadIndicatorBackgroundColor = "#ffffff"
         sdk.configuration().stories.storiesSlideReloadIndicatorSize = 76.0
         sdk.configuration().stories.storiesSlideReloadIndicatorBorderLineWidth = 3
         sdk.configuration().stories.storiesSlideReloadIndicatorSegmentCount = 9
         sdk.configuration().stories.storiesSlideReloadIndicatorAnimationDuration = 1
         sdk.configuration().stories.storiesSlideReloadIndicatorRotationDuration = 17
+
+        //SDK Stories block autoreload settings
+        sdk.configuration().stories.storiesSlideReloadManually = false //default false - autoreload enabled
+        sdk.configuration().stories.storiesSlideReloadTimeoutInterval = 10 //default infinity
 
         //SDK Alert popup connection settings
         sdk.configuration().stories.storiesSlideReloadPopupMessageError = "Failed to retrieve data. Please check your connection and try again."
@@ -133,7 +137,7 @@
         sdk.configuration().stories.storiesSlideReloadPopupPositionY = 120 //default constant
         
         //SDK Stories block text label characters wrapping settings
-        sdk.configuration().stories.storiesBlockNumberOfLines = 2
+        sdk.configuration().stories.storiesBlockNumberOfLines = 0
         sdk.configuration().stories.storiesBlockCharWrapping = false
         sdk.configuration().stories.storiesBlockCharCountWrap = 15
     
