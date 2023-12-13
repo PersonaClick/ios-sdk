@@ -110,8 +110,8 @@
                                                            widgetCartButtonNeedOpenWebUrl: false,
                                                            widgetFavoritesIconColor: "#000000",
                                                            widgetFavoritesIconColorDarkMode: "#ffffff",
-                                                           widgetPreloadIndicatorColor: "#ffffff")
-        
+                                                           widgetPreloadIndicatorColor: "#ffffff",
+                                                           widgetNoReviewDefaultMessage: "No reviews")
         
         //SDK Stories block collection cell indicator
         sdk.configuration().stories.storiesBlockPreloadIndicatorDisabled = true //default false - cell indicator enabled
