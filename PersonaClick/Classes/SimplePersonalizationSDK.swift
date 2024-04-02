@@ -116,14 +116,14 @@ class SimplePersonalizationSDK: PersonalizationSDK {
         return shopId
     }
 
-    func setPushTokenNotification(token: String, completion: @escaping (Result<Void, SDKError>) -> Void) {
+    func setPushTokenNotification(token: String, platform: String? = nil, completion: @escaping (Result<Void, SDKError>) -> Void) {
         sessionQueue.addOperation {
             let path = "mobile_push_tokens"
             let params = [
                 "shop_id": self.shopId,
                 "did": self.deviceId,
                 "token": token,
-                "platform": self.stream,
+                "platform": platform ?? "ios",
             ]
             
             let sessionConfig = URLSessionConfiguration.default
@@ -148,7 +148,7 @@ class SimplePersonalizationSDK: PersonalizationSDK {
                 "shop_id": self.shopId,
                 "did": self.deviceId,
                 "token": token,
-                "platform": "ios",
+                "platform": "ios_firebase",
             ]
             
             let sessionConfig = URLSessionConfiguration.default
@@ -952,9 +952,10 @@ class SimplePersonalizationSDK: PersonalizationSDK {
         }
     }
     
-    func subscribeForBackInStock(id: String, email: String? = nil, phone: String? = nil, completion: @escaping (Result<Void, SDKError>) -> Void) {
+    func subscribeForBackInStock(id: String, email: String? = nil, phone: String? = nil, fashionSize: [String]? = nil, completion: @escaping (Result<Void, SDKError>) -> Void) {
         sessionQueue.addOperation {
             let path = "subscriptions/subscribe_for_product_available"
+            
             var params: [String: Any] = [
                 "shop_id": self.shopId,
                 "did": self.deviceId,
@@ -963,6 +964,11 @@ class SimplePersonalizationSDK: PersonalizationSDK {
                 "segment": self.segment,
                 "item_id": id
             ]
+            
+            if let fashionSize = fashionSize {
+                let tmpSizesArray = self.generateString(array: fashionSize)
+                params["properties"] = ["fashion_size": tmpSizesArray]
+            }
             
             if let email = email {
                 params["email"] = email
