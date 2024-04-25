@@ -162,7 +162,6 @@ struct RecommendationsStarsAccessibility {
     }
 }
 
-
 class RecommendationsStarsText {
     class func position(_ layer: CALayer, starsSize: CGSize, textMargin: Double) {
         layer.position.x = starsSize.width + CGFloat(textMargin)
@@ -171,12 +170,11 @@ class RecommendationsStarsText {
     }
 }
 
-
 struct RecommendationsStarsDefaultSettings {
     
     init() {}
     
-    static let sColor = SdkConfiguration.recommendations.widgetStarsColor.hexToRGB()
+    static let sColor = SdkConfiguration.recommendations.starsColor.hexToRGB()
     static let defaultStarsColor = UIColor(red: sColor.red, green: sColor.green, blue: sColor.blue, alpha: 1) // UIColor(red: 255/255, green: 149/255, blue: 0/255, alpha: 1)
     
     static let emptyBorderColor = defaultStarsColor

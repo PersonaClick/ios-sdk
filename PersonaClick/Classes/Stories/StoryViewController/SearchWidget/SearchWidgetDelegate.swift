@@ -3,16 +3,27 @@ import UIKit
 public protocol SearchWidgetDelegate: SearchWidgetMainViewDelegate, SearchWidgetListViewDelegate { }
 
 public protocol SearchWidgetMainViewDelegate {
-    func searchWidgetCategoriesButtonClicked(productText: String)
+    func searchWidgetCategoriesButtonClicked(productSearchText: String)
     
-    func sdkSearchWidgetHistoryButtonClicked(productText: String)
+    func sdkSearchWidgetHistoryButtonClickedStart(productSearchText: String)
+    
+    func sdkSearchWidgetHistoryButtonClicked(productSearchText: String)
+    
+    func sdkSearchWidgetHistoryButtonClickedFull(productSearchText: String)
+    
+    func reloadBlankSearch()
+    
+    func resetSearchToSimple()
+    
+    func minimizeSearchTextField()
+    
+    func sdkSearchWidgetHistoryButtonClickedOpenProductCard(productId: String, productName: String, productPrice: String, productImage: String, productImagesArray: String)
 
     func sdkSearchWidgetMainViewHistoryChanged()
 }
 
-
 public protocol SearchWidgetListViewDelegate {
-    func sdkSearchWidgetListViewClicked(productKey: String)
+    func sdkSearchWidgetListViewClicked(productSearchKey: String)
     
     func sdkSearchWidgetListViewClicked(object: Any)
     
@@ -29,7 +40,6 @@ public extension SearchWidgetMainViewDelegate {
         //
     }
 }
-
 
 public extension SearchWidgetListViewDelegate {
     func sdkSearchWidgetListViewClicked(object: Any) {

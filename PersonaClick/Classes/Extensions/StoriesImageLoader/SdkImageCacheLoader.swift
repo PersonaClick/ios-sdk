@@ -1,9 +1,9 @@
 import Foundation
 import UIKit
 
-public struct StoryBlockImageCache {
+public struct SdkImagesCacheLoader {
     enum Error: Swift.Error {
-        case StoryBlockImageCacheSaveError
+        case SdkImagesCacheLoaderSaveError
     }
     
     public static var internalLogger: ((_ message: String, _ file: String, _ function: String, _ line: Int) -> Void)?
@@ -42,7 +42,7 @@ public struct StoryBlockImageCache {
                         dispatchCompletionOnMain(image)
                     } else {
                         if let error = error, (error as NSError).code != -999 {
-                            print("SDK Error downloading image for block")
+                            print("SDK: Error downloading image for block")
                         }
                         dispatchCompletionOnMain(nil)
                     }
@@ -63,7 +63,7 @@ public struct StoryBlockImageCache {
         do {
             try fileSystem(save: image, for: key)
         } catch {
-            internalLogger?("SDK Internal Error saving image for key \(key): \(error)", file, function, line)
+            internalLogger?("SDK: Internal Error saving image for key \(key): \(error)", file, function, line)
         }
     }
     
@@ -72,23 +72,23 @@ public struct StoryBlockImageCache {
         urlSession = createUrlSession()
     }
     
-    public static var shared = StoryBlockImageCache()
+    public static var shared = SdkImagesCacheLoader()
     public let internalCache = NSCache<AnyObject, AnyObject>()
     
     fileprivate static let cacheDirectory: URL? = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first
 
     fileprivate init() {
         NotificationCenter.default.addObserver(forName: UIApplication.didReceiveMemoryWarningNotification, object: self, queue: OperationQueue.current) { (note) in
-            StoryBlockImageCache.purgeRecursiveNSCache()
+            SdkImagesCacheLoader.purgeRecursiveNSCache()
         }
     }
 
     fileprivate static func purgeRecursiveNSCache(file: String = #file, function: String = #function, line: Int = #line) {
-        StoryBlockImageCache.shared.internalCache.removeAllObjects()
+        SdkImagesCacheLoader.shared.internalCache.removeAllObjects()
     }
 
     fileprivate static func inMemoryImage(for key: String) -> UIImage? {
-        if let image = StoryBlockImageCache.shared.internalCache.object(forKey: key as NSString) as? UIImage {
+        if let image = SdkImagesCacheLoader.shared.internalCache.object(forKey: key as NSString) as? UIImage {
             return image
         } else {
             return nil
@@ -106,7 +106,7 @@ public struct StoryBlockImageCache {
     }
 
     fileprivate static func inMemory(save image: UIImage, for key: String) {
-        StoryBlockImageCache.shared.internalCache.setObject(image, forKey: key as AnyObject)
+        SdkImagesCacheLoader.shared.internalCache.setObject(image, forKey: key as AnyObject)
     }
 
     fileprivate static func fileSystem(save image: UIImage, for key: String, file: String = #file, function: String = #function, line: Int = #line) throws {
@@ -115,7 +115,7 @@ public struct StoryBlockImageCache {
 //                try jpeg.write(to: url, options: [.atomic])
 //            } catch {
 //                internalLogger?("Error saving image to filesystem for \(key) - \(error)", file, function, line)
-//                throw Error.StoryBlockImageCacheSaveError
+//                throw Error.SdkImagesCacheLoaderSaveError
 //            }
 //        }
         
@@ -123,10 +123,10 @@ public struct StoryBlockImageCache {
             do {
                 try pngAlphaQuality.write(to: url, options: [.atomic])
             } catch {
-                throw Error.StoryBlockImageCacheSaveError
+                throw Error.SdkImagesCacheLoaderSaveError
             }
         }
-        throw Error.StoryBlockImageCacheSaveError
+        throw Error.SdkImagesCacheLoaderSaveError
     }
 
     fileprivate static func fileUrl(forKey key: String) -> URL? {
@@ -143,9 +143,10 @@ public protocol StoryImageURLProviding {
 }
 
 private var imageTaskKey: Void?
+
 public extension UIImageView {
     func setStoryImage(for key: String, file: String = #file, function: String = #function, line: Int = #line) {
-        let task = StoryBlockImageCache.image(for: key, file: file, function: function, line: line) { image in
+        let task = SdkImagesCacheLoader.image(for: key, file: file, function: function, line: line) { image in
             self.image = image
         }
         setImageTask(task)

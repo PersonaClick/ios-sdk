@@ -88,31 +88,31 @@
                                                      productBannerPromocodeCopyToClipboardMessage: "Copied")
 
         //SDK Recommendations Widget settings
-        sdk.configuration().recommendations.setWidgetBlock(widgetFontName: "Museo",
-                                                           widgetBackgroundColor: "#ffffff",
-                                                           widgetBackgroundColorDarkMode: "#000000",
-                                                           widgetCellBackgroundColor: "#ffffff",
-                                                           widgetCellBackgroundColorDarkMode: "#000000",
-                                                           widgetBorderWidth: 1,
-                                                           widgetBorderColor: "#c3c3c3",
-                                                           widgetBorderColorDarkMode: "#c3c3c3",
-                                                           widgetBorderTransparent: 0.4,
-                                                           widgetCornerRadius: 9,
-                                                           widgetStarsColor: "#ff9500",
-                                                           widgetAddToCartButtonText: "Add to cart",
-                                                           widgetRemoveFromCartButtonText: "Remove from cart",
-                                                           widgetAddToCartButtonFontSize: 17,
-                                                           widgetRemoveFromCartButtonFontSize: 14,
-                                                           widgetCartButtonTextColor: "#ffffff",
-                                                           widgetCartButtonTextColorDarkMode: "#ffffff",
-                                                           widgetCartButtonBackgroundColor: "#000000",
-                                                           widgetCartButtonBackgroundColorDarkMode: "#ffffff",
-                                                           widgetCartButtonNeedOpenWebUrl: false,
-                                                           widgetFavoritesIconColor: "#000000",
-                                                           widgetFavoritesIconColorDarkMode: "#ffffff",
-                                                           widgetPreloadIndicatorColor: "#ffffff",
-                                                           widgetNoReviewDefaultMessage: "No reviews")
-        
+        sdk.configuration().recommendations.setWidget(fontNameWidget: "Museo",
+                                                      backgroundColorWidget: "#ffffff",
+                                                      backgroundColorDarkMode: "#000000",
+                                                      cellBackgroundColor: "#ffffff",
+                                                      cellBackgroundColorDarkMode: "#000000",
+                                                      borderWidth: 1,
+                                                      borderColor: "#c3c3c3",
+                                                      borderColorDarkMode: "#c3c3c3",
+                                                      borderTransparent: 0.4,
+                                                      cornerRadius: 9,
+                                                      starsColor: "#ff9500",
+                                                      addToCartButtonText: "Add to cart",
+                                                      removeFromCartButtonText: "Remove from cart",
+                                                      addToCartButtonFontSize: 17,
+                                                      removeFromCartButtonFontSize: 14,
+                                                      cartButtonTextColor: "#ffffff",
+                                                      cartButtonTextColorDarkMode: "#ffffff",
+                                                      cartButtonBackgroundColor: "#000000",
+                                                      cartButtonBackgroundColorDarkMode: "#ffffff",
+                                                      cartButtonNeedOpenWebUrl: false,
+                                                      favoritesIconColor: "#000000",
+                                                      favoritesIconColorDarkMode: "#ffffff",
+                                                      preloadIndicatorColor: "#ffffff",
+                                                      defaultMessageNoReviews: "No reviews")
+
         //SDK Stories block collection cell indicator
         sdk.configuration().stories.storiesBlockPreloadIndicatorDisabled = true //default false - cell indicator enabled
 

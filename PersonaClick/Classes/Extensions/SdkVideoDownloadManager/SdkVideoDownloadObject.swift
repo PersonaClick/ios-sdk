@@ -1,16 +1,16 @@
 import UIKit
 
-class VideoDownloadObject: NSObject {
+class SdkVideoDownloadObject: NSObject {
 
-    var completionBlock: VideoDownloadManager.DownloadCompletionBlock
-    var progressBlock: VideoDownloadManager.DownloadProgressBlock?
+    var completionBlock: SdkVideoDownloadManager.DownloadCompletionBlock
+    var progressBlock: SdkVideoDownloadManager.DownloadProgressBlock?
     let downloadTask: URLSessionDownloadTask
     let directoryName: String?
     let fileName:String?
     
     init(downloadTask: URLSessionDownloadTask,
-         progressBlock: VideoDownloadManager.DownloadProgressBlock?,
-         completionBlock: @escaping VideoDownloadManager.DownloadCompletionBlock,
+         progressBlock: SdkVideoDownloadManager.DownloadProgressBlock?,
+         completionBlock: @escaping SdkVideoDownloadManager.DownloadCompletionBlock,
          fileName: String?,
          directoryName: String?) {
         

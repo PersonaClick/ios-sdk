@@ -1,22 +1,22 @@
 import UIKit
 import UserNotifications
 
-final public class VideoDownloadManager: NSObject {
+final public class SdkVideoDownloadManager: NSObject {
     
     public typealias DownloadCompletionBlock = (_ error : Error?, _ fileUrl:URL?) -> Void
     public typealias DownloadProgressBlock = (_ progress : CGFloat) -> Void
     public typealias BackgroundDownloadCompletionHandler = () -> Void
     
     private var session: URLSession!
-    private var ongoingDownloads: [String : VideoDownloadObject] = [:]
+    private var ongoingDownloads: [String : SdkVideoDownloadObject] = [:]
     private var backgroundSession: URLSession!
     
     public var backgroundCompletionHandler: BackgroundDownloadCompletionHandler?
     public var showLocalNotificationOnBackgroundDownloadSuccess = true
     public var localNotificationText: String?
 
-    public static let shared: VideoDownloadManager = {
-        return VideoDownloadManager()
+    public static let shared: SdkVideoDownloadManager = {
+        return SdkVideoDownloadManager()
     }()
     
     public func downloadStoryMediaFile(withRequest request: URLRequest,
@@ -27,7 +27,7 @@ final public class VideoDownloadManager: NSObject {
                                        onCompletion completionBlock:@escaping DownloadCompletionBlock) -> String? {
         
         guard let url = request.url else {
-            print("SDK Request url is empty")
+            print("SDK: Request url is empty")
             return nil
         }
         
@@ -41,13 +41,14 @@ final public class VideoDownloadManager: NSObject {
             downloadTask = self.session.downloadTask(with: request)
         }
         
-        let download = VideoDownloadObject(downloadTask: downloadTask,
+        let download = SdkVideoDownloadObject(downloadTask: downloadTask,
                                            progressBlock: progressBlock,
                                            completionBlock: completionBlock,
                                            fileName: fileName,
                                            directoryName: directory)
 
         let key = self.getExDownloadKey(withUrl: url)
+        
         self.ongoingDownloads[key] = download
         downloadTask.resume()
         return key
@@ -118,7 +119,7 @@ final public class VideoDownloadManager: NSObject {
         }
     }
 
-    private func isDownloadInProgress(forUniqueKey key:String?) -> (Bool, VideoDownloadObject?) {
+    private func isDownloadInProgress(forUniqueKey key:String?) -> (Bool, SdkVideoDownloadObject?) {
         guard let key = key else {
             return (false, nil)
         }
@@ -135,7 +136,7 @@ final public class VideoDownloadManager: NSObject {
         let notificationCenter = UNUserNotificationCenter.current()
         notificationCenter.getNotificationSettings { (settings) in
             guard settings.authorizationStatus == .authorized else {
-                //debugPrint("SDK not authorized to schedule notification")
+                //debugprint("SDK: not authorized to schedule notification")
                 return
             }
             
@@ -148,7 +149,7 @@ final public class VideoDownloadManager: NSObject {
                                                 content: content, trigger: trigger)
             notificationCenter.add(request, withCompletionHandler: { (error) in
                 if let error = error {
-                    debugPrint("SDK could not schedule notification with error: \(error)")
+                    print("SDK: сould not schedule Download notification with error: \(error)")
                 }
             })
         }
@@ -158,15 +159,29 @@ final public class VideoDownloadManager: NSObject {
         super.init()
         let sessionConfiguration = URLSessionConfiguration.default
         self.session = URLSession(configuration: sessionConfiguration, delegate: self, delegateQueue: nil)
+        
         let backgroundConfiguration = URLSessionConfiguration.background(withIdentifier: Bundle.main.bundleIdentifier!)
+        //backgroundConfiguration.isDiscretionary = false
+        backgroundConfiguration.sessionSendsLaunchEvents = true
         self.backgroundSession = URLSession(configuration: backgroundConfiguration, delegate: self, delegateQueue: OperationQueue())
+        
+//        let backgroundTask = urlSession.downloadTask(with: url)
+//        backgroundTask.earliestBeginDate = Date().addingTimeInterval(60 * 60)
+//        backgroundTask.countOfBytesClientExpectsToSend = 200
+//        backgroundTask.countOfBytesClientExpectsToReceive = 500 * 1024
+//        backgroundTask.resume()
     }
 }
 
-extension VideoDownloadManager : URLSessionDelegate, URLSessionDownloadDelegate {
+extension SdkVideoDownloadManager : URLSessionDelegate, URLSessionDownloadDelegate {
     public func urlSession(_ session: URLSession,
                              downloadTask: URLSessionDownloadTask,
                              didFinishDownloadingTo location: URL) {
+        
+        downloadTask.earliestBeginDate = Date().addingTimeInterval(60 * 60)
+        downloadTask.countOfBytesClientExpectsToSend = 200
+        downloadTask.countOfBytesClientExpectsToReceive = 500 * 1024
+        downloadTask.resume()
         
         let key = (downloadTask.originalRequest?.url?.absoluteString)!
         if let download = self.ongoingDownloads[key] {
@@ -183,7 +198,7 @@ extension VideoDownloadManager : URLSessionDelegate, URLSessionDownloadDelegate 
                 let fileName = download.fileName ?? downloadTask.response?.suggestedFilename ?? (downloadTask.originalRequest?.url?.lastPathComponent)!
                 let directoryName = download.directoryName
                 
-                let fileMovingResult = VideoFileUtils.moveFile(fromUrl: location, toDirectory: directoryName, withName: fileName)
+                let fileMovingResult = SdkVideoFileUtils.moveFile(fromUrl: location, toDirectory: directoryName, withName: fileName)
                 let didSucceed = fileMovingResult.0
                 let error = fileMovingResult.1
                 let finalFileUrl = fileMovingResult.2
@@ -202,7 +217,7 @@ extension VideoDownloadManager : URLSessionDelegate, URLSessionDownloadDelegate 
                              totalBytesWritten: Int64,
                              totalBytesExpectedToWrite: Int64) {
         guard totalBytesExpectedToWrite > 0 else {
-            //debugPrint("SDK Could not calculate progress as total bytes to Write is less than 0")
+            //debugprint("SDK: Could not calculate progress as total bytes to Write is less than 0")
             return
         }
 //        if let download = self.ongoingDownloads[(downloadTask.originalRequest?.url?.absoluteString)!],
@@ -233,6 +248,10 @@ extension VideoDownloadManager : URLSessionDelegate, URLSessionDownloadDelegate 
 
     public func urlSessionDidFinishEvents(forBackgroundURLSession session: URLSession) {
         session.getTasksWithCompletionHandler { (dataTasks, uploadTasks, downloadTasks) in
+            downloadTasks.forEach {_ in
+                //print("oop")(
+            }
+            
             if downloadTasks.count == 0 {
                 OperationQueue.main.addOperation({
                     if let completion = self.backgroundCompletionHandler {
@@ -240,7 +259,7 @@ extension VideoDownloadManager : URLSessionDelegate, URLSessionDownloadDelegate 
                     }
                     
                     if self.showLocalNotificationOnBackgroundDownloadSuccess {
-                        var notificationText = "SDK Internal Notification Downloading task completed"
+                        var notificationText = "SDK: Internal Notification Downloading task completed"
                         if let userNotificationText = self.localNotificationText {
                             notificationText = userNotificationText
                         }

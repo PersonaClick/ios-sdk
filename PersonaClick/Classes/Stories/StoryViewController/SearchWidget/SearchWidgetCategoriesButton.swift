@@ -45,7 +45,8 @@ open class SearchWidgetCategoriesButton: UIButton {
                         layer.borderColor = UIColor.white.cgColor
                     }
                     
-                case .colored: break
+                case .colored:
+                    break
                 }
                 
             } else {
@@ -59,11 +60,12 @@ open class SearchWidgetCategoriesButton: UIButton {
         }
     }
     open func initView() {
-        self.layer.borderColor = UIColor.darkGray.cgColor
-        self.layer.borderWidth = 1
-        self.titleLabel?.font = UIFont.systemFont(ofSize: 12)
-        self.setTitleColor(UIColor.darkGray, for: .normal)
-        self.setTitleColor(UIColor.lightGray, for: .highlighted)
+        self.layer.borderColor = nil
+        self.layer.borderWidth = 0
+        self.titleLabel?.font = UIFont.systemFont(ofSize: 15, weight: .medium)
+        self.backgroundColor = blackSearchColorScheme()
+        self.setTitleColor(UIColor.white, for: .normal)
+        self.setTitleColor(UIColor.white.withAlphaComponent(0.3), for: .highlighted)
         self.layer.cornerRadius = self.frame.height * 0.15
     }
     
@@ -78,9 +80,9 @@ open class SearchWidgetCategoriesButton: UIButton {
         case .blacked:
             self.layer.borderColor = nil
             self.layer.borderWidth = 0
-            self.backgroundColor = randomizeSearchColorScheme()
+            self.backgroundColor = blackSearchColorScheme()
             self.setTitleColor(UIColor.white, for: .normal)
-            self.setTitleColor(UIColor.white.withAlphaComponent(0.3), for: .highlighted)
+            self.setTitleColor(UIColor.white.withAlphaComponent(0.4), for: .highlighted)
         
         case .colored:
             self.layer.borderColor = nil
@@ -91,7 +93,7 @@ open class SearchWidgetCategoriesButton: UIButton {
         }
     }
     
-    open func randomizeSearchColorScheme() -> UIColor {
+    open func blackSearchColorScheme() -> UIColor {
 //        let colorArray = ["ff6699", "ff3366", "ff3333"]
         let colorArray = ["000000"]
         

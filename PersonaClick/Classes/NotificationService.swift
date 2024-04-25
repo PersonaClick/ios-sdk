@@ -51,9 +51,9 @@ public class NotificationService: NotificationServiceProtocol {
             case let .failure(error):
                 switch error {
                 case let .custom(customError):
-                    print("SDK Push Token Error:", customError)
+                    print("SDK: Push Token Error:", customError)
                 default:
-                    print("SDK Push Token server, \(error.description)\n")
+                    print("SDK: Push Token custom Error:\" \(error.description)\n")
                 }
             }
         }
@@ -113,7 +113,6 @@ public class NotificationService: NotificationServiceProtocol {
     
     private func pushProcessing(userInfo: [AnyHashable: Any]) {
         guard let eventJSON = parseDictionary(key: "event", userInfo: userInfo) else {
-            //guard let basicPush = parseDictionary(key: "aps", userInfo: userInfo) else {
             guard parseDictionary(key: "aps", userInfo: userInfo) != nil else {
                 processingNotSDKPush(userInfo: userInfo)
                 return
@@ -173,7 +172,6 @@ public class NotificationService: NotificationServiceProtocol {
     private func pushRetrieved(userInfo: [AnyHashable: Any]) {
         guard let eventJSON = parseDictionary(key: "event", userInfo: userInfo) else {
             guard parseDictionary(key: "aps", userInfo: userInfo) != nil else {
-            //guard let basicPush = parseDictionary(key: "aps", userInfo: userInfo) else {
                 processingNotSDKPush(userInfo: userInfo)
                 return
             }

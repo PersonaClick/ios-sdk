@@ -120,9 +120,9 @@ class CarouselCollectionView: UICollectionView, UICollectionViewDelegate, UIColl
         hideButton.addTarget(self, action: #selector(self.closeButtonTapped), for: .touchUpInside)
         
         var frameworkBundle = Bundle(for: classForCoder)
-    #if SWIFT_PACKAGE
+#if SWIFT_PACKAGE
         frameworkBundle = Bundle.module
-    #endif
+#endif
         let image = UIImage(named: "angleDownBlack", in: frameworkBundle, compatibleWith: nil)
         
         let imageView = UIImageView(image: image)
@@ -143,8 +143,7 @@ class CarouselCollectionView: UICollectionView, UICollectionViewDelegate, UIColl
         addSubview(stackView)
     }
     
-    @objc
-    func closeButtonTapped(sender: UIButton) {
+    @objc func closeButtonTapped(sender: UIButton) {
         carouselProductsDelegate?.closeProductsCarousel()
     }
     
@@ -220,7 +219,6 @@ class CarouselCollectionView: UICollectionView, UICollectionViewDelegate, UIColl
         fatalError("init(coder:) has not been implemented")
     }
 }
-
 
 extension UIButton {
     func addRightIcon(image: UIImage) {
