@@ -5,7 +5,7 @@ let package = Package(
     name: "PersonaClick",
     platforms: [
             .iOS(.v11),
-            .macOS(.v11)
+            .macOS(.v10_15)
         ],
         products: [
             // PersonaClick SDK and libraries produced by a package.
@@ -13,12 +13,15 @@ let package = Package(
             targets: ["PersonaClick"]),
         ],
         dependencies: [
+             // Dependencies declare other packages that PersonaClick depends on.
              // .package(url: /* personaclick.com */, now: pod "3.6.7"),
+             // Copyright © 2023 PersonaClick Inc.
         ],
         targets: [
             .target(
                 name: "PersonaClick",
                 path: "PersonaClick/Classes",
+                exclude: ["Resources/Assets.swift"],
                 resources: [
                     .process("Resources")
                 ],
@@ -30,4 +33,3 @@ let package = Package(
         )
     ]
 )
-
