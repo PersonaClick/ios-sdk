@@ -1,3 +1,11 @@
+//
+//  SimplePersonaliztionSDK.swift
+//  PersonaClick
+//
+//  Created by PersonaClick
+//  Copyright (c) 2023. All rights reserved.
+//
+
 import UIKit
 import Foundation
 import AdSupport
