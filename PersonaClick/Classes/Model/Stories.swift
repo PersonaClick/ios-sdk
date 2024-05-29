@@ -302,6 +302,23 @@ public class StoriesElement {
         self.products = _products.map({StoriesProduct(json: $0)})
         let _product = json["item"] as? [String: Any] ?? [:]
         self.product = StoriesPromoCodeElement(json: _product)
+        
+        applyTextBackgroundOpacity()
+    }
+    
+    private func applyTextBackgroundOpacity() {
+        guard let opacityString = textBackgroundColorOpacity,
+              let opacityValue = extractOpacity(from: opacityString),
+              let color = textBackgroundColor else { return }
+        self.textBackgroundColor = color.withAlphaComponent(opacityValue)
+    }
+    
+    private func extractOpacity(from opacityString: String) -> CGFloat? {
+        let percentageString = opacityString.trimmingCharacters(in: CharacterSet(charactersIn: "%"))
+        if let percentage = Double(percentageString) {
+            return CGFloat(percentage) / 100.0
+        }
+        return nil
     }
 }
 
