@@ -31,42 +31,30 @@ public class NotificationService: NotificationServiceProtocol {
     public var pushActionDelegate: NotificationServicePushDelegate?
     
     public let sdk: PersonalizationSDK
+    private let notificationRegistrar: NotificationRegistrar
     
     public init(sdk: PersonalizationSDK) {
         self.sdk = sdk
+        self.notificationRegistrar = NotificationRegistrar(sdk: sdk)
+        setupNotificationCategories()
+    }
+    
+    public func didRegisterForRemoteNotificationsWithDeviceToken(deviceToken: Data) {
+        notificationRegistrar.registerWithDeviceToken(deviceToken: deviceToken)
+    }
+    
+    private func setupNotificationCategories() {
         requireUserPrivacy { res in
             if res {
                 let categoryIdentifier = "carousel"
                 let carouselNext = UNNotificationAction(identifier: "carousel.next", title: "Next", options: [])
                 let carouselPrevious = UNNotificationAction(identifier: "carousel.previous", title: "Previous", options: [])
-
                 let carouselCategory = UNNotificationCategory(identifier: categoryIdentifier, actions: [carouselNext, carouselPrevious], intentIdentifiers: [], options: [])
                 UNUserNotificationCenter.current().setNotificationCategories([carouselCategory])
             }
         }
     }
-
-    public func didRegisterForRemoteNotificationsWithDeviceToken(deviceToken: Data) {
-        let tokenParts = deviceToken.map { data -> String in
-            String(format: "%02.2hhx", data)
-        }
-
-        let token = tokenParts.joined()
-        sdk.setPushTokenNotification(token: token) { tokenResponse in
-            switch tokenResponse {
-            case .success():
-                return
-            case let .failure(error):
-                switch error {
-                case let .custom(customError):
-                    print("SDK Push Token Error:", customError)
-                default:
-                    print("SDK Push Token server, \(error.description)\n")
-                }
-            }
-        }
-    }
-
+    
     public func didReceiveRemoteNotifications(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable: Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult, String) -> Void) {
         if application.applicationState == .active {
             // SKIP FOR NOW
@@ -78,7 +66,7 @@ public class NotificationService: NotificationServiceProtocol {
     }
     
     public func didReceiveRegistrationFCMToken(fcmToken: String?) {
-        sdk.setFirebasePushToken(token: fcmToken ?? "") { tokenResponse in
+        sdk.setPushTokenNotification(token: fcmToken ?? "", isFirebaseNotification: true) { tokenResponse in
             switch tokenResponse {
             case .success():
                 return
@@ -181,7 +169,7 @@ public class NotificationService: NotificationServiceProtocol {
     private func pushRetrieved(userInfo: [AnyHashable: Any]) {
         guard let eventJSON = parseDictionary(key: "event", userInfo: userInfo) else {
             guard parseDictionary(key: "aps", userInfo: userInfo) != nil else {
-            //guard let basicPush = parseDictionary(key: "aps", userInfo: userInfo) else {
+                //guard let basicPush = parseDictionary(key: "aps", userInfo: userInfo) else {
                 processingNotSDKPush(userInfo: userInfo)
                 return
             }
@@ -263,7 +251,7 @@ public class NotificationService: NotificationServiceProtocol {
             openCustom(url: eventLink)
         }
     }
-
+    
     private func parseDictionary(key: String, userInfo: [AnyHashable: Any]) -> [String: Any]? {
         let eventUserInfo = userInfo[key]
         if let eventJSONString = eventUserInfo as? String {
@@ -287,19 +275,19 @@ public class NotificationService: NotificationServiceProtocol {
     private func processingUnknownLink() {
         print("Unknown url link")
     }
-
+    
     private func openCategory(categoryId: String) {
         pushActionDelegate?.openCategory(categoryId: categoryId)
     }
-
+    
     private func openProduct(productId: String) {
         pushActionDelegate?.openProduct(productId: productId)
     }
-
+    
     private func openWeb(url: String) {
         pushActionDelegate?.openWeb(url: url)
     }
-        
+    
     private func openCustom(url: String) {
         pushActionDelegate?.openCustom(url: url)
     }
