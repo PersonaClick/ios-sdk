@@ -42,8 +42,8 @@ public class NotificationService: NotificationServiceProtocol {
     public func didRegisterForRemoteNotificationsWithDeviceToken(deviceToken: Data) {
         notificationRegistrar.registerWithDeviceToken(deviceToken: deviceToken)
     }
-    
-    private func setupNotificationCategories() {
+
+  private func setupNotificationCategories() {
         requireUserPrivacy { res in
             if res {
                 let categoryIdentifier = "carousel"
@@ -54,7 +54,7 @@ public class NotificationService: NotificationServiceProtocol {
             }
         }
     }
-    
+  
     public func didReceiveRemoteNotifications(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable: Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult, String) -> Void) {
         if application.applicationState == .active {
             // SKIP FOR NOW

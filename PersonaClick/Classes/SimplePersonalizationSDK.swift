@@ -45,7 +45,7 @@ class SimplePersonalizationSDK: PersonalizationSDK {
     
     private let initSemaphore = DispatchSemaphore(value: 0)
     private let serialSemaphore = DispatchSemaphore(value: 0)
-    
+
     init(shopId: String, userEmail: String? = nil, userPhone: String? = nil, userLoyaltyId: String? = nil, apiDomain: String, stream: String = "ios", enableLogs: Bool = false, autoSendPushToken: Bool = true, completion: ((SDKError?) -> Void)? = nil) {
         self.shopId = shopId
         self.autoSendPushToken = autoSendPushToken
@@ -65,7 +65,7 @@ class SimplePersonalizationSDK: PersonalizationSDK {
         segment = ["A", "B"].randomElement() ?? "A"
         
         // Trying to fetch user session (permanent user Id)
-        deviceId = UserDefaults.standard.string(forKey: "device_id") ?? ""
+        deviceId = UserDefaults.standard.string(forKey: "device_id") ?? "No did token"
         
         urlSession = URLSession.shared
         sessionQueue.addOperation {

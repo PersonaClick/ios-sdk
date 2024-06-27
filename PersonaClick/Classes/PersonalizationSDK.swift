@@ -270,7 +270,6 @@ public extension PersonalizationSDK {
     }
 }
 
-
 public func createPersonalizationSDK(
     shopId: String,
     userEmail: String? = nil,
