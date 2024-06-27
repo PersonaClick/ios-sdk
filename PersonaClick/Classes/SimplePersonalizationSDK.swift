@@ -61,11 +61,11 @@ class SimplePersonalizationSDK: PersonalizationSDK {
     var userLoyaltyId: String?
     
     var segment: String
-
+    
     var urlSession: URLSession
-
+    
     var userInfo: InitResponse = InitResponse()
-
+    
     private let sessionQueue = SessionQueue.manager
     
     private var requestOperation: RequestOperation?
@@ -86,7 +86,7 @@ class SimplePersonalizationSDK: PersonalizationSDK {
         self.userPhone = userPhone
         self.userLoyaltyId = userLoyaltyId
         self.stream = stream
-
+        
         // Generate seance
         userSeance = UUID().uuidString
         
@@ -94,7 +94,7 @@ class SimplePersonalizationSDK: PersonalizationSDK {
         segment = ["A", "B"].randomElement() ?? "A"
         
         // Trying to fetch user session (permanent user Id)
-        deviceId = UserDefaults.standard.string(forKey: "device_id") ?? ""
+        deviceId = UserDefaults.standard.string(forKey: "device_id") ?? "No did token"
         
         urlSession = URLSession.shared
         sessionQueue.addOperation {
@@ -135,11 +135,11 @@ class SimplePersonalizationSDK: PersonalizationSDK {
             self.initSemaphore.wait()
         }
     }
-
+    
     func getDeviceId() -> String {
         return deviceId
     }
-
+    
     func getSession() -> String {
         return userSeance
     }
@@ -159,7 +159,7 @@ class SimplePersonalizationSDK: PersonalizationSDK {
     ) {
         sessionQueue.addOperation {
             let path = "mobile_push_tokens"
-            var params = [
+            var params = [
                 "shop_id": self.shopId,
                 "did": self.deviceId,
                 "token": token
@@ -170,7 +170,7 @@ class SimplePersonalizationSDK: PersonalizationSDK {
             } else {
                 params["platform"] = "ios"
             }
-
+          
             let sessionConfig = URLSessionConfiguration.default
             sessionConfig.timeoutIntervalForRequest = 1
             sessionConfig.waitsForConnectivity = true
@@ -389,7 +389,7 @@ class SimplePersonalizationSDK: PersonalizationSDK {
             }
         }
     }
-
+    
     func setProfileData(userEmail: String?, userPhone: String?, userLoyaltyId: String?, birthday: Date?, age: Int?, firstName: String?, lastName: String?, location: String?, gender: Gender?, fbID: String?, vkID: String?, telegramId: String?, loyaltyCardLocation: String?, loyaltyStatus: String?, loyaltyBonuses: Int?, loyaltyBonusesToNextLevel: Int?, boughtSomething: Bool?, userId: String?, customProperties: [String: Any?]?, completion: @escaping (Result<Void, SDKError>) -> Void) {
         sessionQueue.addOperation {
             let path = "profile/set"
@@ -419,19 +419,19 @@ class SimplePersonalizationSDK: PersonalizationSDK {
             if let location = location {
                 paramsTemp["location"] = String(location)
             }
-
+            
             if let loyaltyCardLocation = loyaltyCardLocation {
                 paramsTemp["loyalty_card_location"] = String(loyaltyCardLocation)
             }
-
+            
             if let userLoyaltyId = userLoyaltyId {
                 paramsTemp["loyalty_id"] = String(userLoyaltyId)
             }
-
+            
             if let loyaltyStatus = loyaltyStatus {
                 paramsTemp["loyalty_status"] = String(loyaltyStatus)
             }
-
+            
             if let fbID = fbID {
                 paramsTemp["fb_id"] = String(fbID)
             }
@@ -516,7 +516,7 @@ class SimplePersonalizationSDK: PersonalizationSDK {
             })
         }
     }
-
+    
     func track(event: Event, recommendedBy: RecomendedBy?, completion: @escaping (Result<Void, SDKError>) -> Void) {
         sessionQueue.addOperation {
             var path = "push"
@@ -658,7 +658,7 @@ class SimplePersonalizationSDK: PersonalizationSDK {
         }
     }
     
-
+    
     // Track custom event
     func trackEvent(event: String, category: String?, label: String?, value: Int?, completion: @escaping (Result<Void, SDKError>) -> Void) {
         sessionQueue.addOperation {
@@ -724,6 +724,7 @@ class SimplePersonalizationSDK: PersonalizationSDK {
     }
 
     func recommend(blockId: String, currentProductId: String?, currentCategoryId: String?, locations: String?, imageSize: String?, timeOut: Double?, withLocations: Bool = false, extended: Bool = false, completion: @escaping (Result<RecommenderResponse, SDKError>) -> Void) {
+
         sessionQueue.addOperation {
             let path = "recommend/\(blockId)"
             var params = [
@@ -735,7 +736,7 @@ class SimplePersonalizationSDK: PersonalizationSDK {
                 "resize_image": "180",
                 "segment": self.segment
             ]
-
+            
             if let productId = currentProductId {
                 params["item_id"] = productId
             }
@@ -763,7 +764,7 @@ class SimplePersonalizationSDK: PersonalizationSDK {
             sessionConfig.waitsForConnectivity = true
             sessionConfig.shouldUseExtendedBackgroundIdleMode = true
             self.urlSession = URLSession(configuration: sessionConfig)
-
+            
             self.getRequest(path: path, params: params) { result in
                 switch result {
                 case let .success(successResult):
@@ -776,7 +777,7 @@ class SimplePersonalizationSDK: PersonalizationSDK {
             }
         }
     }
-
+    
     func suggest(query: String, locations: String?, timeOut: Double?, extended: String?, completion: @escaping (Result<SearchResponse, SDKError>) -> Void) {
         sessionQueue.addOperation {
             let path = "search"
@@ -1012,7 +1013,7 @@ class SimplePersonalizationSDK: PersonalizationSDK {
             if let phone = phone {
                 params["phone"] = phone
             }
-
+            
             self.postRequest(path: path, params: params, completion: { result in
                 switch result {
                 case .success(_):
@@ -1048,7 +1049,7 @@ class SimplePersonalizationSDK: PersonalizationSDK {
             if let phone = phone {
                 params["phone"] = phone
             }
-
+            
             self.postRequest(path: path, params: params, completion: { result in
                 switch result {
                 case .success(_):
@@ -1124,7 +1125,7 @@ class SimplePersonalizationSDK: PersonalizationSDK {
             if let phone = phone {
                 params["phone"] = phone
             }
-
+            
             self.postRequest(path: path, params: params, completion: { result in
                 switch result {
                 case .success(_):
@@ -1153,7 +1154,7 @@ class SimplePersonalizationSDK: PersonalizationSDK {
             if let phone = phone {
                 params["phone"] = phone
             }
-
+            
             self.postRequest(path: path, params: params, completion: { result in
                 switch result {
                 case .success(_):
@@ -1164,12 +1165,12 @@ class SimplePersonalizationSDK: PersonalizationSDK {
             })
         }
     }
-
+    
     private func sendInitRequest(completion: @escaping (Result<InitResponse, SDKError>) -> Void) {
         let path = "init"
         var secondsFromGMT: Int { return TimeZone.current.secondsFromGMT() }
         let hours = secondsFromGMT/3600
-
+        
         var params: [String: String] = [
             "shop_id": shopId,
             "tz": String(hours)
@@ -1358,12 +1359,12 @@ class SimplePersonalizationSDK: PersonalizationSDK {
     internal func configuration() -> SdkConfiguration.Type {
         return SdkConfiguration.self
     }
-
+    
     private func getRequest(path: String, params: [String: String], _ isInit: Bool = false, completion: @escaping (Result<[String: Any], SDKError>) -> Void) {
-
+        
         let urlString = baseURL + path
         var url = URLComponents(string: urlString)
-
+        
         var queryItems = [URLQueryItem]()
         for item in params {
             queryItems.append(URLQueryItem(name: item.key, value: item.value))
@@ -1383,7 +1384,7 @@ class SimplePersonalizationSDK: PersonalizationSDK {
                 completion(.failure(.decodeError))
             }
         }
-
+        
         if let endUrl = url?.url {
             urlSession.dataTask(with: endUrl) { result in
                 switch result {
@@ -1428,7 +1429,7 @@ class SimplePersonalizationSDK: PersonalizationSDK {
             completion(.failure(.invalidResponse))
         }
     }
-
+    
     private func postRequest(path: String, params: [String: Any], completion: @escaping (Result<[String: Any], SDKError>) -> Void) {
         var requestParams : [String: Any] = [
             "stream": stream
@@ -1454,7 +1455,7 @@ class SimplePersonalizationSDK: PersonalizationSDK {
                 completion(.failure(.custom(error: "00001: \(error.localizedDescription)")))
                 return
             }
-
+            
             request.addValue("application/json", forHTTPHeaderField: "Content-Type")
             request.addValue("application/json", forHTTPHeaderField: "Accept")
             

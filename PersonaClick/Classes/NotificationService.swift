@@ -54,7 +54,7 @@ public class NotificationService: NotificationServiceProtocol {
             }
         }
     }
-    
+
     public func didReceiveRemoteNotifications(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable: Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult, String) -> Void) {
         if application.applicationState == .active {
             // SKIP FOR NOW
