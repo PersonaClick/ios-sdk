@@ -16,7 +16,8 @@ jobs:
         run: |
           git fetch origin master
           latest_version=$(git show origin/master:PersonaClick.podspec | awk -F"'" '/s.version *=/ {print $2}')
-          echo "Latest version from master: $latest_version"
+          echo "Using version from master: $latest_version"
+          sed -i '' "s/s.version *= *'.*'/s.version = '$latest_version'/" PersonaClick.podspec
           echo "LATEST_VERSION=$latest_version" >> $GITHUB_ENV
 
       # Installing dependencies
