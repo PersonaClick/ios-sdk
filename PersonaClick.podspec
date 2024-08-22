@@ -1,7 +1,7 @@
 
 Pod::Spec.new do |s|
   s.name                        = 'PersonaClick'
-  s.version = '3.6.33'
+  s.version = '3.6.34'
 
 
   s.summary                     = 'PersonaClick SDK for iOS platform - the wide toolset for eCommerce apps. This SDK can be used to integrate in your own app for iOS in few steps.'
