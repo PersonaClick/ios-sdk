@@ -16,8 +16,8 @@ Pod::Spec.new do |s|
   s.license                     = { :type => 'MIT', :file => 'LICENSE' }
   s.author                      = { 'PersonaClick' => '«support@personaclick.com»' }
 
-  s.source                      = { :git => "https://github.com/PersonaClick/ios-sdk.git", :branch => "master",
-                                :tag => s.version.to_s }
+  // TODO Return getting version after correct lint checking with release!   s.source = { :git => "https://github.com/PersonaClick/ios-sdk.git", :branch => "master", :tag => s.version.to_s }
+  s.source                      = { :git => "https://github.com/PersonaClick/ios-sdk.git", :branch => "master" }
 
   s.ios.deployment_target       = '12.0'
 
