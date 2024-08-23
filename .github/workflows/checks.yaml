@@ -11,11 +11,23 @@ jobs:
 
       - uses: swift-actions/setup-swift@v2
 
+      # Getting the last actual version from "master" branch
+      - name: Get latest version from master
+        run: |
+          git fetch origin master
+          latest_version=$(git show origin/master:PersonaClick.podspec | awk -F"'" '/s.version *=/ {print $2}')
+          echo "Using version from master: $latest_version"
+          sed -i '' "s/s.version *= *'.*'/s.version = '$latest_version'/" PersonaClick.podspec
+          echo "LATEST_VERSION=$latest_version" >> $GITHUB_ENV
+
+      # Installing dependencies
       - name: Install
         run: swift package resolve
 
+      # Checking podspec using latest version
       - name: Lint
         if: ${{ !cancelled() }}
         env:
           COCOAPODS_TRUNK_TOKEN: ${{ secrets.COCOAPODS_TOKEN }}
+          LATEST_VERSION: ${{ env.LATEST_VERSION }}
         run: pod spec lint --allow-warnings
