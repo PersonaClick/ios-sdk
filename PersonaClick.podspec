@@ -23,6 +23,7 @@ Pod::Spec.new do |s|
 
   s.source_files                = 'PersonaClick/Classes/**/*.{swift}'
   s.exclude_files               = 'PersonaClick/Classes/ServicesImplementation/NotificationHandlingServiceImpl.swift'
+  s.exclude_files               = 'PersonaClick/PersonaClick/Classes/NotificationService.swift'
 
   s.resources                   = 'PersonaClick/**/*.{xcassets,xib,json,png}'
 
