@@ -23,6 +23,7 @@ Pod::Spec.new do |s|
 
   s.source_files                = 'PersonaClick/Classes/**/*.{swift}'
   s.resources                   = 'PersonaClick/**/*.{xcassets,xib,json,png}'
+  s.exclude_files               = 'PersonaClick/Classes/services/notification/events/RegisterNotification.swift'
 
   s.swift_version = '5'
 
