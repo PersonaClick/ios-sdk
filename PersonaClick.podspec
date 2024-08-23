@@ -1,7 +1,7 @@
 
 Pod::Spec.new do |s|
   s.name                        = 'PersonaClick'
-  s.version = '3.6.34'
+  s.version                     = '3.6.34'
 
 
   s.summary                     = 'PersonaClick SDK for iOS platform - the wide toolset for eCommerce apps. This SDK can be used to integrate in your own app for iOS in few steps.'
@@ -22,8 +22,9 @@ Pod::Spec.new do |s|
   s.ios.deployment_target       = '12.0'
 
   s.source_files                = 'PersonaClick/Classes/**/*.{swift}'
+  s.exclude_files               = 'PersonaClick/Classes/ServicesImplementation/NotificationHandlingServiceImpl.swift'
+
   s.resources                   = 'PersonaClick/**/*.{xcassets,xib,json,png}'
 
-  s.swift_version = '5'
-
+  s.swift_version               = '5'
 end
