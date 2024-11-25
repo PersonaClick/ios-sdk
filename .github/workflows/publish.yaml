@@ -32,11 +32,6 @@ jobs:
           current_version=$(awk -F"'" '/s.version *=/ {print $2}' "$FILE_PATH")
           echo "version=$current_version" >> $GITHUB_OUTPUT
 
-      - name: Print branch and version info
-        run: |
-          echo "PersonaClick-Branch: ${{ env.GITHUB_REF }}"
-          echo "PersonaClick-Version: ${{ steps.version.outputs.version }}"
-
       - name: Create release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
