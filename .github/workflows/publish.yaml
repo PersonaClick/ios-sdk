@@ -4,6 +4,8 @@ on:
   pull_request:
     types:
       - closed
+    branches:
+      - master
     paths-ignore:
       - '.github/**'
   workflow_dispatch:
@@ -15,15 +17,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Get current branch
-        id: current_branch
-        run: |
-          if [ -z "${{ github.head_ref }}" ]; then
-            echo "Current branch: ${GITHUB_REF#refs/heads/}" >> $GITHUB_ENV
-          else
-            echo "Current branch: ${{ github.head_ref }}" >> $GITHUB_ENV
-          fi
-
       - name: Version
         env:
           FILE_PATH: 'PersonaClick.podspec'
@@ -31,7 +24,6 @@ jobs:
         run: |
           current_version=$(awk -F"'" '/s.version *=/ {print $2}' "$FILE_PATH")
           echo "version=$current_version" >> $GITHUB_OUTPUT
-
       - name: Create release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
