@@ -1,7 +1,7 @@
 
 Pod::Spec.new do |s|
   s.name                        = 'PersonaClick'
-  s.version = '3.6.42'
+  s.version = '3.6.43'
 
 
   s.summary                     = 'PersonaClick SDK for iOS platform - the wide toolset for eCommerce apps. This SDK can be used to integrate in your own app for iOS in few steps.'
@@ -16,8 +16,9 @@ Pod::Spec.new do |s|
   s.license                     = { :type => 'MIT', :file => 'LICENSE' }
   s.author                      = { 'PersonaClick' => '«support@personaclick.com»' }
 
-  # TODO Return getting version from after created next release = { :git => "https://github.com/PersonaClick/ios-sdk.git", :branch => "master", :tag => s.version.to_s }
-  s.source                      = { :git => "https://github.com/PersonaClick/ios-sdk.git", :branch => "master" }
+   s.source = { :git => "https://github.com/PersonaClick/ios-sdk.git", :branch => ENV['CURRENT_BRANCH'] }
+
+   s.exclude_files               = 'PersonaClick/Classes/Model/InitResponse.swift'
 
   s.ios.deployment_target       = '12.0'
 
