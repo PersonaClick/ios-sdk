@@ -16,8 +16,9 @@ Pod::Spec.new do |s|
   s.license                     = { :type => 'MIT', :file => 'LICENSE' }
   s.author                      = { 'PersonaClick' => '«support@personaclick.com»' }
 
-  # TODO Return getting version from after created next release = { :git => "https://github.com/PersonaClick/ios-sdk.git", :branch => "master", :tag => s.version.to_s }
-  s.source                      = { :git => "https://github.com/PersonaClick/ios-sdk.git", :branch => "master" }
+   s.source = { :git => "https://github.com/PersonaClick/ios-sdk.git", :branch => ENV['CURRENT_BRANCH'] }
+
+   s.exclude_files               = 'PersonaClick/Classes/Model/InitResponse.swift'
 
   s.ios.deployment_target       = '12.0'
 
