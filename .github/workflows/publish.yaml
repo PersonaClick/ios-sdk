@@ -1,13 +1,13 @@
 name: iOS publish Swift package and Cocoapods
 
 on:
-  pull_request:
-    types:
-      - closed
-    branches:
-      - master
-    paths-ignore:
-      - '.github/**'
+  # pull_request:
+  #   types:
+  #     - closed
+  #   branches:
+  #     - master
+  #   paths-ignore:
+  #     - ".github/**"
   workflow_dispatch:
 
 jobs:
@@ -17,20 +17,30 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Version
-        env:
-          FILE_PATH: 'PersonaClick.podspec'
-        id: version
-        run: |
-          current_version=$(awk -F"'" '/s.version *=/ {print $2}' "$FILE_PATH")
-          echo "version=$current_version" >> $GITHUB_OUTPUT
-      - name: Create release
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          VERSION: ${{ steps.version.outputs.version }}
-        run: gh release create "$VERSION" --title=$VERSION --generate-notes
+      # - name: Version
+      #   env:
+      #     FILE_PATH: "PersonaClick.podspec"
+      #   id: version
+      #   run: |
+      #     current_version=$(awk -F"'" '/s.version *=/ {print $2}' "$FILE_PATH")
+      #     echo "version=$current_version" >> $GITHUB_OUTPUT
+      # - name: Create release
+      #   env:
+      #     GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #     VERSION: ${{ steps.version.outputs.version }}
+      #   run: gh release create "$VERSION" --title=$VERSION --generate-notes
 
       - name: Publish to cocoapods.org
         env:
           COCOAPODS_TRUNK_TOKEN: ${{ secrets.COCOAPODS_TOKEN }}
-        run: pod trunk push --allow-warnings
+        # run: pod trunk push --allow-warnings
+        run: |
+          retry=0
+          max_retries=5
+          while [ $retry -lt $max_retries ]; do
+            # pod trunk push --allow-warnings && break
+            pod spec lint --allow-warnings && break
+            retry=$((retry+1))
+            echo "Push failed. Retrying in 30 seconds... ($retry/$max_retries)"
+            sleep 30
+          done
