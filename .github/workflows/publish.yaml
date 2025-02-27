@@ -39,8 +39,7 @@ jobs:
           retry=0
           max_retries=5
           while [ $retry -lt $max_retries ]; do
-            # pod trunk push --allow-warnings && break
-            pod spec lint --allow-warnings && break
+            pod trunk push --allow-warnings && break
             retry=$((retry+1))
             echo "Push failed. Retrying in 30 seconds... ($retry/$max_retries)"
             sleep 30
