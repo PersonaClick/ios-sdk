@@ -42,3 +42,7 @@ jobs:
             echo "Push failed. Retrying in 30 seconds... ($retry/$max_retries)"
             sleep 30
           done
+          if [ $retry -eq $max_retries ]; then
+            echo "All retry attempts failed. Exiting with error."
+            exit 1
+          fi
