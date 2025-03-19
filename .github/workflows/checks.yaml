@@ -8,6 +8,8 @@ jobs:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
 
       - uses: swift-actions/setup-swift@v2
 
@@ -31,3 +33,4 @@ jobs:
           COCOAPODS_TRUNK_TOKEN: ${{ secrets.COCOAPODS_TOKEN }}
           LATEST_VERSION: ${{ env.LATEST_VERSION }}
         run: pod spec lint --allow-warnings
+
