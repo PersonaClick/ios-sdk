@@ -15,7 +15,7 @@ Pod::Spec.new do |s|
   s.license                     = { :type => 'MIT', :file => 'LICENSE' }
   s.author                      = { 'PersonaClick' => '«support@personaclick.com»' }
 
-  s.source                      = { :git => "https://github.com/PersonaClick/ios-sdk.git", :branch => "master" }
+  s.source = { :git => "https://github.com/PersonaClick/ios-sdk.git", :branch => ENV['GITHUB_HEAD_REF'] || 'master' }
 
   s.exclude_files               = 'PersonaClick/Classes/Model/InitResponse.swift'
 
