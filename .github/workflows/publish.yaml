@@ -1,4 +1,4 @@
-name: iOS publish Swift package and Cocoapods
+name: Bump version, create release and publish
 
 on:
   pull_request:
@@ -7,46 +7,36 @@ on:
     branches:
       - master
     paths-ignore:
-      - ".github/**"
+      - '.github/**'
   workflow_dispatch:
 
 jobs:
-  run:
+  version:
     if: github.event.pull_request.merged == true || github.event_name == 'workflow_dispatch'
-    runs-on: macos-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          ref: master
+    uses: personaClick/workflow/.github/workflows/reusable-ios-version.yaml@master
+    permissions: write-all
+    with:
+      podSpecFilePath: "PersonaClick.podspec"
+      appId: ${{ vars.PUBLIVERSIONER_ID }}
+    secrets:
+      appSecret: ${{ secrets.PUBLIVERSIONER_SECRET }}
 
-      - name: Version
-        env:
-          FILE_PATH: "PersonaClick.podspec"
-        id: version
-        run: |
-          current_version=$(awk -F"'" '/s.version *=/ {print $2}' "$FILE_PATH")
-          echo "version=$current_version" >> $GITHUB_OUTPUT
+  release:
+    needs: version
+    uses: personaClick/workflow/.github/workflows/reusable-ios-release.yaml@master
+    permissions: write-all
+    with:
+      podSpecFilePath: "PersonaClick.podspec"
+      appId: ${{ vars.PUBLIVERSIONER_ID }}
+    secrets:
+      appSecret: ${{ secrets.PUBLIVERSIONER_SECRET }}
 
-      - name: Create release
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          VERSION: ${{ steps.version.outputs.version }}
-        run: gh release create "$VERSION" --title=$VERSION --generate-notes
-
-      - name: Publish to cocoapods.org
-        env:
-          COCOAPODS_TRUNK_TOKEN: ${{ secrets.COCOAPODS_TOKEN }}
-        run: |
-          retry=0
-          max_retries=5
-          while [ $retry -lt $max_retries ]; do
-            pod trunk push --allow-warnings && break
-            retry=$((retry+1))
-            echo "Push failed. Retrying in 30 seconds... ($retry/$max_retries)"
-            sleep 30
-          done
-          if [ $retry -eq $max_retries ]; then
-            echo "All retry attempts failed. Exiting with error."
-            exit 1
-          fi
+  publish:
+    needs: release
+    uses: personaClick/workflow/.github/workflows/reusable-ios-publish.yaml@master
+    permissions: write-all
+    with:
+      appId: ${{ vars.PUBLIVERSIONER_ID }}
+    secrets:
+      cocoapodsToken: ${{ secrets.COCOAPODS_TOKEN }}
+      appSecret: ${{ secrets.PUBLIVERSIONER_SECRET }}
