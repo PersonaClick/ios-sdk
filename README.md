@@ -1,23 +1,25 @@
-# PersonaClick SDK
+# PersonaClick SDK for iOS
 
-[![Version](https://img.shields.io/cocoapods/v/PersonaClick.svg?style=flat)](https://cocoapods.org/pods/PersonaClick)
-![iOS](https://img.shields.io/badge/iOS-release)
-![Release](https://img.shields.io/badge/release-blueviolet)
+![PersonaClick](https://github.com/user-attachments/assets/f84f80c5-5884-42f5-92d5-65f2a4c30aee)
+![iOS](https://img.shields.io/badge/iOS-000000?style=for-the-badge&logo=ios&logoColor=white)
+[![Version](https://img.shields.io/cocoapods/v/PersonaClick.svg?style=for-the-badge)](https://cocoapods.org/pods/PersonaClick)
+![Swift](https://img.shields.io/badge/swift-5-F54A2A?style=for-the-badge&logo=swift&logoColor=white&labelColor=F54A2A)
+[![License](https://img.shields.io/cocoapods/l/PersonaClick.svg?style=for-the-badge)](https://cocoapods.org/pods/PersonaClick)
 
 ## Description
 
-PersonaClick SDK for iOS platform - the wide toolset for eCommerce apps.  
+PersonaClick SDK for iOS platform - the wide toolset for eCommerce apps.
 This SDK can be used to integrate in your own app for iOS in few steps.
 
 ## Documentation
 
 For detailed information on methods, please refer to the documentation available at the following link:
 
-[Official API references](https://personaclick.atlassian.net/wiki/spaces/english/overview?mode=global)
+[Official API references](https://reference.api.personaclick.com/#introduction)
 
 ## Author
 
-PersonaClick, support@personaclick.com
+PersonaClick, desk@personaclick.com
 
 ## License
 
