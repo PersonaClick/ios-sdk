@@ -1,28 +1,43 @@
-
 Pod::Spec.new do |s|
-  s.name                        = 'PersonaClick'
-  s.version = '3.6.60'
+  s.name             = 'PersonaClick'
+  s.version          = '3.6.62'
 
-  s.summary                     = 'PersonaClick SDK for iOS platform - the wide toolset for eCommerce apps. This SDK can be used to integrate in your own app for iOS in few steps.'
-  s.readme                      = 'https://reference.api.personaclick.com/#{spec.version.to_s}/README.md'
+  s.summary          = 'PersonaClick SDK for iOS platform - the wide toolset for eCommerce apps. This SDK can be used to integrate in your own app for iOS in few steps.'
+  s.readme           = 'https://reference.api.personaclick.com/#{spec.version.to_s}/README.md'
 
-  s.description                 = <<-DESC
-                                For detailed information on methods, please refer to the documentation available at the following link: https://personaclick.atlassian.net/wiki/spaces/english/overview?mode=global
-                                DESC
+  s.description      = <<-DESC
+  PersonaClick SDK for iOS platform - the wide toolset for eCommerce apps:
 
-  s.homepage                    = 'https://reference.api.personaclick.com/'
-  s.social_media_url            = 'https://personaclick.com/'
-  s.license                     = { :type => 'MIT', :file => 'LICENSE' }
-  s.author                      = { 'PersonaClick' => '«support@personaclick.com»' }
+  - Personalization engine.
+  - Product recommendations.
+  - Personalized products search engine.
+  - Bulk emails, push-notifications, SMS and Telegram messages.
+  - Transactional emails, push-notifications, Telegram and SMS.
+  - Drip campaigns (email, push, Telegram, SMS).
+  - Customizable on-site popups.
+  - CRM, CDP and customer segments.
+  - Net Promoter Score tool for any goal.
+  - Stories.
+  - In-app push.
+  - Loyalty program.
 
-  s.source = { :git => "https://github.com/PersonaClick/ios-sdk.git", :branch => ENV['GITHUB_HEAD_REF'] || 'master' }
+  You can integrate all PersonaClick tools into your iOS app.
+                       DESC
 
-  s.exclude_files               = 'PersonaClick/Classes/Model/InitResponse.swift'
 
-  s.ios.deployment_target       = '12.0'
+  s.homepage         = 'https://reference.api.personaclick.com/'
+  s.social_media_url = 'https://personaclick.com/'
+  s.license          = { :type => 'MIT', :file => 'LICENSE' }
+  s.author           = { 'PersonaClick' => '«success@personaclick.com»' }
 
-  s.source_files                = 'PersonaClick/Classes/**/*.{swift}'
-  s.resources                   = 'PersonaClick/**/*.{xcassets,xib,json,png}'
+  s.screenshots = ['https://personaclick.com/static-images/cocoapods/r46_ios_sdk_cocoapods_cover.png']
+
+  s.source           = { :git => "https://github.com/personaClick/ios-sdk.git", :branch => "master" }
+
+  s.ios.deployment_target = '12.0'
+
+  s.source_files     = 'PersonaClick/Classes/**/*.{swift}'
+  s.resources        = 'PersonaClick/Classes/Resources/*.{xcassets,xib,storyboard,json,png}'
 
   s.swift_version = '5'
 

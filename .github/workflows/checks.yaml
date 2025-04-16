@@ -1,40 +1,17 @@
-name: iOS checks
+name: Check PR
 
 on:
   pull_request:
+    paths-ignore:
+      - '.github/**'
+
+env:
+  ACTIONS_IS_RUNNING: true
 
 jobs:
   run:
-    runs-on: macos-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          ref: ${{ github.head_ref }}
-
-      - uses: swift-actions/setup-swift@v2
-
-      # Getting the last actual version from "master" branch
-      - name: Get latest version from master
-        run: |
-          git fetch origin master
-          latest_version=$(git show origin/master:PersonaClick.podspec | awk -F"'" '/s.version *=/ {print $2}')
-          echo "LATEST_VERSION=$latest_version" >> $GITHUB_ENV
-
-      # Installing dependencies
-      - name: Install
-        run: swift package resolve
-
-      - name: Debug current branch
-        run: |
-          echo "Current branch: $(git branch --show-current)"
-          echo "Files in current directory:"
-          ls -R
-
-      # Checking podspec using latest version
-      - name: Lint
-        if: ${{ !cancelled() }}
-        env:
-          GITHUB_HEAD_REF: ${{ github.head_ref }}
-          COCOAPODS_TRUNK_TOKEN: ${{ secrets.COCOAPODS_TOKEN }}
-          LATEST_VERSION: ${{ env.LATEST_VERSION }}
-        run: pod spec lint --allow-warnings
+    uses: personaClick/workflow/.github/workflows/reusable-ios-checks.yaml@master
+    permissions: write-all
+    secrets:
+      cocoapodsToken: ${{ secrets.COCOAPODS_TOKEN }}
+      googleServicesString: ${{ secrets.GOOGLE_SERVICES_IOS_FILE_AS_BASE64_STRING }}
