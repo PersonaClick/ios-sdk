@@ -10,7 +10,7 @@ env:
 
 jobs:
   run:
-    uses: personaClick/workflow/.github/workflows/reusable-ios-checks.yaml@master
+    uses: rees46/workflow/.github/workflows/reusable-ios-checks.yaml@master
     permissions: write-all
     secrets:
       cocoapodsToken: ${{ secrets.COCOAPODS_TOKEN }}
