@@ -17,9 +17,9 @@ jobs:
     permissions: write-all
     with:
       podSpecFilePath: "PersonaClick.podspec"
-      appId: ${{ vars.PUBLIVERSIONER_ID }}
+      appId: ${{ vars.PERSONACLICK_COURIER_ID }}
     secrets:
-      appSecret: ${{ secrets.PUBLIVERSIONER_SECRET }}
+      appSecret: ${{ secrets.PERSONACLICK_COURIER_SECRET }}
 
   release:
     needs: version
@@ -27,16 +27,16 @@ jobs:
     permissions: write-all
     with:
       podSpecFilePath: "PersonaClick.podspec"
-      appId: ${{ vars.PUBLIVERSIONER_ID }}
+      appId: ${{ vars.PERSONACLICK_COURIER_ID }}
     secrets:
-      appSecret: ${{ secrets.PUBLIVERSIONER_SECRET }}
+      appSecret: ${{ secrets.PERSONACLICK_COURIER_SECRET }}
 
   publish:
     needs: release
     uses: personaClick/workflow/.github/workflows/reusable-ios-publish.yaml@master
     permissions: write-all
     with:
-      appId: ${{ vars.PUBLIVERSIONER_ID }}
+      appId: ${{ vars.PERSONACLICK_COURIER_ID }}
     secrets:
       cocoapodsToken: ${{ secrets.COCOAPODS_TOKEN }}
-      appSecret: ${{ secrets.PUBLIVERSIONER_SECRET }}
+      appSecret: ${{ secrets.PERSONACLICK_COURIER_SECRET }}
