@@ -1,0 +1,28 @@
+name: Sync repositories
+
+on:
+  pull_request:
+    types:
+      - closed
+    branches:
+      - master
+  workflow_dispatch:
+
+jobs:
+  run:
+    if: github.event.pull_request.merged == true || github.event_name == 'workflow_dispatch'
+    uses: personaClick/workflow/.github/workflows/reusable-ios-synchronization.yaml@master
+    permissions: write-all
+    secrets:
+      privateKey: ${{ secrets.PERSONACLICK_COURIER_SECRET }}
+    with:
+      reviewerUsername: iwwwanow
+      appId: ${{ vars.PERSONACLICK_COURIER_ID }}
+      versionFilePath: version.properties
+      repositoryOwner: personaclick
+      targetRepository: personaclick/ios-sdk
+      replacementDirnames: "PersonaClick|PersonaClick,PersonaClick|PersonaClick,PersonaClick|PersonaClick"
+      replacementFilenames: "PersonaClick|PersonaClick,PersonaClick|PersonaClick"
+      syncIgnore: ".git,.idea,.github/workflows/sync.yaml,.gitignore,Readme.md,version.properties,xcodebuild.log"
+      replacementExtentions: "*.swift,*.podspec,*.xib,*.md,*.yaml,LICENSE,*.xcscheme,Podfile,*.storyboard,*.plist"
+      replacementContents: "PERSONACLICK_COURIER_SECRET|PERSONACLICK_COURIER_SECRET,PERSONACLICK_COURIER_ID|PERSONACLICK_COURIER_ID,https://personaclick.atlassian.net/wiki/spaces/english/overview?mode=global|https://personaclick.atlassian.net/wiki/spaces/english/overview?mode=global,success@personaclick.com|success@personaclick.com,https://github.com/user-attachments/assets/06eba2ec-d342-43a0-9ab5-bec6352490f0|https://github.com/user-attachments/assets/06eba2ec-d342-43a0-9ab5-bec6352490f0,https://api.personaclick.com/|https://api.personaclick.com/,api.personaclick.com|api.personaclick.com,personaclick.com|personaclick.com,personaClick|personaClick,PersonaClick|PersonaClick,PersonaClick|PersonaClick,PersonaClick|PersonaClick"
