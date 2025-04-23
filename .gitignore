@@ -1,9 +1,12 @@
 .DS_Store
 .idea
 .swiftpm
-/.build
-/Packages
+.build
+build/ios
+Packages
 /*.xcodeproj
-/.swiftpm
-/Pods
-xcuserdata/
+Pods/*
+DemoApp/Pods/*
+DemoApp/Podfile.lock
+GoogleService-Info.plist
+
