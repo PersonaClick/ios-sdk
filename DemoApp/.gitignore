@@ -1,0 +1,5 @@
+GoogleService-Info.plist
+.build
+build/ios
+/build
+/PersonaClick.xcworkspace

@@ -1,0 +1,1130 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		0169B35A9F893F6D8D22820A /* Pods_PersonaClickDemo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6F0B9704F35259B141245836 /* Pods_PersonaClickDemo.framework */; };
+		607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACD51AFB9204008FA782 /* AppDelegate.swift */; };
+		607FACD81AFB9204008FA782 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACD71AFB9204008FA782 /* MainViewController.swift */; };
+		607FACDB1AFB9204008FA782 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 607FACD91AFB9204008FA782 /* Main.storyboard */; };
+		607FACDD1AFB9204008FA782 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDC1AFB9204008FA782 /* Images.xcassets */; };
+		607FACE01AFB9204008FA782 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDE1AFB9204008FA782 /* LaunchScreen.xib */; };
+		7587149C2C6CDF62008E5E4E /* SDKConfigProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7587149B2C6CDF62008E5E4E /* SDKConfigProviderTests.swift */; };
+		758714A82C6CF1EB008E5E4E /* AppEnvironments.struct.swift in Sources */ = {isa = PBXBuildFile; fileRef = 758714A62C6CF1EB008E5E4E /* AppEnvironments.struct.swift */; };
+		75A4D60C2C5B8EAA00929368 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 75A4D60B2C5B8EAA00929368 /* GoogleService-Info.plist */; };
+		75D1D5C12CA72BF200C8C564 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 75D1D5C02CA72BF200C8C564 /* Localizable.xcstrings */; };
+		75E237902C334AA800119197 /* SdkTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75E2378E2C334AA800119197 /* SdkTest.swift */; };
+		75E237932C334AD200119197 /* DeviceIdTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75E237912C334AD200119197 /* DeviceIdTest.swift */; };
+		9A7A95DF25BC40E900FFA40A /* UserNotifications.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9ADC31DE25A1C6F700D9D1AA /* UserNotifications.framework */; };
+		9A7A95E025BC40E900FFA40A /* UserNotificationsUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9ADC31E025A1C6F700D9D1AA /* UserNotificationsUI.framework */; };
+		9A7A95E325BC40E900FFA40A /* NotificationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A7A95E225BC40E900FFA40A /* NotificationViewController.swift */; };
+		9A7A95E625BC40E900FFA40A /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9A7A95E425BC40E900FFA40A /* MainInterface.storyboard */; };
+		9A7A95EA25BC40E900FFA40A /* PersonaClickNotificationContentExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 9A7A95DE25BC40E900FFA40A /* PersonaClickNotificationContentExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		9A7A960125BC416600FFA40A /* ImagesCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A7A95FE25BC416600FFA40A /* ImagesCollectionViewCell.swift */; };
+		9A7A960225BC416600FFA40A /* Product.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A7A95FF25BC416600FFA40A /* Product.swift */; };
+		9A7A960325BC416600FFA40A /* ImagesCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9A7A960025BC416600FFA40A /* ImagesCollectionViewCell.xib */; };
+		9A7A961025BC436D00FFA40A /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A7A960F25BC436D00FFA40A /* NotificationService.swift */; };
+		9A7A961425BC436D00FFA40A /* PersonaClickNotificationServiceExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 9A7A960D25BC436D00FFA40A /* PersonaClickNotificationServiceExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		9A7FC75625C0BB69006D8CF9 /* Readme.md in Resources */ = {isa = PBXBuildFile; fileRef = 9A7FC75525C0BB69006D8CF9 /* Readme.md */; };
+		9AFB9EE128044E4A001462AC /* PushPresentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AFB9EDF28044E4A001462AC /* PushPresentViewController.swift */; };
+		9AFB9EE228044E4A001462AC /* PushPresentViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9AFB9EE028044E4A001462AC /* PushPresentViewController.xib */; };
+		D005D80D2DB2CDE900841D78 /* MockGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D005D80C2DB2CDE000841D78 /* MockGenerator.swift */; };
+		D0763E5A2DB8F51D0013E367 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0763E592DB8F5170013E367 /* Constants.swift */; };
+		D0B70C172D522DAF0001782A /* SearchServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B70C162D522DAF0001782A /* SearchServiceTests.swift */; };
+		D0B99F842DB106710012E4F0 /* SubscribeForBackInStock.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B99F832DB106640012E4F0 /* SubscribeForBackInStock.swift */; };
+		D0B99F9F2DB169D80012E4F0 /* UnsubscribeBackInStock.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B99F9E2DB169D30012E4F0 /* UnsubscribeBackInStock.swift */; };
+		D0B99FA32DB16C960012E4F0 /* SubscribeForPriceDrop.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B99FA22DB16C820012E4F0 /* SubscribeForPriceDrop.swift */; };
+		D0B99FA52DB16D290012E4F0 /* UnsubscribePriceDrop.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B99FA42DB16D1A0012E4F0 /* UnsubscribePriceDrop.swift */; };
+		D0B99FA72DB172940012E4F0 /* ManageSubscription.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B99FA62DB1728D0012E4F0 /* ManageSubscription.swift */; };
+		D589BD74A3C4A24BF7BCCD2C /* Pods_PersonaClickTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B57812A2700376CF0EC5D913 /* Pods_PersonaClickTests.framework */; };
+		E9049B762B1F561100BD7FEB /* Inter-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E9049B752B1F561100BD7FEB /* Inter-Bold.ttf */; };
+		E9049B782B1F56D700BD7FEB /* Inter-Semibold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E9049B772B1F56D700BD7FEB /* Inter-Semibold.ttf */; };
+		E9CF44412B30809C000F53F1 /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9CF44402B30809C000F53F1 /* SearchViewController.swift */; };
+		E9EAB8672AF08A43003DC1B5 /* Inter.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E9EAB8662AF08A43003DC1B5 /* Inter.ttf */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		607FACE61AFB9204008FA782 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 607FACC81AFB9204008FA782 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 607FACCF1AFB9204008FA782;
+			remoteInfo = PersonaClick;
+		};
+		9A7A95E825BC40E900FFA40A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 607FACC81AFB9204008FA782 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 9A7A95DD25BC40E900FFA40A;
+			remoteInfo = PersonaClickNotificationContentExtension;
+		};
+		9A7A961225BC436D00FFA40A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 607FACC81AFB9204008FA782 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 9A7A960C25BC436D00FFA40A;
+			remoteInfo = PersonaClickNotificationServiceExtension;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		9ADC31D525A1C6B300D9D1AA /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				9A7A95EA25BC40E900FFA40A /* PersonaClickNotificationContentExtension.appex in Embed App Extensions */,
+				9A7A961425BC436D00FFA40A /* PersonaClickNotificationServiceExtension.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		1C8B363210138CD2A84F29F3 /* Pods-PersonaClickTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PersonaClickTests.debug.xcconfig"; path = "Target Support Files/Pods-PersonaClickTests/Pods-PersonaClickTests.debug.xcconfig"; sourceTree = "<group>"; };
+		35748965E9FE2297E49752C5 /* Pods-PersonaClickDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PersonaClickDemo.release.xcconfig"; path = "Target Support Files/Pods-PersonaClickDemo/Pods-PersonaClickDemo.release.xcconfig"; sourceTree = "<group>"; };
+		53578CC38C4B3A4AA9973CCC /* PersonaClick.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = PersonaClick.podspec; path = ../PersonaClick.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		5AE5CCEEB00A5EF1E5E39AFF /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
+		607FACD01AFB9204008FA782 /* PersonaClickDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PersonaClickDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		607FACD41AFB9204008FA782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		607FACD51AFB9204008FA782 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		607FACD71AFB9204008FA782 /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
+		607FACDA1AFB9204008FA782 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		607FACDC1AFB9204008FA782 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		607FACDF1AFB9204008FA782 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
+		607FACE51AFB9204008FA782 /* PersonaClickTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PersonaClickTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		607FACEA1AFB9204008FA782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		6F0B9704F35259B141245836 /* Pods_PersonaClickDemo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PersonaClickDemo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		7587149B2C6CDF62008E5E4E /* SDKConfigProviderTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SDKConfigProviderTests.swift; sourceTree = "<group>"; };
+		758714A62C6CF1EB008E5E4E /* AppEnvironments.struct.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppEnvironments.struct.swift; sourceTree = "<group>"; };
+		75A4D60B2C5B8EAA00929368 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		75D1D5C02CA72BF200C8C564 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
+		75E2378E2C334AA800119197 /* SdkTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SdkTest.swift; sourceTree = "<group>"; };
+		75E237912C334AD200119197 /* DeviceIdTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceIdTest.swift; sourceTree = "<group>"; };
+		9A58AAB128E80C33004EA84C /* PersonaClickNotificationServiceExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = PersonaClickNotificationServiceExtension.entitlements; sourceTree = "<group>"; };
+		9A58AAB228E80EEA004EA84C /* PersonaClickNotificationContentExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = PersonaClickNotificationContentExtension.entitlements; sourceTree = "<group>"; };
+		9A7A95DE25BC40E900FFA40A /* PersonaClickNotificationContentExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = PersonaClickNotificationContentExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		9A7A95E225BC40E900FFA40A /* NotificationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationViewController.swift; sourceTree = "<group>"; };
+		9A7A95E525BC40E900FFA40A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
+		9A7A95E725BC40E900FFA40A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		9A7A95FE25BC416600FFA40A /* ImagesCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImagesCollectionViewCell.swift; sourceTree = "<group>"; };
+		9A7A95FF25BC416600FFA40A /* Product.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Product.swift; sourceTree = "<group>"; };
+		9A7A960025BC416600FFA40A /* ImagesCollectionViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ImagesCollectionViewCell.xib; sourceTree = "<group>"; };
+		9A7A960D25BC436D00FFA40A /* PersonaClickNotificationServiceExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = PersonaClickNotificationServiceExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		9A7A960F25BC436D00FFA40A /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
+		9A7A961125BC436D00FFA40A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		9A7FC75525C0BB69006D8CF9 /* Readme.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Readme.md; sourceTree = "<group>"; };
+		9ADC31BF25A1C2D600D9D1AA /* PersonaClickDemo.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = PersonaClickDemo.entitlements; sourceTree = "<group>"; };
+		9ADC31DE25A1C6F700D9D1AA /* UserNotifications.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UserNotifications.framework; path = System/Library/Frameworks/UserNotifications.framework; sourceTree = SDKROOT; };
+		9ADC31E025A1C6F700D9D1AA /* UserNotificationsUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UserNotificationsUI.framework; path = System/Library/Frameworks/UserNotificationsUI.framework; sourceTree = SDKROOT; };
+		9AFB9EDF28044E4A001462AC /* PushPresentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushPresentViewController.swift; sourceTree = "<group>"; };
+		9AFB9EE028044E4A001462AC /* PushPresentViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PushPresentViewController.xib; sourceTree = "<group>"; };
+		9E7FFE52FCE8111B44F38A5E /* Pods-PersonaClickDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PersonaClickDemo.debug.xcconfig"; path = "Target Support Files/Pods-PersonaClickDemo/Pods-PersonaClickDemo.debug.xcconfig"; sourceTree = "<group>"; };
+		AAB9149EDCCCB4FF18DB87D6 /* Pods-PersonaClickTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PersonaClickTests.release.xcconfig"; path = "Target Support Files/Pods-PersonaClickTests/Pods-PersonaClickTests.release.xcconfig"; sourceTree = "<group>"; };
+		B57812A2700376CF0EC5D913 /* Pods_PersonaClickTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PersonaClickTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		D005D80C2DB2CDE000841D78 /* MockGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockGenerator.swift; sourceTree = "<group>"; };
+		D0763E592DB8F5170013E367 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		D0B70C162D522DAF0001782A /* SearchServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchServiceTests.swift; sourceTree = "<group>"; };
+		D0B99F832DB106640012E4F0 /* SubscribeForBackInStock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscribeForBackInStock.swift; sourceTree = "<group>"; };
+		D0B99F9E2DB169D30012E4F0 /* UnsubscribeBackInStock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnsubscribeBackInStock.swift; sourceTree = "<group>"; };
+		D0B99FA22DB16C820012E4F0 /* SubscribeForPriceDrop.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscribeForPriceDrop.swift; sourceTree = "<group>"; };
+		D0B99FA42DB16D1A0012E4F0 /* UnsubscribePriceDrop.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnsubscribePriceDrop.swift; sourceTree = "<group>"; };
+		D0B99FA62DB1728D0012E4F0 /* ManageSubscription.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageSubscription.swift; sourceTree = "<group>"; wrapsLines = 0; };
+		DF636BC1FCE3C2D61578639A /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
+		E9049B752B1F561100BD7FEB /* Inter-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Inter-Bold.ttf"; sourceTree = "<group>"; };
+		E9049B772B1F56D700BD7FEB /* Inter-Semibold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Inter-Semibold.ttf"; sourceTree = "<group>"; };
+		E9CF44402B30809C000F53F1 /* SearchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
+		E9EAB8662AF08A43003DC1B5 /* Inter.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Inter.ttf; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		607FACCD1AFB9204008FA782 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0169B35A9F893F6D8D22820A /* Pods_PersonaClickDemo.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		607FACE21AFB9204008FA782 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D589BD74A3C4A24BF7BCCD2C /* Pods_PersonaClickTests.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9A7A95DB25BC40E900FFA40A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9A7A95E025BC40E900FFA40A /* UserNotificationsUI.framework in Frameworks */,
+				9A7A95DF25BC40E900FFA40A /* UserNotifications.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9A7A960A25BC436D00FFA40A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		4F88B19B361A54409BF39837 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				9E7FFE52FCE8111B44F38A5E /* Pods-PersonaClickDemo.debug.xcconfig */,
+				35748965E9FE2297E49752C5 /* Pods-PersonaClickDemo.release.xcconfig */,
+				1C8B363210138CD2A84F29F3 /* Pods-PersonaClickTests.debug.xcconfig */,
+				AAB9149EDCCCB4FF18DB87D6 /* Pods-PersonaClickTests.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
+		5EF802E6E047FD7F294501D7 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				9ADC31DE25A1C6F700D9D1AA /* UserNotifications.framework */,
+				9ADC31E025A1C6F700D9D1AA /* UserNotificationsUI.framework */,
+				6F0B9704F35259B141245836 /* Pods_PersonaClickDemo.framework */,
+				B57812A2700376CF0EC5D913 /* Pods_PersonaClickTests.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		607FACC71AFB9204008FA782 = {
+			isa = PBXGroup;
+			children = (
+				75D1D5C02CA72BF200C8C564 /* Localizable.xcstrings */,
+				75A4D60B2C5B8EAA00929368 /* GoogleService-Info.plist */,
+				9A58AAB228E80EEA004EA84C /* PersonaClickNotificationContentExtension.entitlements */,
+				9A58AAB128E80C33004EA84C /* PersonaClickNotificationServiceExtension.entitlements */,
+				9ADC31BF25A1C2D600D9D1AA /* PersonaClickDemo.entitlements */,
+				607FACF51AFB993E008FA782 /* Podspec Metadata */,
+				607FACD21AFB9204008FA782 /* PersonaClickDemo */,
+				607FACE81AFB9204008FA782 /* PersonaClickDemoTests */,
+				9A7A95E125BC40E900FFA40A /* NotificationContentExtension */,
+				9A7A960E25BC436D00FFA40A /* NotificationServiceExtension */,
+				607FACD11AFB9204008FA782 /* Products */,
+				4F88B19B361A54409BF39837 /* Pods */,
+				5EF802E6E047FD7F294501D7 /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		607FACD11AFB9204008FA782 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				607FACD01AFB9204008FA782 /* PersonaClickDemo.app */,
+				607FACE51AFB9204008FA782 /* PersonaClickTests.xctest */,
+				9A7A95DE25BC40E900FFA40A /* PersonaClickNotificationContentExtension.appex */,
+				9A7A960D25BC436D00FFA40A /* PersonaClickNotificationServiceExtension.appex */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		607FACD21AFB9204008FA782 /* PersonaClickDemo */ = {
+			isa = PBXGroup;
+			children = (
+				758714A72C6CF1EB008E5E4E /* Utils */,
+				607FACD51AFB9204008FA782 /* AppDelegate.swift */,
+				607FACD71AFB9204008FA782 /* MainViewController.swift */,
+				E9CF44402B30809C000F53F1 /* SearchViewController.swift */,
+				607FACD91AFB9204008FA782 /* Main.storyboard */,
+				607FACDE1AFB9204008FA782 /* LaunchScreen.xib */,
+				607FACDC1AFB9204008FA782 /* Images.xcassets */,
+				9AFB9EE328044E4D001462AC /* PushPresent */,
+				607FACD31AFB9204008FA782 /* Supporting Files */,
+			);
+			name = PersonaClickDemo;
+			path = PersonaClickDemo;
+			sourceTree = "<group>";
+		};
+		607FACD31AFB9204008FA782 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				E9EAB8652AF08A43003DC1B5 /* Fonts */,
+				607FACD41AFB9204008FA782 /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		607FACE81AFB9204008FA782 /* PersonaClickDemoTests */ = {
+			isa = PBXGroup;
+			children = (
+				D0763E5B2DB8F8820013E367 /* generators */,
+				D0763E592DB8F5170013E367 /* Constants.swift */,
+				75E2378B2C334A4200119197 /* services */,
+				607FACE91AFB9204008FA782 /* Supporting Files */,
+			);
+			path = PersonaClickDemoTests;
+			sourceTree = "<group>";
+		};
+		607FACE91AFB9204008FA782 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				607FACEA1AFB9204008FA782 /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		607FACF51AFB993E008FA782 /* Podspec Metadata */ = {
+			isa = PBXGroup;
+			children = (
+				53578CC38C4B3A4AA9973CCC /* PersonaClick.podspec */,
+				5AE5CCEEB00A5EF1E5E39AFF /* README.md */,
+				DF636BC1FCE3C2D61578639A /* LICENSE */,
+			);
+			name = "Podspec Metadata";
+			sourceTree = "<group>";
+		};
+		758714A72C6CF1EB008E5E4E /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				758714A62C6CF1EB008E5E4E /* AppEnvironments.struct.swift */,
+			);
+			path = Utils;
+			sourceTree = "<group>";
+		};
+		75E2378B2C334A4200119197 /* services */ = {
+			isa = PBXGroup;
+			children = (
+				75E2378D2C334A5800119197 /* device */,
+				75E2378C2C334A5300119197 /* sdk */,
+			);
+			name = services;
+			sourceTree = "<group>";
+		};
+		75E2378C2C334A5300119197 /* sdk */ = {
+			isa = PBXGroup;
+			children = (
+				D0B99FA12DB16C740012E4F0 /* unsubscribe */,
+				D0B99FA02DB16C5A0012E4F0 /* subscribe */,
+				D0B70C162D522DAF0001782A /* SearchServiceTests.swift */,
+				7587149B2C6CDF62008E5E4E /* SDKConfigProviderTests.swift */,
+				75E2378E2C334AA800119197 /* SdkTest.swift */,
+			);
+			name = sdk;
+			sourceTree = "<group>";
+		};
+		75E2378D2C334A5800119197 /* device */ = {
+			isa = PBXGroup;
+			children = (
+				75E237912C334AD200119197 /* DeviceIdTest.swift */,
+			);
+			name = device;
+			sourceTree = "<group>";
+		};
+		9A7A95E125BC40E900FFA40A /* NotificationContentExtension */ = {
+			isa = PBXGroup;
+			children = (
+				9A7A95E225BC40E900FFA40A /* NotificationViewController.swift */,
+				9A7A95FE25BC416600FFA40A /* ImagesCollectionViewCell.swift */,
+				9A7A960025BC416600FFA40A /* ImagesCollectionViewCell.xib */,
+				9A7A95FF25BC416600FFA40A /* Product.swift */,
+				9A7A95E425BC40E900FFA40A /* MainInterface.storyboard */,
+				9A7A95E725BC40E900FFA40A /* Info.plist */,
+				9A7FC75525C0BB69006D8CF9 /* Readme.md */,
+			);
+			path = NotificationContentExtension;
+			sourceTree = "<group>";
+		};
+		9A7A960E25BC436D00FFA40A /* NotificationServiceExtension */ = {
+			isa = PBXGroup;
+			children = (
+				9A7A960F25BC436D00FFA40A /* NotificationService.swift */,
+				9A7A961125BC436D00FFA40A /* Info.plist */,
+			);
+			path = NotificationServiceExtension;
+			sourceTree = "<group>";
+		};
+		9AFB9EE328044E4D001462AC /* PushPresent */ = {
+			isa = PBXGroup;
+			children = (
+				9AFB9EDF28044E4A001462AC /* PushPresentViewController.swift */,
+				9AFB9EE028044E4A001462AC /* PushPresentViewController.xib */,
+			);
+			name = PushPresent;
+			sourceTree = "<group>";
+		};
+		D0763E5B2DB8F8820013E367 /* generators */ = {
+			isa = PBXGroup;
+			children = (
+				D005D80C2DB2CDE000841D78 /* MockGenerator.swift */,
+			);
+			path = generators;
+			sourceTree = "<group>";
+		};
+		D0B99FA02DB16C5A0012E4F0 /* subscribe */ = {
+			isa = PBXGroup;
+			children = (
+				D0B99FA62DB1728D0012E4F0 /* ManageSubscription.swift */,
+				D0B99FA22DB16C820012E4F0 /* SubscribeForPriceDrop.swift */,
+				D0B99F832DB106640012E4F0 /* SubscribeForBackInStock.swift */,
+			);
+			path = subscribe;
+			sourceTree = "<group>";
+		};
+		D0B99FA12DB16C740012E4F0 /* unsubscribe */ = {
+			isa = PBXGroup;
+			children = (
+				D0B99FA42DB16D1A0012E4F0 /* UnsubscribePriceDrop.swift */,
+				D0B99F9E2DB169D30012E4F0 /* UnsubscribeBackInStock.swift */,
+			);
+			path = unsubscribe;
+			sourceTree = "<group>";
+		};
+		E9EAB8652AF08A43003DC1B5 /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				E9EAB8662AF08A43003DC1B5 /* Inter.ttf */,
+				E9049B752B1F561100BD7FEB /* Inter-Bold.ttf */,
+				E9049B772B1F56D700BD7FEB /* Inter-Semibold.ttf */,
+			);
+			path = Fonts;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		607FACCF1AFB9204008FA782 /* PersonaClickDemo */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 607FACEF1AFB9204008FA782 /* Build configuration list for PBXNativeTarget "PersonaClickDemo" */;
+			buildPhases = (
+				C2B999EEE449E9DD4C36E51E /* [CP] Check Pods Manifest.lock */,
+				607FACCC1AFB9204008FA782 /* Sources */,
+				607FACCD1AFB9204008FA782 /* Frameworks */,
+				607FACCE1AFB9204008FA782 /* Resources */,
+				9ADC31D525A1C6B300D9D1AA /* Embed App Extensions */,
+				4B3B99AAD90467F611E936AE /* [CP] Embed Pods Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				9A7A95E925BC40E900FFA40A /* PBXTargetDependency */,
+				9A7A961325BC436D00FFA40A /* PBXTargetDependency */,
+			);
+			name = PersonaClickDemo;
+			productName = PersonaClick;
+			productReference = 607FACD01AFB9204008FA782 /* PersonaClickDemo.app */;
+			productType = "com.apple.product-type.application";
+		};
+		607FACE41AFB9204008FA782 /* PersonaClickTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 607FACF21AFB9204008FA782 /* Build configuration list for PBXNativeTarget "PersonaClickTests" */;
+			buildPhases = (
+				CCE4B451456CB7B822CD2FDB /* [CP] Check Pods Manifest.lock */,
+				607FACE11AFB9204008FA782 /* Sources */,
+				607FACE21AFB9204008FA782 /* Frameworks */,
+				607FACE31AFB9204008FA782 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				607FACE71AFB9204008FA782 /* PBXTargetDependency */,
+			);
+			name = PersonaClickTests;
+			productName = Tests;
+			productReference = 607FACE51AFB9204008FA782 /* PersonaClickTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		9A7A95DD25BC40E900FFA40A /* PersonaClickNotificationContentExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 9A7A95ED25BC40E900FFA40A /* Build configuration list for PBXNativeTarget "PersonaClickNotificationContentExtension" */;
+			buildPhases = (
+				9A7A95DA25BC40E900FFA40A /* Sources */,
+				9A7A95DB25BC40E900FFA40A /* Frameworks */,
+				9A7A95DC25BC40E900FFA40A /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = PersonaClickNotificationContentExtension;
+			productName = PersonaClickNotificationContentExtension;
+			productReference = 9A7A95DE25BC40E900FFA40A /* PersonaClickNotificationContentExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+		9A7A960C25BC436D00FFA40A /* PersonaClickNotificationServiceExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 9A7A961525BC436D00FFA40A /* Build configuration list for PBXNativeTarget "PersonaClickNotificationServiceExtension" */;
+			buildPhases = (
+				9A7A960925BC436D00FFA40A /* Sources */,
+				9A7A960A25BC436D00FFA40A /* Frameworks */,
+				9A7A960B25BC436D00FFA40A /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = PersonaClickNotificationServiceExtension;
+			productName = PersonaClickNotificationServiceExtension;
+			productReference = 9A7A960D25BC436D00FFA40A /* PersonaClickNotificationServiceExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		607FACC81AFB9204008FA782 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 1220;
+				LastUpgradeCheck = 1150;
+				ORGANIZATIONNAME = "";
+				TargetAttributes = {
+					607FACCF1AFB9204008FA782 = {
+						CreatedOnToolsVersion = 6.3.1;
+						LastSwiftMigration = 1150;
+						ProvisioningStyle = Manual;
+					};
+					607FACE41AFB9204008FA782 = {
+						CreatedOnToolsVersion = 6.3.1;
+						LastSwiftMigration = 1150;
+						ProvisioningStyle = Manual;
+						TestTargetID = 607FACCF1AFB9204008FA782;
+					};
+					9A7A95DD25BC40E900FFA40A = {
+						CreatedOnToolsVersion = 12.2;
+						ProvisioningStyle = Manual;
+					};
+					9A7A960C25BC436D00FFA40A = {
+						CreatedOnToolsVersion = 12.2;
+						ProvisioningStyle = Manual;
+					};
+				};
+			};
+			buildConfigurationList = 607FACCB1AFB9204008FA782 /* Build configuration list for PBXProject "PersonaClick" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 607FACC71AFB9204008FA782;
+			productRefGroup = 607FACD11AFB9204008FA782 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				607FACCF1AFB9204008FA782 /* PersonaClickDemo */,
+				607FACE41AFB9204008FA782 /* PersonaClickTests */,
+				9A7A95DD25BC40E900FFA40A /* PersonaClickNotificationContentExtension */,
+				9A7A960C25BC436D00FFA40A /* PersonaClickNotificationServiceExtension */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		607FACCE1AFB9204008FA782 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9AFB9EE228044E4A001462AC /* PushPresentViewController.xib in Resources */,
+				75A4D60C2C5B8EAA00929368 /* GoogleService-Info.plist in Resources */,
+				607FACDB1AFB9204008FA782 /* Main.storyboard in Resources */,
+				E9EAB8672AF08A43003DC1B5 /* Inter.ttf in Resources */,
+				E9049B762B1F561100BD7FEB /* Inter-Bold.ttf in Resources */,
+				E9049B782B1F56D700BD7FEB /* Inter-Semibold.ttf in Resources */,
+				607FACE01AFB9204008FA782 /* LaunchScreen.xib in Resources */,
+				607FACDD1AFB9204008FA782 /* Images.xcassets in Resources */,
+				75D1D5C12CA72BF200C8C564 /* Localizable.xcstrings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		607FACE31AFB9204008FA782 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9A7A95DC25BC40E900FFA40A /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9A7A960325BC416600FFA40A /* ImagesCollectionViewCell.xib in Resources */,
+				9A7A95E625BC40E900FFA40A /* MainInterface.storyboard in Resources */,
+				9A7FC75625C0BB69006D8CF9 /* Readme.md in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9A7A960B25BC436D00FFA40A /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		4B3B99AAD90467F611E936AE /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-PersonaClickDemo/Pods-PersonaClickDemo-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/Fakery/Fakery.framework",
+				"${BUILT_PRODUCTS_DIR}/FirebaseCore/FirebaseCore.framework",
+				"${BUILT_PRODUCTS_DIR}/FirebaseCoreInternal/FirebaseCoreInternal.framework",
+				"${BUILT_PRODUCTS_DIR}/FirebaseInstallations/FirebaseInstallations.framework",
+				"${BUILT_PRODUCTS_DIR}/FirebaseMessaging/FirebaseMessaging.framework",
+				"${BUILT_PRODUCTS_DIR}/GoogleDataTransport/GoogleDataTransport.framework",
+				"${BUILT_PRODUCTS_DIR}/GoogleUtilities/GoogleUtilities.framework",
+				"${BUILT_PRODUCTS_DIR}/PromisesObjC/FBLPromises.framework",
+				"${BUILT_PRODUCTS_DIR}/PersonaClick/PersonaClick.framework",
+				"${BUILT_PRODUCTS_DIR}/nanopb/nanopb.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Fakery.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FirebaseCore.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FirebaseCoreInternal.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FirebaseInstallations.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FirebaseMessaging.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleDataTransport.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleUtilities.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBLPromises.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/PersonaClick.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/nanopb.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-PersonaClickDemo/Pods-PersonaClickDemo-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		C2B999EEE449E9DD4C36E51E /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-PersonaClickDemo-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		CCE4B451456CB7B822CD2FDB /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-PersonaClickTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		607FACCC1AFB9204008FA782 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				607FACD81AFB9204008FA782 /* MainViewController.swift in Sources */,
+				9AFB9EE128044E4A001462AC /* PushPresentViewController.swift in Sources */,
+				E9CF44412B30809C000F53F1 /* SearchViewController.swift in Sources */,
+				607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */,
+				758714A82C6CF1EB008E5E4E /* AppEnvironments.struct.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		607FACE11AFB9204008FA782 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D0B99F842DB106710012E4F0 /* SubscribeForBackInStock.swift in Sources */,
+				D0763E5A2DB8F51D0013E367 /* Constants.swift in Sources */,
+				D0B99FA32DB16C960012E4F0 /* SubscribeForPriceDrop.swift in Sources */,
+				D0B99FA52DB16D290012E4F0 /* UnsubscribePriceDrop.swift in Sources */,
+				D0B99FA72DB172940012E4F0 /* ManageSubscription.swift in Sources */,
+				75E237902C334AA800119197 /* SdkTest.swift in Sources */,
+				D0B70C172D522DAF0001782A /* SearchServiceTests.swift in Sources */,
+				D0B99F9F2DB169D80012E4F0 /* UnsubscribeBackInStock.swift in Sources */,
+				7587149C2C6CDF62008E5E4E /* SDKConfigProviderTests.swift in Sources */,
+				75E237932C334AD200119197 /* DeviceIdTest.swift in Sources */,
+				D005D80D2DB2CDE900841D78 /* MockGenerator.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9A7A95DA25BC40E900FFA40A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9A7A960125BC416600FFA40A /* ImagesCollectionViewCell.swift in Sources */,
+				9A7A95E325BC40E900FFA40A /* NotificationViewController.swift in Sources */,
+				9A7A960225BC416600FFA40A /* Product.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9A7A960925BC436D00FFA40A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9A7A961025BC436D00FFA40A /* NotificationService.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		607FACE71AFB9204008FA782 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 607FACCF1AFB9204008FA782 /* PersonaClickDemo */;
+			targetProxy = 607FACE61AFB9204008FA782 /* PBXContainerItemProxy */;
+		};
+		9A7A95E925BC40E900FFA40A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 9A7A95DD25BC40E900FFA40A /* PersonaClickNotificationContentExtension */;
+			targetProxy = 9A7A95E825BC40E900FFA40A /* PBXContainerItemProxy */;
+		};
+		9A7A961325BC436D00FFA40A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 9A7A960C25BC436D00FFA40A /* PersonaClickNotificationServiceExtension */;
+			targetProxy = 9A7A961225BC436D00FFA40A /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		607FACD91AFB9204008FA782 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				607FACDA1AFB9204008FA782 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		607FACDE1AFB9204008FA782 /* LaunchScreen.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				607FACDF1AFB9204008FA782 /* Base */,
+			);
+			name = LaunchScreen.xib;
+			sourceTree = "<group>";
+		};
+		9A7A95E425BC40E900FFA40A /* MainInterface.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				9A7A95E525BC40E900FFA40A /* Base */,
+			);
+			name = MainInterface.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		607FACED1AFB9204008FA782 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		607FACEE1AFB9204008FA782 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_VERSION = 5.0;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		607FACF01AFB9204008FA782 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 9E7FFE52FCE8111B44F38A5E /* Pods-PersonaClickDemo.debug.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = PersonaClickDemo.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				INFOPLIST_FILE = PersonaClickDemo/Info.plist;
+				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MARKETING_VERSION = 1.0;
+				MODULE_NAME = PersonaClick;
+				PRODUCT_BUNDLE_IDENTIFIER = Avsi.TestPushSDK1;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		607FACF11AFB9204008FA782 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 35748965E9FE2297E49752C5 /* Pods-PersonaClickDemo.release.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = PersonaClickDemo.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				INFOPLIST_FILE = PersonaClickDemo/Info.plist;
+				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MARKETING_VERSION = 1.0;
+				MODULE_NAME = PersonaClick;
+				PRODUCT_BUNDLE_IDENTIFIER = Avsi.TestPushSDK1;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		607FACF31AFB9204008FA782 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 1C8B363210138CD2A84F29F3 /* Pods-PersonaClickTests.debug.xcconfig */;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = "";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(PLATFORM_DIR)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = PersonaClickDemoTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/PersonaClickDemo.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/PersonaClickDemo";
+			};
+			name = Debug;
+		};
+		607FACF41AFB9204008FA782 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = AAB9149EDCCCB4FF18DB87D6 /* Pods-PersonaClickTests.release.xcconfig */;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = "";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(PLATFORM_DIR)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = PersonaClickDemoTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/PersonaClickDemo.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/PersonaClickDemo";
+			};
+			name = Release;
+		};
+		9A7A95EB25BC40E900FFA40A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = PersonaClickNotificationContentExtension.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = "";
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = "$(SRCROOT)/NotificationContentExtension/Info.plist";
+				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = Avsi.TestPushSDK1.PersonaClickNotificationContentExtension;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		9A7A95EC25BC40E900FFA40A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = PersonaClickNotificationContentExtension.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = "$(SRCROOT)/NotificationContentExtension/Info.plist";
+				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = Avsi.TestPushSDK1.PersonaClickNotificationContentExtension;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		9A7A961625BC436D00FFA40A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = PersonaClickNotificationServiceExtension.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = "";
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = "$(SRCROOT)/NotificationServiceExtension/Info.plist";
+				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = Avsi.TestPushSDK1.PersonaClickNotificationServiceExtension;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		9A7A961725BC436D00FFA40A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = PersonaClickNotificationServiceExtension.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = "$(SRCROOT)/NotificationServiceExtension/Info.plist";
+				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = Avsi.TestPushSDK1.PersonaClickNotificationServiceExtension;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		607FACCB1AFB9204008FA782 /* Build configuration list for PBXProject "PersonaClick" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				607FACED1AFB9204008FA782 /* Debug */,
+				607FACEE1AFB9204008FA782 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		607FACEF1AFB9204008FA782 /* Build configuration list for PBXNativeTarget "PersonaClickDemo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				607FACF01AFB9204008FA782 /* Debug */,
+				607FACF11AFB9204008FA782 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		607FACF21AFB9204008FA782 /* Build configuration list for PBXNativeTarget "PersonaClickTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				607FACF31AFB9204008FA782 /* Debug */,
+				607FACF41AFB9204008FA782 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		9A7A95ED25BC40E900FFA40A /* Build configuration list for PBXNativeTarget "PersonaClickNotificationContentExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				9A7A95EB25BC40E900FFA40A /* Debug */,
+				9A7A95EC25BC40E900FFA40A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		9A7A961525BC436D00FFA40A /* Build configuration list for PBXNativeTarget "PersonaClickNotificationServiceExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				9A7A961625BC436D00FFA40A /* Debug */,
+				9A7A961725BC436D00FFA40A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 607FACC81AFB9204008FA782 /* Project object */;
+}
