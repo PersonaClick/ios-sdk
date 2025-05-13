@@ -311,7 +311,7 @@ public func createPersonalizationSDK(
     userEmail: String? = nil,
     userPhone: String? = nil,
     userLoyaltyId: String? = nil,
-    apiDomain: String = "",
+    apiDomain: String = "api.personaclick.com",
     stream: String = "ios",
     enableLogs: Bool = false,
     autoSendPushToken: Bool = true,
