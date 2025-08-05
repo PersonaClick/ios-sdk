@@ -6,7 +6,6 @@ import AppTrackingTransparency
 public var global_EL: Bool = true
 
 class SimplePersonalizationSDK: PersonalizationSDK {
-    
     private var global_EL: Bool = false
     
     var parentViewController: UIViewController?
@@ -64,6 +63,14 @@ class SimplePersonalizationSDK: PersonalizationSDK {
     
     lazy var profileData: ProfileDataProtocol = {
         return ProfileDataImpl(sdk: self, configProvider: self)
+    }()
+    
+    lazy var updateAdvertisingIdUseCase: UpdateAdvertisingIdUseCase = {
+        let advertisingIdAdapter = IDFAAdapter()
+        return UpdateAdvertisingIdUseCase(
+            advertisingIdPort: advertisingIdAdapter,
+            profileData: self.profileData
+        )
     }()
     
     init(
@@ -130,12 +137,34 @@ class SimplePersonalizationSDK: PersonalizationSDK {
             }
             self.initSemaphore.wait()
         }
-        
+       
+        updateAdvertisingIdUseCase.execute { result in
+            switch result {
+            case .success(let advertisingId):
+                #if DEBUG
+                print("Advertising ID sent successfully: \(advertisingId.value)")
+                #endif
+            case .failure(let error):
+                #if DEBUG
+                print("Failed to send Advertising ID: \(error.localizedDescription)")
+                #endif
+            }
+        }
+
         initializeNotificationRegistrar()
     }
     
     func getDeviceId() -> String {
         return deviceId
+    }
+    
+    func setParentViewController(controller: UIViewController, completion: @escaping () -> Void) {
+        self.parentViewController = controller
+        completion()
+    }
+    
+    func getNotificationWidget() -> NotificationWidget? {
+        return notificationWidget
     }
     
     func getSession() -> String {
@@ -318,6 +347,7 @@ class SimplePersonalizationSDK: PersonalizationSDK {
         lastName: String?,
         location: String?,
         gender: Gender?,
+        advertisingId: String?,
         fbID: String?,
         vkID: String?,
         telegramId: String?,
@@ -341,6 +371,7 @@ class SimplePersonalizationSDK: PersonalizationSDK {
                 lastName:lastName,
                 location:location,
                 gender:gender,
+                advertisingId:advertisingId,
                 fbID:fbID,
                 vkID:vkID,
                 telegramId:telegramId,
