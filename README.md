@@ -19,9 +19,8 @@ For detailed information on methods, please refer to the documentation available
 
 ## Author
 
-PersonaClick, success@personaclick.com
+PersonaClick, <success@personaclick.com>
 
 ## License
 
 PersonaClick SDK is available under the MIT license. See the LICENSE file for more info.
-

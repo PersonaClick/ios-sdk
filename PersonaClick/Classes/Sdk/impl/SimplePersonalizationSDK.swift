@@ -20,6 +20,7 @@ class SimplePersonalizationSDK: PersonalizationSDK {
     let baseInitJsonFileName = ".json"
     let autoSendPushToken: Bool
     let needReInitialization: Bool
+    let sendAdvertisingId: Bool
     
     let sdkBundleId = Bundle(for: SimplePersonalizationSDK.self).bundleIdentifier
     let appBundleId = Bundle(for: SimplePersonalizationSDK.self).bundleIdentifier
@@ -38,7 +39,7 @@ class SimplePersonalizationSDK: PersonalizationSDK {
     private let serialSemaphore = DispatchSemaphore(value: 0)
     
     lazy var trackEventService: TrackEventServiceProtocol = {
-        return TrackEventServiceImpl(sdk: self, parentViewController: parentViewController)
+        return TrackEventServiceImpl(sdk: self)
     }()
     
     lazy var trackSourceService: TrackSourceServiceProtocol = {
@@ -82,6 +83,7 @@ class SimplePersonalizationSDK: PersonalizationSDK {
         stream: String = "ios",
         enableLogs: Bool = false,
         autoSendPushToken: Bool = true,
+        sendAdvertisingId: Bool = false,
         parentViewController: UIViewController?,
         needReInitialization: Bool = false,
         completion: ((SdkError?) -> Void)? = nil
@@ -98,6 +100,7 @@ class SimplePersonalizationSDK: PersonalizationSDK {
         self.stream = stream
         self.storiesCode = nil
         self.needReInitialization = needReInitialization
+        self.sendAdvertisingId = sendAdvertisingId
         
         // Generate seance and segment
         userSeance = UUID().uuidString
@@ -138,16 +141,18 @@ class SimplePersonalizationSDK: PersonalizationSDK {
             self.initSemaphore.wait()
         }
        
-        updateAdvertisingIdUseCase.execute { result in
-            switch result {
-            case .success(let advertisingId):
-                #if DEBUG
-                print("Advertising ID sent successfully: \(advertisingId.value)")
-                #endif
-            case .failure(let error):
-                #if DEBUG
-                print("Failed to send Advertising ID: \(error.localizedDescription)")
-                #endif
+        if(sendAdvertisingId) {
+            updateAdvertisingIdUseCase.execute { result in
+                switch result {
+                case .success(let advertisingId):
+                    #if DEBUG
+                    print("Advertising ID sent successfully: \(advertisingId.value)")
+                    #endif
+                case .failure(let error):
+                    #if DEBUG
+                    print("Failed to send Advertising ID: \(error.localizedDescription)")
+                    #endif
+                }
             }
         }
 
