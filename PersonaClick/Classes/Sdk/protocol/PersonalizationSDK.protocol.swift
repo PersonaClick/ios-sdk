@@ -16,6 +16,7 @@ public protocol PersonalizationSDK {
     var segment: String { get }
     var storiesCode: String? { get }
     var sessionQueue: SessionQueue { get }
+    var parentViewController: UIViewController? {get}
     var urlSession: URLSession { get set }
     
     func postRequest(path: String, params: [String: Any], completion: @escaping (Result<[String: Any], SdkError>) -> Void)
@@ -317,6 +318,7 @@ public func createPersonalizationSDK(
     stream: String = "ios",
     enableLogs: Bool = false,
     autoSendPushToken: Bool = true,
+    sendAdvertisingId: Bool = false,
     parentViewController: UIViewController? = nil,
     needReInitialization: Bool = false,
     _ completion: ((SdkError?) -> Void)? = nil
@@ -330,6 +332,7 @@ public func createPersonalizationSDK(
         stream: stream,
         enableLogs: enableLogs,
         autoSendPushToken: autoSendPushToken,
+        sendAdvertisingId: sendAdvertisingId,
         parentViewController: parentViewController,
         needReInitialization: needReInitialization,
         completion: completion
