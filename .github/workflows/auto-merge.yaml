@@ -2,15 +2,18 @@ name: Auto Merge Sync PRs
 
 on:
   pull_request:
-    types: [opened, synchronize]
+    types:
+      - opened
+      - synchronize
     branches:
       - master
     paths-ignore:
-      - ".github/**"
+      - '.github/**'
 
 jobs:
   auto-merge:
-    if: startsWith(github.head_ref, 'sync/')
+    name: Auto merge
+    if: startsWith(github.head_ref, 'sync/') || startsWith(github.head_ref, 'release/')
     uses: personaClick/workflow/.github/workflows/reusable-auto-merge-pr.yaml@master
     secrets:
       appSecret: ${{ secrets.VERSIONER_SECRET }}
