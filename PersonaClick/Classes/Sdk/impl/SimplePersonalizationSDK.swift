@@ -7,6 +7,11 @@ public var global_EL: Bool = true
 
 // MARK: - SimplePersonalizationSDK
 
+private enum ProbabilityToPurchaseNetworkConstants {
+    /// Default `URLSessionConfiguration.timeoutIntervalForRequest` for purchase probability API calls.
+    static let requestTimeoutIntervalSeconds: TimeInterval = 15
+}
+
 class SimplePersonalizationSDK: PersonalizationSDK {
     private var global_EL: Bool = false
     
@@ -404,8 +409,24 @@ class SimplePersonalizationSDK: PersonalizationSDK {
         trackEventService.track(event: event, recommendedBy: recommendedBy, completion: completion)
     }
     
-    func trackEvent(event: String, category: String?, label: String?, value: Int?, completion: @escaping (Result<Void, SdkError>) -> Void) {
-        trackEventService.trackEvent(event: event, category: category, label: label, value: value, completion: completion)
+    func trackEvent(
+        event: String,
+        time: Int?,
+        category: String?,
+        label: String?,
+        value: Int?,
+        customFields: [String: Any]?,
+        completion: @escaping (Result<Void, SdkError>) -> Void
+    ) {
+        trackEventService.trackEvent(
+            event: event,
+            time: time,
+            category: category,
+            label: label,
+            value: value,
+            customFields: customFields,
+            completion: completion
+        )
     }
     
     func trackPopupShown(popupId: Int, completion: @escaping (Result<Void, SdkError>) -> Void) {
@@ -463,6 +484,53 @@ class SimplePersonalizationSDK: PersonalizationSDK {
                     let resJSON = successResult
                     let resultResponse = RecommenderResponse(json: resJSON)
                     completion(.success(resultResponse))
+                case let .failure(error):
+                    completion(.failure(error))
+                }
+            }
+        }
+    }
+
+    func getProbabilityToPurchase(
+        params: PurchasePredictParams,
+        completion: @escaping (Result<ProbabilityToPurchaseResponse, SdkError>) -> Void
+    ) {
+        sessionQueue.addOperation {
+            let path = "predict/probability-to-purchase"
+            var queryParams: [String: String] = [
+                "shop_id": self.shopId,
+                "did": self.deviceId,
+                "seance": self.userSeance,
+                "sid": self.userSeance,
+                "segment": self.segment
+            ]
+            if let email = params.email, !email.isEmpty {
+                queryParams["email"] = email
+            }
+            if let phone = params.phone, !phone.isEmpty {
+                queryParams["phone"] = phone
+            }
+            if let telegramId = params.telegramId, !telegramId.isEmpty {
+                queryParams["telegram_id"] = telegramId
+            }
+            if let loyaltyId = params.loyaltyId, !loyaltyId.isEmpty {
+                queryParams["loyalty_id"] = loyaltyId
+            }
+
+            let sessionConfig = URLSessionConfiguration.default
+            sessionConfig.timeoutIntervalForRequest = ProbabilityToPurchaseNetworkConstants.requestTimeoutIntervalSeconds
+            sessionConfig.waitsForConnectivity = true
+            sessionConfig.shouldUseExtendedBackgroundIdleMode = true
+            self.urlSession = URLSession(configuration: sessionConfig)
+
+            self.getRequest(path: path, params: queryParams) { result in
+                switch result {
+                case let .success(json):
+                    if let parsed = ProbabilityToPurchaseResponse(json: json) {
+                        completion(.success(parsed))
+                    } else {
+                        completion(.failure(.decodeError))
+                    }
                 case let .failure(error):
                     completion(.failure(error))
                 }
@@ -1184,7 +1252,12 @@ class SimplePersonalizationSDK: PersonalizationSDK {
             urlSession.postTask(with: request) { result in
                 switch result {
                 case .success(let (response, data)):
-                    guard let statusCode = (response as? HTTPURLResponse)?.statusCode, 200 ..< 299 ~= statusCode else {
+                    let statusCode = (response as? HTTPURLResponse)?.statusCode ?? -1
+                    guard 200 ..< 299 ~= statusCode else {
+#if DEBUG
+                        let errorBody = String(data: data, encoding: .utf8) ?? "<non-utf8 body, \(data.count) bytes>"
+                        print("LOG: postRequest HTTP \(statusCode) path=\(path) response=\(errorBody)")
+#endif
                         if let json = try? JSONSerialization.jsonObject(with: data) {
                             if let jsonObject = json as? [String:Any] {
                                 if let status = jsonObject["status"] as? String, status == "error" {
@@ -1198,6 +1271,12 @@ class SimplePersonalizationSDK: PersonalizationSDK {
                         completion(.failure(.invalidResponse))
                         return
                     }
+#if DEBUG
+                    let successBody = data.isEmpty
+                        ? "<empty>"
+                        : (String(data: data, encoding: .utf8) ?? "<non-utf8 body, \(data.count) bytes>")
+                    print("LOG: postRequest HTTP \(statusCode) path=\(path) response=\(successBody)")
+#endif
                     do {
                         if data.isEmpty {
                             if path.contains("clicked") || path.contains("closed") || path.contains("received") || path.contains("showed") {
