@@ -1,8 +1,3 @@
-//
-//  ProbabilityToPurchaseResponse.swift
-//  PersonaClick
-//
-
 import Foundation
 
 public struct ProbabilityToPurchaseResponse {
