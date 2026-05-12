@@ -1,8 +1,3 @@
-//
-//  PurchasePredictParams.swift
-//  PersonaClick
-//
-
 import Foundation
 
 /// Optional query parameters for `getProbabilityToPurchase`. `shop_id`, `did`, session and `stream` are set by the SDK.
