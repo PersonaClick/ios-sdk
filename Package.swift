@@ -4,19 +4,14 @@ import PackageDescription
 let package = Package(
     name: "PersonaClick",
     platforms: [
-            .iOS(.v11),
-            .macOS(.v10_15)
+            .iOS(.v12)
         ],
         products: [
             // PersonaClick SDK and libraries produced by a package.
             .library(name: "PersonaClick",
             targets: ["PersonaClick"]),
         ],
-        dependencies: [
-             // Dependencies declare other packages that PersonaClick depends on.
-             // .package(url: /* personaclick.com */, now: pod "3.6.7"),
-             // Copyright © 2023 PersonaClick Inc.
-        ],
+        dependencies: [],
         targets: [
             .target(
                 name: "PersonaClick",
@@ -27,8 +22,7 @@ let package = Package(
                 ],
                 linkerSettings: [
                     .linkedFramework("Foundation"),
-                    .linkedFramework("UIKit", .when(platforms: [.iOS])),
-                    .linkedFramework("AppKit", .when(platforms: [.macOS])),
+                    .linkedFramework("UIKit"),
                 ]
         )
     ]
