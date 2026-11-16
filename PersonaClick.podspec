@@ -37,7 +37,7 @@ Pod::Spec.new do |s|
 
   s.source           = { :git => "https://github.com/personaClick/ios-sdk.git", :tag => "v#{version}" }
 
-  s.ios.deployment_target = '12.0'
+  s.ios.deployment_target = '15.0'
 
   s.source_files     = 'PersonaClick/Classes/**/*.{swift}'
   s.resources        = 'PersonaClick/Classes/Resources/*.{xcassets,xib,storyboard,json,png}'
