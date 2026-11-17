@@ -2,10 +2,10 @@
 //  CoreV2.swift
 //  PersonaClick
 //
-//  The new core, behind `PersonaClickConfig.coreV2`: the requests of the funnel go through the new client
-//  (`NetworkClient`), `/init` is the new core's own (`InitMachine`) and so is the session
-//  (`SessionWindow`): a call waits until the instance is usable, at most its own timeout, and goes with
-//  the current `sid`.
+//  The new core, behind `PersonaClickConfig.coreV2` (`PersonaClick.initializeBridge`): the requests of the funnel
+//  go through the new client (`NetworkClient`), `/init` is the new core's own (`InitMachine`) and so
+//  is the session (`SessionWindow`): a call waits until the instance is usable, at most its own
+//  timeout, and goes with the current `sid`.
 //
 
 import Foundation
