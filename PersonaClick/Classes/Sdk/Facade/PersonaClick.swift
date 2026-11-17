@@ -84,7 +84,7 @@ public enum PersonaClick {
     @discardableResult
     public static func initialize(
         _ config: PersonaClickConfig,
-        completion: ((PersonaClick.SdkError?) -> Void)? = nil
+        completion: ((LegacySdkError?) -> Void)? = nil
     ) -> PersonalizationSDK {
         withCreationLock {
             lock.lock()
@@ -125,7 +125,7 @@ public enum PersonaClick {
     private static func joinExisting(
         _ existing: PersonalizationSDK,
         config: PersonaClickConfig,
-        completion: ((PersonaClick.SdkError?) -> Void)?
+        completion: ((LegacySdkError?) -> Void)?
     ) -> () -> Void {
         guard let instance = existing as? SimplePersonalizationSDK else {
             // Another conformer the app registered: it has no outcome to tell.
@@ -349,7 +349,7 @@ public enum PersonaClick {
      `track/received` as before.
      */
     @_disfavoredOverload
-    public static func handlePush(_ payload: [AnyHashable: Any], event: PersonaClick.PushEvent) {
+    public static func handlePush(_ payload: [AnyHashable: Any], event: LegacyPushEvent) {
         route(payload, PushRoute(event))
     }
 
