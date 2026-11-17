@@ -4,6 +4,7 @@ only_rules:
   - force_unwrapping
   - force_try
   - force_cast
+  - custom_rules
 
 included:
   - PersonaClick/Classes/Core
@@ -33,3 +34,16 @@ excluded:
 force_unwrapping: error
 force_try: error
 force_cast: error
+
+custom_rules:
+  # A synchronized copy of the SDK renames the module and the `PersonaClick` facade to the same word, so
+  # `PersonaClick.X` there means the facade's nested type, not the module's: the copy stops compiling.
+  module_qualified_name:
+    name: "Module-qualified name"
+    regex: '\bPersonaClick\.[A-Z]'
+    excluded_match_kinds:
+      - comment
+      - doccomment
+      - string
+    message: "A synchronized copy renames the module and PersonaClick to the same word: use a plain name or LegacySdkError / LegacyPushEvent"
+    severity: error
