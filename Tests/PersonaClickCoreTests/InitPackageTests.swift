@@ -119,6 +119,15 @@ final class InitPackageTests: XCTestCase {
         XCTAssertTrue(PersonaClickConfig(shopId: "a", enableLogs: true).hasSameSettings(as: PersonaClickConfig(shopId: "a", logLevel: .debug)))
     }
 
+    func test_the_app_domain_is_app_personaClick_ru_unless_the_config_gives_another() {
+        XCTAssertEqual(PersonaClickConfig(shopId: "a").appDomain, "app.personaclick.com")
+        XCTAssertEqual(PersonaClickConfig(shopId: "a", appDomain: " app.cluster.example \n").appDomain, "app.cluster.example")
+        XCTAssertEqual(PersonaClickConfig(shopId: "a", appDomain: "").appDomain, "app.personaclick.com", "empty is the default")
+        XCTAssertEqual(PersonaClickConfig(shopId: "a", appDomain: "app.cluster.example").onNewCore().appDomain, "app.cluster.example")
+        XCTAssertFalse(PersonaClickConfig(shopId: "a").hasSameSettings(as: PersonaClickConfig(shopId: "a", appDomain: "app.cluster.example")))
+        XCTAssertTrue(PersonaClickConfig(shopId: "a").hasSameSettings(as: PersonaClickConfig(shopId: "a", appDomain: "app.personaclick.com")))
+    }
+
     // MARK: - The machine over a transport the test answers
 
     func test_the_machine_retries_with_a_pause_and_lets_waiting_calls_through_once_ready() async throws {
