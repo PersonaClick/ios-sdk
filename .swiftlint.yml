@@ -11,9 +11,19 @@ included:
   - PersonaClick/Classes/Sdk
   - PersonaClick/Classes/Notifications
   - PersonaClick/Classes/Tracking
+  - PersonaClick/Classes/Cart
+  - PersonaClick/Classes/Stories/API
+  - PersonaClick/Classes/Predict
+  - PersonaClick/Classes/Loyalty
+  - PersonaClick/Classes/Sliders
+  - PersonaClick/Classes/Reviews
   - PersonaClick/Classes/Search
+  - PersonaClick/Classes/Products
+  - PersonaClick/Classes/Collections
+  - PersonaClick/Classes/Recommendations
   - PersonaClick/Classes/Profile
   - PersonaClick/Classes/Subscription
+  - PersonaClick/Classes/Segments
   - PersonaClick/Classes/Infrastructure
   - PersonaClick/Classes/Domain
   - PersonaClick/Classes/Errors

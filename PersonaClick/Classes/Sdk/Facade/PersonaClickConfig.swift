@@ -25,6 +25,13 @@ public struct PersonaClickConfig {
     public let shopId: String
     /// API host the instance talks to (a region points here).
     public let apiDomain: String
+    /// The host of API v3, without a scheme: `app.personaclick.com`, unless the shop's cluster has its own; an
+    /// empty one is the default. The SDK's methods that call API v3 go there — the namespaces of the new
+    /// core, the bridges' (`PersonaClick.initializeBridge`); no method an app calls goes there yet. Popups v3
+    /// and stories v3 keep their own settings of it (`popups.appHost`, `PersonalizationStories.apiV3Domain`).
+    public let appDomain: String
+    /// `appDomain` when none is given.
+    static let defaultAppDomain = "app.personaclick.com"
     /// Traffic stream label sent with every request.
     public let stream: String
     /// The device id (`did`) the app already keeps — say from another version of the SDK — for a shop
@@ -73,6 +80,7 @@ public struct PersonaClickConfig {
     public init(
         shopId: String,
         apiDomain: String = "api.personaclick.com",
+        appDomain: String = "app.personaclick.com",
         stream: String = "ios",
         deviceId: String? = nil,
         enableLogs: Bool = false,
@@ -86,6 +94,7 @@ public struct PersonaClickConfig {
         self.init(
             shopId: shopId,
             apiDomain: apiDomain,
+            appDomain: appDomain,
             stream: stream,
             deviceId: deviceId,
             enableLogs: enableLogs,
@@ -103,6 +112,7 @@ public struct PersonaClickConfig {
     init(
         shopId: String,
         apiDomain: String = "api.personaclick.com",
+        appDomain: String = PersonaClickConfig.defaultAppDomain,
         stream: String = "ios",
         deviceId: String? = nil,
         enableLogs: Bool = false,
@@ -127,6 +137,8 @@ public struct PersonaClickConfig {
         self.needReInitialization = needReInitialization
         self.storageKey = storageKey
         self.coreV2 = coreV2
+        let host = appDomain.trimmingCharacters(in: .whitespacesAndNewlines)
+        self.appDomain = host.isEmpty ? Self.defaultAppDomain : host
     }
 
     /// This configuration on the new core: what `PersonaClick.initializeBridge` makes of a bridge's one.
@@ -148,6 +160,7 @@ public struct PersonaClickConfig {
             && enableAutoPopupPresentation == other.enableAutoPopupPresentation
             && needReInitialization == other.needReInitialization
             && storageKey == other.storageKey
+            && appDomain == other.appDomain
             && coreV2 == other.coreV2
     }
 }
